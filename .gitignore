@@ -1,0 +1,7 @@
+/vendors/
+/composer.lock
+/after.sh
+/aliases
+/package-lock.json
+/node_modules/
+/artisan

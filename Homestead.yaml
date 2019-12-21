@@ -1,0 +1,35 @@
+---
+ip: "192.168.10.10"
+memory: 2048
+cpus: 2
+provider: virtualbox
+
+authorize: ~/OneDrive/.ssh/bjjtrackr.pub
+
+keys:
+  - ~/OneDrive/.ssh/bjjtrackr
+
+folders:
+  - map: ~/code/bjjtrackr
+    to: /home/vagrant/code/bjjtrackr
+
+sites:
+  - map: bjjtrackr
+    to: /home/vagrant/code/bjjtrackr/public
+
+databases:
+  - bjjtrackr
+
+hostname: bjjtrackr
+
+features:
+  - mariadb: false
+  - ohmyzsh: false
+  - webdriver: false
+
+# ports:
+#     - send: 50000
+#       to: 5000
+#     - send: 7777
+#       to: 777
+#       protocol: udp
