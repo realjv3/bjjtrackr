@@ -17,9 +17,15 @@
     "@babel/preset-env": "^7.7.7",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.4.0",
+    "deepmerge": "^4.2.2",
+    "fibers": "^4.0.2",
+    "sass": "^1.24.0",
+    "sass-loader": "^8.0.0",
     "vue-loader": "^15.8.3",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.11",
+    "vuetify": "^2.1.15",
+    "vuetify-loader": "^1.4.3",
     "webpack": "^4.41.4",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1"
@@ -28,7 +34,7 @@
     "vue": "^2.6.11"
   },
   "scripts": {
-    "dev": "webpack-dev-server --mode development",
+    "dev": "webpack-dev-server --mode development --https",
     "prod": "webpack --mode production"
   }
 }

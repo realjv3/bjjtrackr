@@ -8,6 +8,8 @@
 7. Run ```npm install``` from project root directory.
 8. Run ```vagrant up``` from the project root directory.
 9. Run ```npm run dev``` to develop, ```npm run build``` to deploy.
+10. To create the database tables, ```vagrant ssh``` into the virtual machine, ```cd``` into the project root and run ```php artisan migrate```.
+11. Then seed the database tables with users and roles with ```php artisan db:seed```.
 
 At this point, the web app should be up at https://bjjtrackr.local, according to _hostname_ in Homestead.yaml.
 
