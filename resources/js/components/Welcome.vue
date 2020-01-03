@@ -101,7 +101,7 @@
                 })
                 .then( json => {
                     this.loading = false;
-                    if (json.errors) {
+                    if (json && json.errors) {
                         this.errors.email = json.errors.email;
                         this.errors.password = json.errors.password;
 

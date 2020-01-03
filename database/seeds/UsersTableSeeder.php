@@ -16,15 +16,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'John Verity',
             'email' => 'jverity@fatguymedia.com',
             'password' => bcrypt('password'),
-            'role_id' => 1,
-        ]);
-        $user->save();
-
-        $user = new User([
-            'name' => 'Paulo Santana',
-            'email' => 'paulo_jiujitsu100@hotmail.com',
-            'password' => bcrypt('password'),
-            'role_id' => 1,
+            'belt' => 'purple',
         ]);
         $user->save();
 
@@ -32,31 +24,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'Neil Fernandez',
             'email' => 'neilfernandezdev@gmail.com',
             'password' => bcrypt('password'),
-            'role_id' => 1,
-        ]);
-        $user->save();
-
-        $user = new User([
-            'name' => 'Lucas Lepri',
-            'email' => 'lucas@lepri.com',
-            'password' => bcrypt('password'),
-            'role_id' => 2,
-        ]);
-        $user->save();
-
-        $user = new User([
-            'name' => 'Teacher',
-            'email' => 'teacher@lepri.com',
-            'password' => bcrypt('password'),
-            'role_id' => 3,
-        ]);
-        $user->save();
-
-        $user = new User([
-            'name' => 'Student',
-            'email' => 'student@lepri.com',
-            'password' => bcrypt('password'),
-            'role_id' => 4,
+            'belt' => 'purple',
         ]);
         $user->save();
     }

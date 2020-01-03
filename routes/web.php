@@ -16,6 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::view('welcome', 'welcome')->name('welcome');
 
 Route::post('login', 'Auth\LoginController@login')->name('login');
-Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout')->name('logout');
+Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::view('/', 'home')->name('home')->middleware('auth');
+Route::get('/', 'HomeController@index')->name('home');

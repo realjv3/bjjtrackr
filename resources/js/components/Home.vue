@@ -74,23 +74,27 @@
             dark
         >
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+
             <v-toolbar-title
                 style="width: 300px"
                 class="ml-0 pl-4"
             >
                 <span class="hidden-sm-and-down">BJJ Trackr</span>
             </v-toolbar-title>
-            <v-text-field
-                flat
-                solo-inverted
-                hide-details
-                prepend-inner-icon="mdi-magnify"
-                label="Search"
-                class="hidden-sm-and-down"
-            />
+
+<!--            <v-text-field-->
+<!--                flat-->
+<!--                solo-inverted-->
+<!--                hide-details-->
+<!--                prepend-inner-icon="mdi-magnify"-->
+<!--                label="Search"-->
+<!--                class="hidden-sm-and-down"-->
+<!--            />-->
+
             <v-spacer />
 
             <v-menu offset-y>
+
                 <template v-slot:activator="{on}">
                     <v-btn icon v-on="on">
                         <v-icon>mdi-chevron-down</v-icon>
@@ -115,34 +119,13 @@
         <v-content>
             <v-container class="fill-height" fluid>
                 <v-row align="center" justify="center">
-                    <v-tooltip right>
-                        <template v-slot:activator="{ on }">
-                            <v-btn
-                                :href="source"
-                                icon
-                                large
-                                target="_blank"
-                                v-on="on"
-                            >
-                                <v-icon large>mdi-code-tags</v-icon>
-                            </v-btn>
-                        </template>
-                        <span>Source</span>
-                    </v-tooltip>
-                    <v-tooltip right>
-                        <template v-slot:activator="{ on }">
-                            <v-btn
-                                icon
-                                large
-                                href="https://codepen.io/johnjleider/pen/MNYLdL"
-                                target="_blank"
-                                v-on="on"
-                            >
-                                <v-icon large>mdi-codepen</v-icon>
-                            </v-btn>
-                        </template>
-                        <span>Codepen</span>
-                    </v-tooltip>
+                    <v-data-table
+                        v-if="show === 'People'"
+                        :headers="headers.People"
+                        :items="[]"
+                        :items-per-page="5"
+                        class="elevation-1"
+                    />
                 </v-row>
             </v-container>
         </v-content>
@@ -253,18 +236,9 @@
             dialog: false,
             drawer: null,
             items: [
-                { icon: 'mdi-contacts', text: 'Contacts' },
-                { icon: 'mdi-history', text: 'Frequently contacted' },
-                { icon: 'mdi-content-copy', text: 'Duplicates' },
-                {
-                    icon: 'mdi-chevron-up',
-                    'icon-alt': 'mdi-chevron-down',
-                    text: 'Labels',
-                    model: true,
-                    children: [
-                        { icon: 'mdi-plus', text: 'Create label' },
-                    ],
-                },
+                { icon: 'mdi-contacts', text: 'People' },
+                { icon: 'mdi-history', text: 'Check-ins' },
+                { icon: 'mdi-barcode', text: 'Barcodes' },
                 {
                     icon: 'mdi-chevron-up',
                     'icon-alt': 'mdi-chevron-down',
@@ -281,9 +255,16 @@
                 { icon: 'mdi-settings', text: 'Settings' },
                 { icon: 'mdi-message', text: 'Send feedback' },
                 { icon: 'mdi-help-circle', text: 'Help' },
-                { icon: 'mdi-cellphone-link', text: 'App downloads' },
-                { icon: 'mdi-keyboard', text: 'Go to the old version' },
             ],
+            headers: {
+                People: [
+                    { text: 'Name', align: 'left', value: 'name' },
+                    { text: 'Belt', value: 'belt' },
+                    { text: 'Email', value: 'email' },
+                    { text: 'Last Check-in', value: 'lastcheckin' },
+                ],
+            },
+            show: 'People',
         }),
     }
 </script>
