@@ -6,6 +6,16 @@
             app
         >
             <v-list dense>
+
+                <v-list-item v-if="isSuperAdmin() || isAdmin()" key="clients" link @click="show = 'Clients'">
+                    <v-list-item-action>
+                        <v-icon>mdi-account-cash</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Clients</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
                 <template v-for="item in items">
 
                     <v-row v-if="item.heading" :key="item.heading" align="center">
@@ -49,11 +59,7 @@
                         </v-list-item>
                     </v-list-group>
 
-                    <v-list-item
-                        v-else
-                        :key="item.text"
-                        link
-                    >
+                    <v-list-item v-else :key="item.text" link @click="show = item.text">
                         <v-list-item-action>
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-list-item-action>
@@ -81,15 +87,6 @@
             >
                 <span class="hidden-sm-and-down">BJJ Trackr</span>
             </v-toolbar-title>
-
-<!--            <v-text-field-->
-<!--                flat-->
-<!--                solo-inverted-->
-<!--                hide-details-->
-<!--                prepend-inner-icon="mdi-magnify"-->
-<!--                label="Search"-->
-<!--                class="hidden-sm-and-down"-->
-<!--            />-->
 
             <v-spacer />
 
@@ -119,121 +116,68 @@
         <v-content>
             <v-container class="fill-height" fluid>
                 <v-row align="center" justify="center">
-                    <v-data-table
-                        v-if="show === 'People'"
-                        :headers="headers.People"
-                        :items="[]"
-                        :items-per-page="5"
-                        class="elevation-1"
-                    />
+
+                    <People  v-show="show === 'People'"/>
+
+                    <Clients v-show="show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
                 </v-row>
             </v-container>
         </v-content>
 
-        <v-btn
-            bottom
-            color="pink"
-            dark
-            fab
-            fixed
-            right
-            @click="dialog = !dialog"
-        >
-            <v-icon>mdi-plus</v-icon>
-        </v-btn>
+        <v-speed-dial v-model="speedDial" bottom right fixed open-on-hover>
 
-        <v-dialog
-            v-model="dialog"
-            width="800px"
-        >
-            <v-card>
-                <v-card-title class="grey darken-2">
-                    Create contact
-                </v-card-title>
-                <v-container>
-                    <v-row class="mx-2">
-                        <v-col
-                            class="align-center justify-space-between"
-                            cols="12"
-                        >
-                            <v-row
-                                align="center"
-                                class="mr-0"
-                            >
-                                <v-avatar
-                                    size="40px"
-                                    class="mx-3"
-                                >
-                                    <img
-                                        src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png"
-                                        alt=""
-                                    >
-                                </v-avatar>
-                                <v-text-field
-                                    placeholder="Name"
-                                />
-                            </v-row>
-                        </v-col>
-                        <v-col cols="6">
-                            <v-text-field
-                                prepend-icon="business"
-                                placeholder="Company"
-                            />
-                        </v-col>
-                        <v-col cols="6">
-                            <v-text-field
-                                placeholder="Job title"
-                            />
-                        </v-col>
-                        <v-col cols="12">
-                            <v-text-field
-                                prepend-icon="mail"
-                                placeholder="Email"
-                            />
-                        </v-col>
-                        <v-col cols="12">
-                            <v-text-field
-                                type="tel"
-                                prepend-icon="phone"
-                                placeholder="(000) 000 - 0000"
-                            />
-                        </v-col>
-                        <v-col cols="12">
-                            <v-text-field
-                                prepend-icon="notes"
-                                placeholder="Notes"
-                            />
-                        </v-col>
-                    </v-row>
-                </v-container>
-                <v-card-actions>
-                    <v-btn
-                        text
-                        color="primary"
-                    >More</v-btn>
-                    <v-spacer />
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="dialog = false"
-                    >Cancel</v-btn>
-                    <v-btn
-                        text
-                        @click="dialog = false"
-                    >Save</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+            <template v-slot:activator>
+                <v-btn v-model="speedDial" color="pink" dark fab>
+                    <v-icon v-if="speedDial">mdi-close</v-icon>
+                    <v-icon v-else>mdi-plus</v-icon>
+                </v-btn>
+            </template>
+
+            <v-tooltip left>
+                <template v-slot:activator="{ on }">
+                    <v-btn fab dark small color="primary" v-on="on">
+                        <v-icon>mdi-history</v-icon>
+                    </v-btn>
+                </template>
+                <span>Check-in</span>
+            </v-tooltip>
+
+            <v-tooltip v-if="isAdmin() || isSuperAdmin()" left>
+                <template v-slot:activator="{ on }">
+                    <v-btn fab dark small color="primary" v-on="on">
+                        <v-icon>mdi-contacts</v-icon>
+                    </v-btn>
+                </template>
+                <span>Person</span>
+            </v-tooltip>
+
+            <v-tooltip v-if="isSuperAdmin()" left>
+                <template v-slot:activator="{ on }">
+                    <v-btn @click="$refs.client.show = true" fab dark small color="primary" v-on="on">
+                        <v-icon>mdi-account-cash</v-icon>
+                    </v-btn>
+                </template>
+                <span>Client</span>
+            </v-tooltip>
+
+        </v-speed-dial>
+
+        <Client ref="client" @save-client="onSaveClient"/>
     </v-app>
 </template>
 
 <script>
+    import {isSuperAdmin, isAdmin, isInstructor} from "../authorization";
+    import People from "components/People";
+    import Clients from "components/Clients";
+    import Client from "components/Client";
+
     export default {
+        components: {Client, Clients, People},
         props: {
             source: String,
         },
         data: () => ({
-            dialog: false,
             drawer: null,
             items: [
                 { icon: 'mdi-contacts', text: 'People' },
@@ -256,15 +200,26 @@
                 { icon: 'mdi-message', text: 'Send feedback' },
                 { icon: 'mdi-help-circle', text: 'Help' },
             ],
-            headers: {
-                People: [
-                    { text: 'Name', align: 'left', value: 'name' },
-                    { text: 'Belt', value: 'belt' },
-                    { text: 'Email', value: 'email' },
-                    { text: 'Last Check-in', value: 'lastcheckin' },
-                ],
-            },
             show: 'People',
+            speedDial: false,
         }),
+        methods: {
+            isSuperAdmin,
+            isAdmin,
+            isInstructor,
+            onSaveClient() {
+                this.$refs.clients.refresh();
+            },
+            onEditClient(client) {
+                this.$refs.client.client = Object.assign({}, client);
+                this.$refs.client.show = true;
+            },
+        },
     }
 </script>
+
+<style>
+    td {
+        color: #d3d3d3;
+    }
+</style>

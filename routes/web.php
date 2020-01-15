@@ -19,3 +19,8 @@ Route::post('login', 'Auth\LoginController@login')->name('login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::get('/', 'HomeController@index')->name('home');
+
+Route::get('/clients', 'ClientsController@read');
+Route::post('/clients', 'ClientsController@create');
+Route::post('/clients/{id}', 'ClientsController@update');
+Route::delete('/clients/{id}', 'ClientsController@delete');

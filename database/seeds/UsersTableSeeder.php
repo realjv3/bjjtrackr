@@ -17,14 +17,18 @@ class UsersTableSeeder extends Seeder
             'email' => 'jverity@fatguymedia.com',
             'password' => bcrypt('password'),
             'belt' => 'purple',
+            'stripes' => 1,
+            'client_id' => 1,
         ]);
         $user->save();
 
         $user = new User([
-            'name' => 'Neil Fernandez',
-            'email' => 'neilfernandezdev@gmail.com',
+            'name' => 'Paulo Santana',
+            'email' => 'paulo_jiujitsu100@hotmail.com',
             'password' => bcrypt('password'),
-            'belt' => 'purple',
+            'belt' => 'black',
+            'stripes' => 0,
+            'client_id' => 1,
         ]);
         $user->save();
     }

@@ -17,12 +17,17 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('belt');
-            $table->unsignedBigInteger('client_id')->nullable();
+            $table->string('belt')->nullable();
+            $table->unsignedTinyInteger('stripes')->nullable();
+            $table->unsignedBigInteger('client_id');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+        });
+
+        Schema::table('users', function(Blueprint $table) {
+            $table->foreign('client_id')->references('id')->on('clients');
         });
     }
 
@@ -33,6 +38,9 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        Schema::table('users', function(Blueprint $table) {
+            $table->dropForeign('users_client_id_foreign');
+        });
         Schema::dropIfExists('users');
     }
 }

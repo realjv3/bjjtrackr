@@ -12,15 +12,18 @@ keys:
 folders:
   - map: ~/code/bjjtrackr
     to: /home/vagrant/code/bjjtrackr
+  - map: ~/code/bjjlanding
+    to: /home/vagrant/code/bjjlanding
 
 sites:
-  - map: bjjtrackr
+  - map: bjjtrackr.local
     to: /home/vagrant/code/bjjtrackr/public
+  - map: bjjlanding.local
+    to: /home/vagrant/code/bjjlanding/wp
 
 databases:
   - bjjtrackr
-
-hostname: bjjtrackr
+  - bjjlanding
 
 features:
   - mariadb: false
