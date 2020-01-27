@@ -24,3 +24,8 @@ Route::get('/clients', 'ClientsController@read');
 Route::post('/clients', 'ClientsController@create');
 Route::post('/clients/{id}', 'ClientsController@update');
 Route::delete('/clients/{id}', 'ClientsController@delete');
+
+Route::get('/users', 'UserController@read');
+Route::post('/users', 'UserController@create');
+Route::post('/users/{id}', 'UserController@update');
+Route::delete('/users/{id}', 'UserController@delete');

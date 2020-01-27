@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'John Verity',
             'email' => 'jverity@fatguymedia.com',
             'password' => bcrypt('password'),
-            'belt' => 'purple',
+            'belt' => 'Purple',
             'stripes' => 1,
             'client_id' => 1,
         ]);
@@ -26,7 +26,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'Paulo Santana',
             'email' => 'paulo_jiujitsu100@hotmail.com',
             'password' => bcrypt('password'),
-            'belt' => 'black',
+            'belt' => 'Black',
             'stripes' => 0,
             'client_id' => 1,
         ]);

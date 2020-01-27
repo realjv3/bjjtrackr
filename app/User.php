@@ -15,9 +15,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password', 'role_id',
-    ];
+    protected $fillable = ['name', 'email', 'belt', 'stripes', 'password', 'notes'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -37,11 +35,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function role() {
-        return $this->belongsToMany('App\Role', 'user_role');
+    public function roles() {
+        return $this->belongsToMany('App\Role', 'user_role')->withTimestamps();
     }
 
     public function client() {
-        return $this->hasOne('App\Client');
+        return $this->belongsTo('App\Client');
     }
 }

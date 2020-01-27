@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClientsController extends Controller
 {
@@ -13,7 +14,22 @@ class ClientsController extends Controller
 
     public function read() {
 
-        return Client::all();
+        $user = Auth::user();
+        $isSuperAdmin = false;
+        $roles = $user->roles;
+
+        foreach ($roles as $role) {
+            if ($role->role == 'Super Admin') {
+                $isSuperAdmin = true;
+                break;
+            }
+        }
+
+        if ($isSuperAdmin) {
+            return Client::all();
+        } else {
+            return [Client::find($user->client->id)];
+        }
     }
 
     public function create(Request $request) {

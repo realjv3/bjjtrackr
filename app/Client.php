@@ -19,6 +19,6 @@ class Client extends Model
     ];
 
     public function user() {
-        return $this->belongsToMany('App\User');
+        return $this->hasMany('App\User');
     }
 }

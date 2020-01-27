@@ -15,11 +15,15 @@ class UserRoleTableSeeder extends Seeder
         DB::table('user_role')->insert([
             'user_id' => 1,
             'role_id' => 1,
+            'created_at' => date('Y-m-d G:i:s'),
+            'updated_at' => date('Y-m-d G:i:s'),
         ]);
 
         DB::table('user_role')->insert([
             'user_id' => 2,
             'role_id' => 1,
+            'created_at' => date('Y-m-d G:i:s'),
+            'updated_at' => date('Y-m-d G:i:s'),
         ]);
     }
 }

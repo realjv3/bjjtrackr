@@ -117,9 +117,13 @@
             <v-container class="fill-height" fluid>
                 <v-row align="center" justify="center">
 
-                    <People  v-show="show === 'People'"/>
+                    <People
+                        v-if="(isSuperAdmin() || isAdmin() || isInstructor()) && show === 'People'"
+                        ref="people"
+                        @edit-person="onEditPerson"
+                    />
 
-                    <Clients v-show="show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
+                    <Clients v-if="isSuperAdmin() && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
                 </v-row>
             </v-container>
         </v-content>
@@ -144,7 +148,7 @@
 
             <v-tooltip v-if="isAdmin() || isSuperAdmin()" left>
                 <template v-slot:activator="{ on }">
-                    <v-btn fab dark small color="primary" v-on="on">
+                    <v-btn @click="$refs.person.show = true" fab dark small color="primary" v-on="on">
                         <v-icon>mdi-contacts</v-icon>
                     </v-btn>
                 </template>
@@ -163,17 +167,20 @@
         </v-speed-dial>
 
         <Client ref="client" @save-client="onSaveClient"/>
+
+        <Person ref="person" @save-person="onSavePerson"/>
     </v-app>
 </template>
 
 <script>
     import {isSuperAdmin, isAdmin, isInstructor} from "../authorization";
     import People from "components/People";
+    import Person from "components/Person";
     import Clients from "components/Clients";
     import Client from "components/Client";
 
     export default {
-        components: {Client, Clients, People},
+        components: {Client, Clients, People, Person},
         props: {
             source: String,
         },
@@ -213,6 +220,13 @@
             onEditClient(client) {
                 this.$refs.client.client = Object.assign({}, client);
                 this.$refs.client.show = true;
+            },
+            onSavePerson() {
+                this.$refs.people.refresh();
+            },
+            onEditPerson(person) {
+                this.$refs.person.person = Object.assign({}, person);
+                this.$refs.person.show = true;
             },
         },
     }

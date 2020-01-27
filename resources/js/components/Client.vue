@@ -120,6 +120,7 @@
                     country: null,
                     notes: null,
                 };
+                this.error = null;
             },
         },
 	}
