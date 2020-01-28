@@ -29,7 +29,7 @@ class UserController extends Controller
         }
 
         if ($isSuperAdmin) {
-            return [User::with(['roles', 'client'])->get()];
+            return User::with(['roles', 'client'])->get();
         } else {
             return User::with(['client', 'roles'])->where('client_id', $client->id)->get();
         }
