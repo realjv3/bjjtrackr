@@ -57,7 +57,9 @@
 </template>
 
 <script>
-	export default {
+    import {headers} from '../authorization';
+
+    export default {
 		name: "Client",
         data: function() {
             return  {
@@ -82,12 +84,7 @@
                 this.loading = true;
                 fetch('/clients' + (this.client.hasOwnProperty('id') ? `/${this.client.id}` : ''), {
                     method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "X-Requested-With": "XMLHttpRequest",
-                        "X-CSRF-TOKEN": CSRFToken,
-                    },
+                    headers,
                     credentials: "same-origin",
                     body: JSON.stringify(this.client),
                 })

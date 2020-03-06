@@ -101,7 +101,7 @@
 </template>
 
 <script>
-    import {isSuperAdmin, isAdmin} from "../authorization";
+    import {isSuperAdmin, isAdmin, headers} from "../authorization";
 
     export default {
 		name: "Person",
@@ -133,7 +133,7 @@
         },
         computed: {
 		    editing: function() {
-		        return this.person.id
+		        return this.person.id;
             },
         },
         methods: {
@@ -142,12 +142,7 @@
                 this.resetErrors();
                 fetch('/users' + (this.person.hasOwnProperty('id') ? `/${this.person.id}` : ''), {
                     method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "X-Requested-With": "XMLHttpRequest",
-                        "X-CSRF-TOKEN": CSRFToken,
-                    },
+                    headers,
                     credentials: "same-origin",
                     body: JSON.stringify(this.person),
                 })
@@ -174,12 +169,7 @@
             },
             getClients() {
                 fetch('/clients', {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json, text-plain, */*",
-                        "X-Requested-With": "XMLHttpRequest",
-                        "X-CSRF-TOKEN": CSRFToken,
-                    },
+                    headers,
                     credentials: "same-origin",
                 })
                     .then( resp => {

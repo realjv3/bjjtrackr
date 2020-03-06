@@ -5,14 +5,32 @@
             :clipped="$vuetify.breakpoint.lgAndUp"
             app
         >
-            <v-list dense>
+            <v-list>
 
-                <v-list-item v-if="isSuperAdmin() || isAdmin()" key="clients" link @click="show = 'Clients'">
+                <v-list-item v-if="isSuperAdmin()" key="clients" link @click="show = 'Clients'">
                     <v-list-item-action>
                         <v-icon>mdi-account-cash</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title>Clients</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item v-if="isSuperAdmin() || isAdmin()" key="people" link @click="show = 'People'">
+                    <v-list-item-action>
+                        <v-icon>mdi-contacts</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>People</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item key="checkins" link @click="show = 'Check-ins'">
+                    <v-list-item-action>
+                        <v-icon>mdi-history</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Check-ins</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
@@ -118,77 +136,85 @@
                 <v-row align="center" justify="center">
 
                     <People
-                        v-if="(isSuperAdmin() || isAdmin() || isInstructor()) && show === 'People'"
+                        v-show="( ! isStudentOnly()) && show === 'People'"
                         ref="people"
                         @edit-person="onEditPerson"
                     />
 
-                    <Clients v-if="isSuperAdmin() && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
+                    <Clients v-show="isSuperAdmin() && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
+
+                    <Checkins v-show="show === 'Check-ins'" ref="checkins" @edit-checkin="onEditCheckin" />
                 </v-row>
+
+                <v-speed-dial
+                    v-if="! isStudentOnly()"
+                    v-model="speedDial"
+                    bottom right fixed open-on-hover
+                >
+
+                    <template v-slot:activator>
+                        <v-btn v-model="speedDial" color="pink" dark fab>
+                            <v-icon v-if="speedDial">mdi-close</v-icon>
+                            <v-icon v-else>mdi-plus</v-icon>
+                        </v-btn>
+                    </template>
+
+                    <v-tooltip v-if="! isStudentOnly()" left>
+                        <template v-slot:activator="{ on }">
+                            <v-btn @click="$refs.checkin.setCheckin(null)" fab dark small color="primary" v-on="on">
+                                <v-icon>mdi-history</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Check-in</span>
+                    </v-tooltip>
+
+                    <v-tooltip v-if="isAdmin() || isSuperAdmin()" left>
+                        <template v-slot:activator="{ on }">
+                            <v-btn @click="$refs.person.show = true" fab dark small color="primary" v-on="on">
+                                <v-icon>mdi-contacts</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Person</span>
+                    </v-tooltip>
+
+                    <v-tooltip v-if="isSuperAdmin()" left>
+                        <template v-slot:activator="{ on }">
+                            <v-btn @click="$refs.client.show = true" fab dark small color="primary" v-on="on">
+                                <v-icon>mdi-account-cash</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Client</span>
+                    </v-tooltip>
+
+                </v-speed-dial>
+
+                <Client v-show="isSuperAdmin()" ref="client" @save-client="onSaveClient"/>
+
+                <Person v-show="isSuperAdmin() || isAdmin()" ref="person" @save-person="onSavePerson"/>
+
+                <Checkin v-show="! isStudentOnly()" ref="checkin" @save-checkin="onSaveCheckin"/>
             </v-container>
         </v-content>
-
-        <v-speed-dial v-model="speedDial" bottom right fixed open-on-hover>
-
-            <template v-slot:activator>
-                <v-btn v-model="speedDial" color="pink" dark fab>
-                    <v-icon v-if="speedDial">mdi-close</v-icon>
-                    <v-icon v-else>mdi-plus</v-icon>
-                </v-btn>
-            </template>
-
-            <v-tooltip left>
-                <template v-slot:activator="{ on }">
-                    <v-btn fab dark small color="primary" v-on="on">
-                        <v-icon>mdi-history</v-icon>
-                    </v-btn>
-                </template>
-                <span>Check-in</span>
-            </v-tooltip>
-
-            <v-tooltip v-if="isAdmin() || isSuperAdmin()" left>
-                <template v-slot:activator="{ on }">
-                    <v-btn @click="$refs.person.show = true" fab dark small color="primary" v-on="on">
-                        <v-icon>mdi-contacts</v-icon>
-                    </v-btn>
-                </template>
-                <span>Person</span>
-            </v-tooltip>
-
-            <v-tooltip v-if="isSuperAdmin()" left>
-                <template v-slot:activator="{ on }">
-                    <v-btn @click="$refs.client.show = true" fab dark small color="primary" v-on="on">
-                        <v-icon>mdi-account-cash</v-icon>
-                    </v-btn>
-                </template>
-                <span>Client</span>
-            </v-tooltip>
-
-        </v-speed-dial>
-
-        <Client ref="client" @save-client="onSaveClient"/>
-
-        <Person ref="person" @save-person="onSavePerson"/>
     </v-app>
 </template>
 
 <script>
-    import {isSuperAdmin, isAdmin, isInstructor} from "../authorization";
+    import {isSuperAdmin, isAdmin, isStudentOnly} from "../authorization";
     import People from "components/People";
     import Person from "components/Person";
     import Clients from "components/Clients";
     import Client from "components/Client";
+    import Checkins from "components/Checkins";
+    import Checkin from "components/Checkin";
 
     export default {
-        components: {Client, Clients, People, Person},
+        components: {Client, Clients, People, Person, Checkins, Checkin},
         props: {
             source: String,
         },
         data: () => ({
             drawer: null,
             items: [
-                { icon: 'mdi-contacts', text: 'People' },
-                { icon: 'mdi-history', text: 'Check-ins' },
                 { icon: 'mdi-barcode', text: 'Barcodes' },
                 {
                     icon: 'mdi-chevron-up',
@@ -207,26 +233,45 @@
                 { icon: 'mdi-message', text: 'Send feedback' },
                 { icon: 'mdi-help-circle', text: 'Help' },
             ],
-            show: 'People',
+            show: 'Check-ins',
             speedDial: false,
         }),
         methods: {
             isSuperAdmin,
             isAdmin,
-            isInstructor,
+            isStudentOnly,
             onSaveClient() {
-                this.$refs.clients.refresh();
+                if (this.$refs.clients) {
+                    this.$refs.clients.refresh();
+                }
             },
             onEditClient(client) {
-                this.$refs.client.client = Object.assign({}, client);
-                this.$refs.client.show = true;
+                if (this.$refs.client && isSuperAdmin()) {
+                    this.$refs.client.client = Object.assign({}, client);
+                    this.$refs.client.show = true;
+                }
             },
             onSavePerson() {
-                this.$refs.people.refresh();
+                if (this.$refs.people && (isSuperAdmin() || isAdmin())) {
+                    this.$refs.people.refresh();
+                }
             },
             onEditPerson(person) {
-                this.$refs.person.person = Object.assign({}, person);
-                this.$refs.person.show = true;
+                if (this.$refs.person && (isSuperAdmin() || isAdmin())) {
+                    this.$refs.person.person = Object.assign({}, person);
+                    this.$refs.person.show = true;
+                }
+            },
+            onSaveCheckin() {
+                if (this.$refs.checkins) {
+                    this.$refs.checkins.refresh();
+                }
+            },
+            onEditCheckin(checkin) {
+                if (this.$refs.checkin && (! isStudentOnly())) {
+
+                    this.$refs.checkin.setCheckin(checkin);
+                }
             },
         },
     }

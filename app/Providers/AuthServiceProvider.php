@@ -25,6 +25,51 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('isSuperAdmin', function ($user) {
+
+            $isSuperAdmin = false;
+            $roles = $user->roles;
+
+            foreach ($roles as $role) {
+                if ($role->role == 'Super Admin') {
+                    $isSuperAdmin = true;
+                    break;
+                }
+            }
+            return $isSuperAdmin;
+        });
+
+        Gate::define('isAdmin', function ($user) {
+
+            $isAdmin = false;
+            $roles = $user->roles;
+
+            foreach ($roles as $role) {
+                if ($role->role == 'Administrator') {
+                    $isAdmin = true;
+                    break;
+                }
+            }
+            return $isAdmin;
+        });
+
+        Gate::define('isInstructor', function ($user) {
+
+            $isInstructor = false;
+            $roles = $user->roles;
+
+            foreach ($roles as $role) {
+                if ($role->role == 'Instructor') {
+                    $isInstructor = true;
+                    break;
+                }
+            }
+            return $isInstructor;
+        });
+
+        Gate::define('isStudentOnly', function ($user) {
+
+            return Gate::denies('isSuperAdmin') && Gate::denies('isAdmin') && Gate::denies('isInstructor');
+        });
     }
 }

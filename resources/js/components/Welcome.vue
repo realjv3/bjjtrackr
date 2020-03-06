@@ -62,6 +62,8 @@
 </template>
 
 <script>
+    import {headers} from '../authorization';
+
     export default {
         props: {
             source: String,
@@ -79,12 +81,7 @@
             clickLogin() {
                 this.loading = true;
                 fetch('/login', {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json, text-plain, */*",
-                        "X-Requested-With": "XMLHttpRequest",
-                        "X-CSRF-TOKEN": CSRFToken,
-                    },
+                    headers,
                     credentials: "same-origin",
                     method: 'POST',
                     body: JSON.stringify({

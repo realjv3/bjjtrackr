@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -14,23 +15,17 @@ class UserController extends Controller
         $this->middleware('auth');
     }
 
-    public function read() {
+    public function read($client_id = null) {
 
-        $user = Auth::user();
-        $isSuperAdmin = false;
-        $roles = $user->roles;
-        $client = $user->client;
-
-        foreach ($roles as $role) {
-            if ($role->role == 'Super Admin') {
-                $isSuperAdmin = true;
-                break;
+        if (Gate::allows('isSuperAdmin')) {
+            if ( ! empty($client_id)) {
+                return User::with(['roles', 'client'])->where('client_id', $client_id)->get();
+            } else {
+                return User::with(['roles', 'client'])->get();
             }
-        }
-
-        if ($isSuperAdmin) {
-            return User::with(['roles', 'client'])->get();
         } else {
+            $user = Auth::user();
+            $client = $user->client;
             return User::with(['client', 'roles'])->where('client_id', $client->id)->get();
         }
     }

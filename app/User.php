@@ -42,4 +42,8 @@ class User extends Authenticatable
     public function client() {
         return $this->belongsTo('App\Client');
     }
+
+    public function checkins() {
+        return $this->hasMany('App\Checkin');
+    }
 }

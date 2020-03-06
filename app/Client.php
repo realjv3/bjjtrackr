@@ -18,7 +18,11 @@ class Client extends Model
         'notes',
     ];
 
-    public function user() {
+    public function checkins() {
+        return $this->hasMany('App\Checkin');
+    }
+
+    public function users() {
         return $this->hasMany('App\User');
     }
 }

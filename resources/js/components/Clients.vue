@@ -33,7 +33,9 @@
 </template>
 
 <script>
-	export default {
+    import {headers} from '../authorization';
+
+    export default {
 		name: "Clients",
         data: () => ({
             clients: [],
@@ -55,12 +57,7 @@
 		    refresh() {
 		        this.loading = true;
                 fetch('/clients', {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json, text-plain, */*",
-                        "X-Requested-With": "XMLHttpRequest",
-                        "X-CSRF-TOKEN": CSRFToken,
-                    },
+                    headers,
                     credentials: "same-origin",
                 })
                     .then( resp => {
@@ -77,12 +74,7 @@
                 confirm('Are you sure you want to delete this client?') &&
                 fetch(`/clients/${client.id}`, {
                     method: 'DELETE',
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json, text-plain, */*",
-                        "X-Requested-With": "XMLHttpRequest",
-                        "X-CSRF-TOKEN": CSRFToken,
-                    },
+                    headers,
                     credentials: "same-origin",
                 })
                     .then( resp => {

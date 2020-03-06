@@ -37,3 +37,22 @@ export function isStudent() {
     const userRoles = user().roles.map(role => role.id);
     return userRoles.includes(4);
 }
+
+/**
+ * Is the currently logged in user a student
+ * @return {boolean | *}
+ */
+export function isStudentOnly() {
+    return ! isSuperAdmin() && ! isAdmin() && ! isInstructor();
+}
+
+/**
+ * AJAX request headers
+ * @return {Object}
+ */
+export const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+    "X-CSRF-TOKEN": CSRFToken,
+};

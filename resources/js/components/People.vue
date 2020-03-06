@@ -33,7 +33,9 @@
 </template>
 
 <script>
-	export default {
+    import {headers} from '../authorization';
+
+    export default {
 		name: "People",
         data: () => ({
             users: [],
@@ -52,15 +54,7 @@
         methods: {
 		    refresh() {
 		        this.loading = true;
-                fetch('/users', {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json, text-plain, */*",
-                        "X-Requested-With": "XMLHttpRequest",
-                        "X-CSRF-TOKEN": CSRFToken,
-                    },
-                    credentials: "same-origin",
-                })
+                fetch('/users', {headers, credentials: "same-origin"})
                     .then( resp => {
                         if (resp.ok) {
                             return resp.json();
@@ -78,16 +72,7 @@
             },
 		    delPerson(person) {
                 confirm('Are you sure you want to delete this person?') &&
-                fetch(`/users/${person.id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json, text-plain, */*",
-                        "X-Requested-With": "XMLHttpRequest",
-                        "X-CSRF-TOKEN": CSRFToken,
-                    },
-                    credentials: "same-origin",
-                })
+                fetch(`/users/${person.id}`, {method: 'DELETE', headers, credentials: "same-origin"})
                     .then( resp => {
                         if (resp.ok) {
                             this.refresh();

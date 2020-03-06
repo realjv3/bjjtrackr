@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ClientsController extends Controller
 {
@@ -14,21 +15,12 @@ class ClientsController extends Controller
 
     public function read() {
 
-        $user = Auth::user();
-        $isSuperAdmin = false;
-        $roles = $user->roles;
-
-        foreach ($roles as $role) {
-            if ($role->role == 'Super Admin') {
-                $isSuperAdmin = true;
-                break;
-            }
-        }
-
-        if ($isSuperAdmin) {
+        if (Gate::allows('isSuperAdmin')) {
             return Client::all();
         } else {
-            return [Client::find($user->client->id)];
+            $user = Auth::user();
+            $client = $user->client;
+            return Client::with(['users'])->where('id', $client->id)->get();
         }
     }
 
