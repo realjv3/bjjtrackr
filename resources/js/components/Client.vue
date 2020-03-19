@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="show" width="800px">
+    <v-dialog v-model="show" width="800px" :persistent="true">
         <v-card>
             <v-card-title class="grey darken-2">Edit a client</v-card-title>
             <v-container>

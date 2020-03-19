@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-dialog v-model="show.checkin" width="800px">
+        <v-dialog v-model="show.checkin" width="800px" :persistent="true">
             <v-card>
                 <v-card-title class="grey darken-2">{{(checkin.id ? 'Edit a ' : 'New ') + 'check-in'}}</v-card-title>
                 <v-container>
@@ -11,7 +11,8 @@
                                 :items="clients"
                                 :error-messages="error.client_id"
                                 label="Academy"
-                                :loading="loading.clients"
+                                item-text="name"
+                                item-value="id"
                             />
                         </v-col>
                     </v-row>
@@ -79,7 +80,6 @@
                     user_id: null,
                     checked_in_at: null,
                 },
-                clients: [],
                 date: null,
                 error: {
                     client_id: null,
@@ -102,6 +102,11 @@
                 },
                 time: null,
             };
+        },
+        computed: {
+            clients() {
+                return this.$store.state.clients;
+            },
         },
         watch: {
 		    'checkin.client_id': function(newClientId, oldClientId) {
@@ -156,19 +161,6 @@
                 this.saving = false;
                 this.resetErrors();
             },
-            getClients() {
-                this.loading.clients = true;
-                fetch('/clients', {headers, credentials: "same-origin"})
-                    .then( resp => {
-                        if (resp.ok) {
-                            return resp.json();
-                        }
-                    })
-                    .then( json => {
-                        this.clients = json.map( client => ({text: client.name, value: client.id}));
-                        this.loading.clients = false;
-                    })
-            },
             getPeople() {
 		        this.loading.people = true;
                 fetch(`/users/${this.checkin.client_id}`, {headers, credentials: "same-origin"})
@@ -205,10 +197,6 @@
                 }
                 this.show.checkin = true;
             },
-        },
-        created() {
-            this.getClients();
-            this.checkin.client_id = user().client_id;
         },
     }
 </script>

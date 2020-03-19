@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="show" width="800px">
+    <v-dialog v-model="show" width="800px" :persistent="true">
         <v-card>
             <v-card-title class="grey darken-2">Edit a person</v-card-title>
             <v-container>
@@ -80,6 +80,8 @@
                             :items="clients"
                             :error-messages="error.client_id"
                             label="Academy"
+                            item-text="name"
+                            item-value="id"
                         />
                     </v-col>
                 </v-row>
@@ -107,7 +109,6 @@
 		name: "Person",
         data: function() {
             return  {
-                clients: [],
                 person: {
                     name: null,
                     email: null,
@@ -132,8 +133,11 @@
             };
         },
         computed: {
-		    editing: function() {
+		    editing() {
 		        return this.person.id;
+            },
+            clients() {
+		        return this.$store.state.clients;
             },
         },
         methods: {
@@ -166,20 +170,6 @@
                 this.saving = false;
                 this.resetPerson();
                 this.resetErrors();
-            },
-            getClients() {
-                fetch('/clients', {
-                    headers,
-                    credentials: "same-origin",
-                })
-                    .then( resp => {
-                        if (resp.ok) {
-                            return resp.json();
-                        }
-                    })
-                    .then( json => {
-                        this.clients = json.map( client => ({text: client.name, value: client.id}));
-                    })
             },
             resetErrors() {
                 this.error = {
@@ -216,7 +206,6 @@
             },
         },
         created() {
-		    this.getClients();
 		    this.setRoles();
         },
     }

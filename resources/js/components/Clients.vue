@@ -18,7 +18,6 @@
                     :items="clients"
                     :items-per-page="5"
                     class="elevation-1"
-                    :loading="loading"
                     :search="search"
                 >
                     <template v-slot:item.action="{ item }">
@@ -38,7 +37,6 @@
     export default {
 		name: "Clients",
         data: () => ({
-            clients: [],
             headers: [
                 { text: 'Name', align: 'left', value: 'name' },
                 { text: 'Affiliation', value: 'affiliation' },
@@ -50,25 +48,16 @@
                 { text: 'Country', value: 'country' },
                 { text: 'Actions', value: 'action', sortable: false },
             ],
-            loading: true,
             search: '',
         }),
+        computed: {
+            clients() {
+                return this.$store.state.clients;
+            },
+        },
         methods: {
 		    refresh() {
-		        this.loading = true;
-                fetch('/clients', {
-                    headers,
-                    credentials: "same-origin",
-                })
-                    .then( resp => {
-                        if (resp.ok) {
-                            return resp.json();
-                        }
-                    })
-                    .then( json => {
-                        this.clients = json;
-                        this.loading = false;
-                    });
+                this.$store.dispatch('getClients');
             },
 		    delClient(client) {
                 confirm('Are you sure you want to delete this client?') &&
@@ -83,9 +72,6 @@
                         }
                     });
             },
-        },
-        created() {
-		    this.refresh();
         },
     }
 </script>

@@ -15,7 +15,7 @@
                 </v-card-title>
                 <v-row class="mx-2" justify="center">
                     <v-col cols="8">
-                        <v-select v-model="clientId" :items="clients" :loading="loadingClients"></v-select>
+                        <v-select v-model="clientId" :items="clients" item-text="name" item-value="id"></v-select>
                     </v-col>
                 </v-row>
                 <v-data-table
@@ -51,16 +51,19 @@ export default {
     data: () => ({
         checkins: [],
         clientId: null,
-        clients: [],
         headers: [
             { text: 'Name', align: 'left', value: 'user.name' },
             { text: 'Check-in', value: 'checked_in_at' },
             { text: 'Actions', value: 'action', sortable: false },
         ],
         loading: false,
-        loadingClients: false,
         search: '',
     }),
+    computed: {
+        clients() {
+            return this.$store.state.clients;
+        },
+    },
     watch: {
         clientId(newClientId, oldClientId) {
             if (newClientId && (newClientId !== oldClientId)) {
@@ -87,19 +90,6 @@ export default {
                     });
             }
         },
-        getClients() {
-            this.loadingClients = true;
-            fetch('/clients', {
-                headers,
-                credentials: "same-origin",
-            })
-                .then( resp => resp.json())
-                .then( json => {
-                    this.clients = json.map( client => ({text: client.name, value: client.id}));
-                    this.clientId = this.clients[0].value;
-                    this.loadingClients = false;
-                })
-        },
         refresh() {
             const clientId = this.clientId ? this.clientId : '';
             if (clientId) {
@@ -112,9 +102,6 @@ export default {
                     });
             }
         },
-    },
-    created() {
-        this.getClients();
     },
 }
 </script>
