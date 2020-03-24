@@ -38,7 +38,6 @@
     export default {
 		name: "People",
         data: () => ({
-            users: [],
             headers: [
                 { text: 'Name', align: 'left', value: 'name' },
                 { text: 'Belt', value: 'belt' },
@@ -51,24 +50,16 @@
             loading: true,
             search: '',
         }),
+        computed: {
+            users() {
+                return this.$store.state.people;
+            },
+        },
         methods: {
-		    refresh() {
+		    async refresh() {
 		        this.loading = true;
-                fetch('/users', {headers, credentials: "same-origin"})
-                    .then( resp => {
-                        if (resp.ok) {
-                            return resp.json();
-                        }
-                    })
-                    .then( json => {
-                        json = json.map( user => {
-                            user.client = user.client ? user.client.name : null;
-                            user.roles = user.roles.map( role => role.id);
-                            return user;
-                        });
-                        this.users = json;
-                        this.loading = false;
-                    });
+                await this.$store.dispatch('getPeople');
+                this.loading = false;
             },
 		    delPerson(person) {
                 confirm('Are you sure you want to delete this person?') &&

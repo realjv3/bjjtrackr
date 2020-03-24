@@ -34,3 +34,5 @@ Route::get('/checkins/{clientId?}', 'CheckinController@read');
 Route::post('/checkin/', 'CheckinController@create');
 Route::post('/checkin/{id}', 'CheckinController@update');
 Route::delete('/checkin/{id}', 'CheckinController@delete');
+
+Route::get('/qrcode/{id}', 'UserController@getQrCode');

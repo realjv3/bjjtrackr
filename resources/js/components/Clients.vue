@@ -19,6 +19,7 @@
                     :items-per-page="5"
                     class="elevation-1"
                     :search="search"
+                    :loading="loading"
                 >
                     <template v-slot:item.action="{ item }">
                         <v-icon small class="mr-2" @click="$emit('edit-client', item)">edit</v-icon>
@@ -48,6 +49,7 @@
                 { text: 'Country', value: 'country' },
                 { text: 'Actions', value: 'action', sortable: false },
             ],
+            loading: false,
             search: '',
         }),
         computed: {
@@ -56,8 +58,10 @@
             },
         },
         methods: {
-		    refresh() {
-                this.$store.dispatch('getClients');
+		    async refresh() {
+		        this.loading = true;
+                await this.$store.dispatch('getClients');
+		        this.loading = false;
             },
 		    delClient(client) {
                 confirm('Are you sure you want to delete this client?') &&

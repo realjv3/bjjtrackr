@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
@@ -19,14 +20,22 @@ class UserController extends Controller
 
         if (Gate::allows('isSuperAdmin')) {
             if ( ! empty($client_id)) {
-                return User::with(['roles', 'client'])->where('client_id', $client_id)->get();
+                return User::with(['roles', 'client'])
+                    ->where('client_id', $client_id)
+                    ->orderBy('name')
+                    ->get();
             } else {
-                return User::with(['roles', 'client'])->get();
+                return User::with(['roles', 'client'])
+                    ->orderBy('name')
+                    ->get();
             }
         } else {
             $user = Auth::user();
             $client = $user->client;
-            return User::with(['client', 'roles'])->where('client_id', $client->id)->get();
+            return User::with(['client', 'roles'])
+                ->where('client_id', $client->id)
+                ->orderBy('name')
+                ->get();
         }
     }
 
@@ -92,5 +101,13 @@ class UserController extends Controller
         $user = User::find($id);
         $user->roles()->detach();
         $user->delete();
+    }
+
+    public function getQrCode(\BaconQrCode\Writer $writer, Request $request, $id) {
+        $fileName = $id . '_qrcode.png';
+        $writer->writeFile($id, $fileName);
+        $path = public_path() . '/' . $fileName;
+        $type = File::mimeType($path);
+        return response()->file($path, ["Content-Type" => $type]);
     }
 }

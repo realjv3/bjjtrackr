@@ -65,6 +65,11 @@ export default {
         },
     },
     watch: {
+        clients(newClients) {
+            if (newClients.length) {
+                this.clientId = newClients[0].id;
+            }
+        },
         clientId(newClientId, oldClientId) {
             if (newClientId && (newClientId !== oldClientId)) {
                 this.refresh();

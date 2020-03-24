@@ -34,6 +34,15 @@
                     </v-list-item-content>
                 </v-list-item>
 
+                <v-list-item key="qrcodes" link @click="show = 'QRCodes'">
+                    <v-list-item-action>
+                        <v-icon>mdi-qrcode</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>QR Codes</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
                 <template v-for="item in items">
 
                     <v-row v-if="item.heading" :key="item.heading" align="center">
@@ -141,6 +150,8 @@
                         @edit-person="onEditPerson"
                     />
 
+                    <QRCodes v-show="show === 'QRCodes'" ref="people" @edit-person="onEditPerson" />
+
                     <Clients v-show="isSuperAdmin() && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
 
                     <Checkins v-show="show === 'Check-ins'" ref="checkins" @edit-checkin="onEditCheckin" />
@@ -206,16 +217,16 @@
     import Client from "components/Client";
     import Checkins from "components/Checkins";
     import Checkin from "components/Checkin";
+    import QRCodes from "components/QRCodes";
 
     export default {
-        components: {Client, Clients, People, Person, Checkins, Checkin},
+        components: {Client, Clients, People, Person, Checkins, Checkin, QRCodes},
         props: {
             source: String,
         },
         data: () => ({
             drawer: null,
             items: [
-                { icon: 'mdi-barcode', text: 'Barcodes' },
                 {
                     icon: 'mdi-chevron-up',
                     'icon-alt': 'mdi-chevron-down',
