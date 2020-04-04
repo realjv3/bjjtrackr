@@ -45,5 +45,17 @@ export default {
             this.user = newUsers[0];
         }
     },
+    created() {
+        document.addEventListener('keydown', function(e) {
+            const
+                textInput = e.key || String.fromCharCode(e.keyCode),
+                targetName = e.target.localName;
+
+            if (textInput && textInput.length === 1 && targetName !== 'input'){
+
+                console.log('barcode scanned:  ', textInput);
+            }
+        });
+    }
 }
 </script>
