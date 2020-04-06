@@ -150,7 +150,7 @@
                         @edit-person="onEditPerson"
                     />
 
-                    <QRCodes v-show="show === 'QRCodes'" ref="people" @edit-person="onEditPerson" />
+                    <QRCodes v-show="show === 'QRCodes'" @edit-person="onEditPerson" />
 
                     <Clients v-show="isSuperAdmin() && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
 

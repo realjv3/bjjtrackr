@@ -1,105 +1,120 @@
 <template>
-    <v-dialog v-model="show" width="800px" :persistent="true">
-        <v-card>
-            <v-card-title class="grey darken-2">Edit a person</v-card-title>
-            <v-container>
-                <v-row class="mx-2">
-                    <v-col cols="12">
-                        <v-text-field
-                            v-model="person.name"
-                            :error-messages="error.name"
-                            placeholder="required"
-                            label="Name"
-                        />
-                    </v-col>
+    <div>
+        <v-dialog v-model="show" width="800px" :persistent="true">
+            <v-card>
+                <v-card-title class="grey darken-2">Edit a person</v-card-title>
+                <v-container>
+                    <v-row class="mx-2">
+                        <v-col cols="12">
+                            <v-text-field
+                                v-model="person.name"
+                                :error-messages="error.name"
+                                placeholder="required"
+                                label="Name"
+                            />
+                        </v-col>
 
-                    <v-col cols="12">
-                        <v-text-field
-                            v-model="person.email"
-                            :error-messages="error.email"
-                            type="email"
-                            placeholder="required"
-                            label="Email"
-                        />
-                    </v-col>
-                </v-row>
-                <v-row class="mx-2">
-                    <v-col cols="6">
-                        <v-text-field
-                            v-model="person.password"
-                            :error-messages="error.password"
-                            type="password"
-                            :placeholder="editing ? '••••••••' : 'required'"
-                            label="Password"
-                        />
-                    </v-col>
-                    <v-col cols="6">
-                        <v-text-field
-                            v-model="person.password_confirmation"
-                            :error-messages="error.password_confirmation"
-                            type="password"
-                            :placeholder="editing ? '••••••••' : 'required'"
-                            label="Confirm Password"
-                        />
-                    </v-col>
-                </v-row>
-                <v-row class="mx-2">
-                    <v-col cols="4">
-                        <v-select
-                            v-model="person.belt"
-                            :items="['White', 'Blue', 'Purple', 'Brown', 'Black']"
-                            label="Belt"
-                            value="White"
-                        />
-                    </v-col>
+                        <v-col cols="12">
+                            <v-text-field
+                                v-model="person.email"
+                                :error-messages="error.email"
+                                type="email"
+                                placeholder="required"
+                                label="Email"
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-row class="mx-2">
+                        <v-col cols="6">
+                            <v-text-field
+                                v-model="person.password"
+                                :error-messages="error.password"
+                                type="password"
+                                :placeholder="editing ? '••••••••' : 'required'"
+                                label="Password"
+                            />
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field
+                                v-model="person.password_confirmation"
+                                :error-messages="error.password_confirmation"
+                                type="password"
+                                :placeholder="editing ? '••••••••' : 'required'"
+                                label="Confirm Password"
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-row class="mx-2">
+                        <v-col cols="4">
+                            <v-select
+                                v-model="person.belt"
+                                :items="['White', 'Blue', 'Purple', 'Brown', 'Black']"
+                                label="Belt"
+                                value="White"
+                            />
+                        </v-col>
 
-                    <v-col cols="2">
-                        <v-select
-                            v-model="person.stripes"
-                            :items="[0, 1, 2, 3, 4, 5, 6]"
-                            label="Stripes"
-                            value="0"
-                        />
-                    </v-col>
+                        <v-col cols="2">
+                            <v-select
+                                v-model="person.stripes"
+                                :items="[0, 1, 2, 3, 4, 5, 6]"
+                                label="Stripes"
+                                value="0"
+                            />
+                        </v-col>
 
-                    <v-col cols="6">
-                        <v-select
-                            v-model="person.roles"
-                            :items="roles"
-                            label="Roles"
-                            :error-messages="error.roles"
-                            multiple
-                        />
-                    </v-col>
-                </v-row>
-                <v-row class="mx-2">
-                    <v-col cols="10">
-                        <v-select
-                            v-model="person.client_id"
-                            :value="editing ? person.client_id : null"
-                            :items="clients"
-                            :error-messages="error.client_id"
-                            label="Academy"
-                            item-text="name"
-                            item-value="id"
-                        />
-                    </v-col>
-                </v-row>
-                <v-row class="mx-2">
-                    <v-col cols="12">
-                        <v-textarea v-model="person.notes" label="Notes" outlined/>
-                    </v-col>
-                </v-row>
-                <v-row justify="end">
-                    <v-card-actions>
-                        <v-btn text @click="clickSave" :loading="saving">Save</v-btn>
-                        <v-btn text color="primary" @click="close">Cancel</v-btn>
-                    </v-card-actions>
-                </v-row>
-            </v-container>
+                        <v-col cols="6">
+                            <v-select
+                                v-model="person.roles"
+                                :items="roles"
+                                label="Roles"
+                                :error-messages="error.roles"
+                                multiple
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-row class="mx-2">
+                        <v-col cols="8">
+                            <v-select
+                                v-model="person.client_id"
+                                :value="editing ? person.client_id : null"
+                                :items="clients"
+                                :error-messages="error.client_id"
+                                label="Academy"
+                                item-text="name"
+                                item-value="id"
+                            />
+                        </v-col>
+                        <v-col>
+                            <v-text-field
+                                label="Member since"
+                                :value="person.start_date"
+                                @click="showDatepicker = true"
+                                prepend-inner-icon="mdi-calendar-month-outline"
+                                :error-messages="error.start_date"
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-row class="mx-2">
+                        <v-col cols="12">
+                            <v-textarea v-model="person.notes" label="Notes" outlined/>
+                        </v-col>
+                    </v-row>
+                    <v-row justify="end">
+                        <v-card-actions>
+                            <v-btn text @click="clickSave" :loading="saving">Save</v-btn>
+                            <v-btn text color="primary" @click="close">Cancel</v-btn>
+                        </v-card-actions>
+                    </v-row>
+                </v-container>
 
-        </v-card>
-    </v-dialog>
+            </v-card>
+        </v-dialog>
+
+        <v-dialog v-model="showDatepicker" class="mx-auto" width="290px">
+            <v-date-picker v-model="person.start_date" />
+        </v-dialog>
+    </div>
 </template>
 
 <script>
@@ -118,6 +133,7 @@
                     client_id: null,
                     password: null,
                     password_confirmation: null,
+                    start_date: null,
                 },
                 error: {
                     name: null,
@@ -126,10 +142,12 @@
                     password_confirmation: null,
                     roles: null,
                     client_id: null,
+                    start_date: null,
                 },
                 roles: [],
                 saving: false,
                 show: false,
+                showDatepicker: false,
             };
         },
         computed: {
@@ -179,6 +197,7 @@
                     password_confirmation: null,
                     roles: null,
                     client_id: null,
+                    start_date: null,
                 };
             },
             resetPerson() {
@@ -189,6 +208,7 @@
                     stripes: 0,
                     roles: null,
                     client_id: null,
+                    start_date: null,
                     password_confirmation: null,
                 };
             },

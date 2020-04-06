@@ -56,8 +56,8 @@
             },
         },
         methods: {
-		    async refresh() {
-		        this.loading = true;
+            async refresh() {
+                this.loading = true;
                 await this.$store.dispatch('getPeople');
                 this.loading = false;
             },

@@ -19,6 +19,7 @@ class UsersTableSeeder extends Seeder
             'belt' => 'Purple',
             'stripes' => 1,
             'client_id' => 1,
+            'start_date' => '2009-12-19',
         ]);
         $user->save();
 

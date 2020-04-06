@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->unsignedTinyInteger('stripes')->nullable();
             $table->unsignedBigInteger('client_id')->nullable();
             $table->text('notes')->nullable();
+            $table->date('start_date')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

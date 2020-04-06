@@ -49,6 +49,7 @@ class UserController extends Controller
             'belt' => 'required',
             'stripes' => 'required',
             'client_id' => Rule::requiredIf( ! in_array(1, $request->roles ? $request->roles : [])),
+            'start_date' => 'nullable|date',
         ]);
 
         $user = new User([
@@ -58,6 +59,7 @@ class UserController extends Controller
             'belt' => $request->belt,
             'stripes' => $request->stripes,
             'notes' => $request->notes,
+            'start_date' => $request->start_date,
         ]);
         if ( ! empty($request->client_id)) {
             $user->client()->associate($request->client_id);
@@ -79,6 +81,7 @@ class UserController extends Controller
             'belt' => 'required',
             'stripes' => 'required',
             'client_id' => Rule::requiredIf( ! in_array(1, $request->roles ? $request->roles : [])),
+            'start_date' => 'nullable|date',
         ]);
 
         $user = User::find($id);
