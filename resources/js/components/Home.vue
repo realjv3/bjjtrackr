@@ -43,6 +43,15 @@
                     </v-list-item-content>
                 </v-list-item>
 
+                <v-list-item key="reports" link @click="show = 'Reports'">
+                    <v-list-item-action>
+                        <v-icon>mdi-file-chart</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Reports</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
                 <template v-for="item in items">
 
                     <v-row v-if="item.heading" :key="item.heading" align="center">
@@ -150,11 +159,15 @@
                         @edit-person="onEditPerson"
                     />
 
-                    <QRCodes v-show="show === 'QRCodes'" @edit-person="onEditPerson" />
-
                     <Clients v-show="isSuperAdmin() && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
 
                     <Checkins v-show="show === 'Check-ins'" ref="checkins" @edit-checkin="onEditCheckin" />
+
+                    <QRCodes v-show="show === 'QRCodes'" @edit-person="onEditPerson" />
+
+                    <Reports v-show="show === 'Reports'"/>
+
+                    <Settings v-show="show === 'Settings'"/>
                 </v-row>
 
                 <v-speed-dial
@@ -218,15 +231,18 @@
     import Checkins from "components/Checkins";
     import Checkin from "components/Checkin";
     import QRCodes from "components/QRCodes";
+    import Reports from "components/Reports";
+    import Settings from "components/Settings";
 
     export default {
-        components: {Client, Clients, People, Person, Checkins, Checkin, QRCodes},
+        components: {Client, Clients, People, Person, Checkins, Checkin, QRCodes, Reports, Settings},
         props: {
             source: String,
         },
         data: () => ({
             drawer: null,
             items: [
+                { icon: 'mdi-settings', text: 'Settings' },
                 {
                     icon: 'mdi-chevron-up',
                     'icon-alt': 'mdi-chevron-down',
@@ -240,11 +256,10 @@
                         { text: 'Other contacts' },
                     ],
                 },
-                { icon: 'mdi-settings', text: 'Settings' },
                 { icon: 'mdi-message', text: 'Send feedback' },
                 { icon: 'mdi-help-circle', text: 'Help' },
             ],
-            show: 'Check-ins',
+            show: 'Reports',
             speedDial: false,
         }),
         methods: {

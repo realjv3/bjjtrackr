@@ -36,3 +36,6 @@ Route::post('/checkin/{id}', 'CheckinController@update');
 Route::delete('/checkin/{id}', 'CheckinController@delete');
 
 Route::get('/qrcode/{id}', 'UserController@getQrCode');
+
+Route::get('/settings', 'SettingsController@read');
+Route::post('/settings', 'SettingsController@update');

@@ -39,6 +39,10 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Role', 'user_role')->withTimestamps();
     }
 
+    public function belt() {
+        return $this->belongsTo('App\Belt');
+    }
+
     public function client() {
         return $this->belongsTo('App\Client');
     }
