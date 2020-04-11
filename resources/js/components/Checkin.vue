@@ -89,7 +89,6 @@
                     clients: false,
                     people: false,
                 },
-                people: [],
                 saving: false,
                 show: {
                     checkin: false,
@@ -107,15 +106,13 @@
             clients() {
                 return this.$store.state.clients;
             },
+            people() {
+                return this.$store.state.people
+                    .filter( person => person.client_id === this.checkin.client_id)
+                    .map( person => ({text: person.name, value: person.id}));
+            },
         },
         watch: {
-		    'checkin.client_id': function(newClientId, oldClientId) {
-
-		        if (newClientId && (newClientId !== oldClientId)) {
-
-		            this.getPeople();
-                }
-            },
 		    'checkin.checked_in_at': function(newDt, oldDt) {
 
 		        if (newDt && (newDt !== oldDt)) {
@@ -160,19 +157,6 @@
                 };
                 this.saving = false;
                 this.resetErrors();
-            },
-            getPeople() {
-		        this.loading.people = true;
-                fetch(`/users/${this.checkin.client_id}`, {headers, credentials: "same-origin"})
-                    .then( resp => {
-                        if (resp.ok) {
-                            return resp.json();
-                        }
-                    })
-                    .then( json => {
-                        this.people = json.map( person => ({text: person.name, value: person.id}));
-                        this.loading.people = false;
-                    })
             },
             resetErrors() {
                 this.error = {

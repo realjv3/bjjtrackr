@@ -48,9 +48,16 @@
                         <v-col cols="4">
                             <v-select
                                 v-model="person.belt"
-                                :items="['White', 'Blue', 'Purple', 'Brown', 'Black']"
+                                :items="[
+                                    {value: 1, text: 'White'},
+                                    {value: 2, text: 'Blue'},
+                                    {value: 3, text: 'Purple'},
+                                    {value: 4, text: 'Brown'},
+                                    {value: 5, text: 'Black'},
+                                ]"
                                 label="Belt"
                                 value="White"
+                                :error-messages="error.belt"
                             />
                         </v-col>
 
@@ -60,6 +67,7 @@
                                 :items="[0, 1, 2, 3, 4, 5, 6]"
                                 label="Stripes"
                                 value="0"
+                                :error-messages="error.stripes"
                             />
                         </v-col>
 
@@ -140,6 +148,8 @@
                     email: null,
                     password: null,
                     password_confirmation: null,
+                    belt: null,
+                    stripes: null,
                     roles: null,
                     client_id: null,
                     start_date: null,
