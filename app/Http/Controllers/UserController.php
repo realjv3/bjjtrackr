@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Rank;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,20 +21,20 @@ class UserController extends Controller
 
         if (Gate::allows('isSuperAdmin')) {
             if ( ! empty($client_id)) {
-                return User::with(['roles', 'client'])
+                return User::with(['rank', 'roles', 'client'])
                     ->where('client_id', $client_id)
                     ->orderBy('name')
                     ->get();
             } else {
-                return User::with(['roles', 'client'])
+                return User::with(['rank', 'roles', 'client'])
                     ->orderBy('name')
                     ->get();
             }
         } else {
             $user = Auth::user();
-            $client = $user->client;
-            return User::with(['client', 'roles'])
-                ->where('client_id', $client->id)
+            $clientId = $user->client_id;
+            return User::with(['rank', 'client', 'roles'])
+                ->where('client_id', $clientId)
                 ->orderBy('name')
                 ->get();
         }
@@ -46,10 +47,11 @@ class UserController extends Controller
             'email' => 'required|unique:users|email',
             'password' => 'required|confirmed',
             'roles' => 'required|array',
-            'belt' => 'required|numeric',
-            'stripes' => 'required|numeric',
+            'rank.belt' => 'required|numeric',
+            'rank.stripes' => 'required|numeric',
             'client_id' => Rule::requiredIf( ! in_array(1, $request->roles ? $request->roles : [])),
             'start_date' => 'nullable|date',
+            'rank.last_ranked_up' => 'nullable|date',
         ]);
 
         $user = new User([
@@ -69,6 +71,17 @@ class UserController extends Controller
         if ( ! empty($request->roles)) {
             $user->roles()->attach($request->roles);
         }
+
+        if ( ! empty($request->rank)) {
+
+            $rank = new Rank([
+                'user_id' => $user->id,
+                'belt' => $request->rank['belt'],
+                'stripes' => $request->rank['stripes'],
+                'last_ranked_up' => date('Y-m-d'),
+            ]);
+            $rank->save();
+        }
     }
 
     public function update(Request $request, $id) {
@@ -78,8 +91,9 @@ class UserController extends Controller
             'email' => 'required|email',
             'password' => 'confirmed',
             'roles' => 'required|array',
-            'belt' => 'required|numeric',
-            'stripes' => 'required|numeric',
+            'rank.belt' => 'required|numeric',
+            'rank.stripes' => 'required|numeric',
+            'rank.last_ranked_up' => 'nullable|date',
             'client_id' => Rule::requiredIf( ! in_array(1, $request->roles ? $request->roles : [])),
             'start_date' => 'nullable|date',
         ]);
@@ -96,6 +110,15 @@ class UserController extends Controller
         if ( ! empty($request->roles)) {
 
             $user->roles()->sync($request->roles);
+        }
+
+        if ( ! empty($request->rank)) {
+
+            $rank = Rank::where('user_id', $request->id)->get()->first();
+            $rank->belt = $request->rank['belt'];
+            $rank->stripes = $request->rank['stripes'];
+            $rank->last_ranked_up = $request->rank['last_ranked_up'];
+            $rank->save();
         }
     }
 

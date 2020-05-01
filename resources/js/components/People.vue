@@ -47,7 +47,7 @@
                 { text: 'Last Check-in', value: 'lastcheckin' },
                 { text: 'Actions', value: 'action', sortable: false },
             ],
-            loading: true,
+            loading: false,
             search: '',
         }),
         computed: {
@@ -70,9 +70,6 @@
                         }
                     });
             },
-        },
-        created() {
-		    this.refresh();
         },
     }
 </script>

@@ -1,15 +1,19 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import {headers} from "./authorization";
+import {headers, isSuperAdmin} from "./authorization";
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
+        checkins: [],
         clients: [],
         people: [],
     },
     mutations: {
+        setCheckins(state, checkins) {
+            state.checkins = checkins;
+        },
         setClients(state, clients) {
             state.clients = clients;
         },
@@ -38,6 +42,13 @@ const store = new Vuex.Store({
                 });
                 commit('setPeople', json);
             }
+        },
+        async getCheckins({commit}) {
+            const
+                clientId = isSuperAdmin() ? '' : user().client_id,
+                resp = await fetch(`/checkins/${clientId}`, {headers, credentials: "same-origin"}),
+                json = await resp.json();
+            commit('setCheckins', json);
         },
     },
 });

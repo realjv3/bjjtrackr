@@ -19,19 +19,28 @@ class CheckinController extends Controller
         if (Gate::allows('isStudentOnly')) {
 
             $user = Auth::user();
-            return Checkin::with(['user'])->where('user_id', $user->id)->get();
+            return Checkin::with(['user'])
+                ->where('user_id', $user->id)
+                ->orderBy('checked_in_at')
+                ->get();
 
         } else if (Gate::allows('isSuperAdmin')) {
 
             if ( ! empty($clientId)) {
-                return Checkin::with(['user'])->where('client_id', $clientId)->get();
+                return Checkin::with(['user'])
+                    ->where('client_id', $clientId)
+                    ->orderBy('checked_in_at')
+                    ->get();
             } else {
-                return Checkin::with(['user'])->get();
+                return Checkin::with(['user'])->orderBy('checked_in_at')->get();
             }
         } else {
             $user = Auth::user();
             $client = $user->client;
-            return Checkin::with(['user'])->where('client_id', $client->id)->get();
+            return Checkin::with(['user'])
+                ->orderBy('checked_in_at')
+                ->where('client_id', $client->id)
+                ->get();
         }
     }
 

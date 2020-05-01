@@ -144,7 +144,7 @@
                             this.$emit('save-checkin');
                             this.close();
                             const datetime = new Date(json.checked_in_at + ' UTC');
-                            this.snackbar.text = `Checkin at ${datetime.toLocaleString()}`;
+                            this.snackbar.text = `Checked in at ${datetime.toLocaleString()}`;
                             this.snackbar.show = true;
                         }
                     });

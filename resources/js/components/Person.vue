@@ -5,7 +5,7 @@
                 <v-card-title class="grey darken-2">Edit a person</v-card-title>
                 <v-container>
                     <v-row class="mx-2">
-                        <v-col cols="12">
+                        <v-col cols="6">
                             <v-text-field
                                 v-model="person.name"
                                 :error-messages="error.name"
@@ -14,7 +14,7 @@
                             />
                         </v-col>
 
-                        <v-col cols="12">
+                        <v-col>
                             <v-text-field
                                 v-model="person.email"
                                 :error-messages="error.email"
@@ -47,7 +47,7 @@
                     <v-row class="mx-2">
                         <v-col cols="4">
                             <v-select
-                                v-model="person.belt"
+                                v-model="person.rank.belt"
                                 :items="[
                                     {value: 1, text: 'White'},
                                     {value: 2, text: 'Blue'},
@@ -60,29 +60,27 @@
                                 :error-messages="error.belt"
                             />
                         </v-col>
-
                         <v-col cols="2">
                             <v-select
-                                v-model="person.stripes"
+                                v-model="person.rank.stripes"
                                 :items="[0, 1, 2, 3, 4, 5, 6]"
                                 label="Stripes"
                                 value="0"
                                 :error-messages="error.stripes"
                             />
                         </v-col>
-
-                        <v-col cols="6">
-                            <v-select
-                                v-model="person.roles"
-                                :items="roles"
-                                label="Roles"
-                                :error-messages="error.roles"
-                                multiple
+                        <v-col cols="4">
+                            <v-text-field
+                                label="Last ranked up"
+                                :value="person.rank.last_ranked_up"
+                                @click="pickRankedDate = true"
+                                prepend-inner-icon="mdi-calendar-month-outline"
+                                :error-messages="error['rank.last_ranked_up'][0]"
                             />
                         </v-col>
                     </v-row>
                     <v-row class="mx-2">
-                        <v-col cols="8">
+                        <v-col cols="6">
                             <v-select
                                 v-model="person.client_id"
                                 :value="editing ? person.client_id : null"
@@ -94,10 +92,21 @@
                             />
                         </v-col>
                         <v-col>
+                            <v-select
+                                v-model="person.roles"
+                                :items="roles"
+                                label="Roles"
+                                :error-messages="error.roles"
+                                multiple
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-row class="mx-2">
+                        <v-col cols="4">
                             <v-text-field
                                 label="Member since"
                                 :value="person.start_date"
-                                @click="showDatepicker = true"
+                                @click="pickStartDate = true"
                                 prepend-inner-icon="mdi-calendar-month-outline"
                                 :error-messages="error.start_date"
                             />
@@ -119,7 +128,11 @@
             </v-card>
         </v-dialog>
 
-        <v-dialog v-model="showDatepicker" class="mx-auto" width="290px">
+        <v-dialog v-model="pickRankedDate" class="mx-auto" width="290px">
+            <v-date-picker v-model="person.rank.last_ranked_up" />
+        </v-dialog>
+
+        <v-dialog v-model="pickStartDate" class="mx-auto" width="290px">
             <v-date-picker v-model="person.start_date" />
         </v-dialog>
     </div>
@@ -135,8 +148,11 @@
                 person: {
                     name: null,
                     email: null,
-                    belt: 'White',
-                    stripes: 0,
+                    rank: {
+                        belt: 1,
+                        stripes: 0,
+                        last_ranked_up: null,
+                    },
                     roles: null,
                     client_id: null,
                     password: null,
@@ -153,11 +169,13 @@
                     roles: null,
                     client_id: null,
                     start_date: null,
+                    'rank.last_ranked_up': [],
                 },
                 roles: [],
                 saving: false,
                 show: false,
-                showDatepicker: false,
+                pickRankedDate: false,
+                pickStartDate: false,
             };
         },
         computed: {
@@ -208,14 +226,18 @@
                     roles: null,
                     client_id: null,
                     start_date: null,
+                    'rank.last_ranked_up': [],
                 };
             },
             resetPerson() {
                 this.person = {
                     name: null,
                     email: null,
-                    belt: 'White',
-                    stripes: 0,
+                    rank: {
+                        belt: 'White',
+                        stripes: 0,
+                        last_ranked_up: null,
+                    },
                     roles: null,
                     client_id: null,
                     start_date: null,

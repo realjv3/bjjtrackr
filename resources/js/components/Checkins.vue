@@ -49,7 +49,6 @@ import {headers, isStudentOnly} from "../authorization";
 export default {
     name: "Checkins",
     data: () => ({
-        checkins: [],
         clientId: null,
         headers: [
             { text: 'Name', align: 'left', value: 'user.name' },
@@ -60,6 +59,12 @@ export default {
         search: '',
     }),
     computed: {
+        checkins() {
+            if ( ! this.$store.state.checkins.length) {
+                return [];
+            }
+            return this.$store.state.checkins.filter(checkin => checkin.user.client_id === this.clientId);
+        },
         clients() {
             return this.$store.state.clients;
         },
@@ -68,11 +73,6 @@ export default {
         clients(newClients) {
             if (newClients.length) {
                 this.clientId = newClients[0].id;
-            }
-        },
-        clientId(newClientId, oldClientId) {
-            if (newClientId && (newClientId !== oldClientId)) {
-                this.refresh();
             }
         },
     },
@@ -95,18 +95,14 @@ export default {
                     });
             }
         },
-        refresh() {
-            const clientId = this.clientId ? this.clientId : '';
-            if (clientId) {
-                this.loading = true;
-                fetch(`/checkins/${clientId}`, {headers, credentials: "same-origin"})
-                    .then( resp => resp.json())
-                    .then( json => {
-                        this.checkins = json;
-                        this.loading = false;
-                    });
-            }
+        async refresh() {
+            this.loading = true;
+            await this.$store.dispatch('getCheckins');
+            this.loading = false;
         },
     },
+    created() {
+        this.refresh();
+    }
 }
 </script>
