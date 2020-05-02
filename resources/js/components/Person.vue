@@ -63,7 +63,7 @@
                         <v-col cols="2">
                             <v-select
                                 v-model="person.rank.stripes"
-                                :items="[0, 1, 2, 3, 4, 5, 6]"
+                                :items="[0, 1, 2, 3, 4]"
                                 label="Stripes"
                                 value="0"
                                 :error-messages="error.stripes"

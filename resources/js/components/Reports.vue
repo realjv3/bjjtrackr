@@ -20,10 +20,23 @@
                             <td
                                 v-for="field in fieldsPerRow"
                                 :class="{
+                                    nextrank: true,
                                     stripe1: field * row === Number(classesTilStripe) && user.rank.stripes === 0,
                                     stripe2: field * row === Number(classesTilStripe) && user.rank.stripes === 1,
                                     stripe3: field * row === Number(classesTilStripe) && user.rank.stripes === 2,
                                     stripe4: field * row === Number(classesTilStripe) && user.rank.stripes === 3,
+                                    bluebelt: field * row === Number(classesTilStripe)
+                                            && user.rank.stripes === 4
+                                            && user.rank.belt === 1,
+                                    purplebelt: field * row === Number(classesTilStripe)
+                                            && user.rank.stripes === 4
+                                            && user.rank.belt === 2,
+                                    brownbelt: field * row === Number(classesTilStripe)
+                                            && user.rank.stripes === 4
+                                            && user.rank.belt === 3,
+                                    blackbelt: field * row === Number(classesTilStripe)
+                                            && user.rank.stripes === 4
+                                            && user.rank.belt === 4,
                                 }"
                             >
                                 <span
@@ -119,9 +132,8 @@ export default {
         font-weight: bold;
     }
 
-    .stripe1::after {
+    .nextrank::after {
         content: "";
-        background-image: url("/storage/stripe1.png");
         opacity: .35;
         height: 50px;
         width: 50px;
@@ -130,45 +142,38 @@ export default {
         bottom: 0;
         left: 0;
         right: 0;
+    }
+
+    .stripe1::after {
+        background-image: url("/storage/stripe1.png");
     }
 
     .stripe2::after {
-        content: "";
         background-image: url("/storage/stripe2.png");
-        opacity: .35;
-        height: 50px;
-        width: 50px;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
     }
 
     .stripe3::after {
-        content: "";
         background-image: url("/storage/stripe3.png");
-        opacity: .35;
-        height: 50px;
-        width: 50px;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
     }
 
     .stripe4::after {
         display: block;
-        content: "";
         background-image: url("/storage/stripe4.png");
-        opacity: .35;
-        height: 50px;
-        width: 50px;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
+    }
+
+    .bluebelt::after {
+        background-image: url("/storage/blue.png");
+    }
+
+    .purplebelt::after {
+        background-image: url("/storage/purple.png");
+    }
+
+    .brownbelt::after {
+        background-image: url("/storage/brown.png");
+    }
+
+    .blackbelt::after {
+        background-image: url("/storage/black.png");
     }
 </style>
