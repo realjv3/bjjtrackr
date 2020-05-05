@@ -145,35 +145,35 @@ export default {
     }
 
     .stripe1::after {
-        background-image: url("/storage/stripe1.png");
+        background-image: url("/storage/ranks/stripe1.png");
     }
 
     .stripe2::after {
-        background-image: url("/storage/stripe2.png");
+        background-image: url("/storage/ranks/stripe2.png");
     }
 
     .stripe3::after {
-        background-image: url("/storage/stripe3.png");
+        background-image: url("/storage/ranks/stripe3.png");
     }
 
     .stripe4::after {
         display: block;
-        background-image: url("/storage/stripe4.png");
+        background-image: url("/storage/ranks/stripe4.png");
     }
 
     .bluebelt::after {
-        background-image: url("/storage/blue.png");
+        background-image: url("/storage/ranks/blue.png");
     }
 
     .purplebelt::after {
-        background-image: url("/storage/purple.png");
+        background-image: url("/storage/ranks/purple.png");
     }
 
     .brownbelt::after {
-        background-image: url("/storage/brown.png");
+        background-image: url("/storage/ranks/brown.png");
     }
 
     .blackbelt::after {
-        background-image: url("/storage/black.png");
+        background-image: url("/storage/ranks/black.png");
     }
 </style>

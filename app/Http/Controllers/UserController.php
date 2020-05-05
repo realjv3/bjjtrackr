@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -126,14 +127,17 @@ class UserController extends Controller
 
         $user = User::find($id);
         $user->roles()->detach();
+        Storage::delete('public/qrcodes/' . $id . '_qrcode.png');
         $user->delete();
     }
 
     public function getQrCode(\BaconQrCode\Writer $writer, Request $request, $id) {
-        $fileName = $id . '_qrcode.png';
-        $writer->writeFile($id, $fileName);
-        $path = public_path() . '/' . $fileName;
-        $type = File::mimeType($path);
-        return response()->file($path, ["Content-Type" => $type]);
+
+        $fileName = public_path() . '/storage/qrcodes/' . $id . '_qrcode.png';
+        if ( ! Storage::exists($fileName)) {
+            $writer->writeFile($id, $fileName);
+        }
+        $type = File::mimeType($fileName);
+        return response()->file($fileName, ["Content-Type" => $type]);
     }
 }
