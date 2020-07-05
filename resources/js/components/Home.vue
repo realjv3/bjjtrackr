@@ -163,7 +163,7 @@
 
                     <Checkins v-show="show === 'Check-ins'" ref="checkins" @edit-checkin="onEditCheckin" />
 
-                    <QRCodes v-show="show === 'QRCodes'" @edit-person="onEditPerson" />
+                    <QRCodes v-show="show === 'QRCodes'" @edit-person="onEditPerson" @save-checkin="onSaveCheckin" />
 
                     <Reports v-show="show === 'Reports'"/>
 
