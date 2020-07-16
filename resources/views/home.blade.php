@@ -6,4 +6,4 @@
         settings = @json($settings);
 </script>
 
-<script type="application/javascript" src="https://localhost:9000/home.bundle.js" defer></script>
+<script type="application/javascript" src="<?= config('app.js_url') ?>/home.bundle.js" defer></script>

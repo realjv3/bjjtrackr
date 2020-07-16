@@ -1,3 +1,3 @@
 @extends('header')
 
-<script type="application/javascript" src="https://localhost:9000/welcome.bundle.js" defer></script>
+<script type="application/javascript" src="<?= config('app.js_url') ?>/welcome.bundle.js" defer></script>

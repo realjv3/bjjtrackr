@@ -12,7 +12,7 @@
     "url": "https://github.com/realjv3/bjjtrackr/issues"
   },
   "homepage": "https://bjjtrackr.com",
-  "devDependencies": {
+  "dependencies": {
     "@babel/core": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
     "babel-loader": "^8.0.6",
@@ -27,15 +27,16 @@
     "vuetify": "^2.2.15",
     "vuetify-loader": "^1.4.3",
     "webpack": "^4.42.0",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
-  },
-  "dependencies": {
     "vue": "^2.6.11",
-    "vuex": "^3.1.2"
+    "vuex": "^3.1.2",
+    "webpack-cli": "^3.3.11"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^3.10.3"
   },
   "scripts": {
     "dev": "webpack-dev-server --mode development --https",
+    "test": "webpack --mode development",
     "prod": "webpack --mode production"
   }
 }
