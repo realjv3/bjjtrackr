@@ -133,6 +133,9 @@ class UserController extends Controller
 
     public function getQrCode(\BaconQrCode\Writer $writer, Request $request, $id) {
 
+        if ( ! is_dir(public_path() . '/storage/qrcodes')) {
+            mkdir(public_path() . '/storage/qrcodes', 0755);
+        }
         $fileName = public_path() . '/storage/qrcodes/' . $id . '_qrcode.png';
         if ( ! Storage::exists($fileName)) {
             $writer->writeFile($id, $fileName);
