@@ -112,8 +112,5 @@ export default {
             this.user = newUsers[0];
         }
     },
-    created() {
-        document.addEventListener('keypress', this.onKeypress);
-    }
 }
 </script>

@@ -163,7 +163,12 @@
 
                     <Checkins v-show="show === 'Check-ins'" ref="checkins" @edit-checkin="onEditCheckin" />
 
-                    <QRCodes v-show="show === 'QRCodes'" @edit-person="onEditPerson" @save-checkin="onSaveCheckin" />
+                    <QRCodes
+                        v-show="show === 'QRCodes'"
+                        @edit-person="onEditPerson"
+                        @save-checkin="onSaveCheckin"
+                        ref="qrcodes"
+                    />
 
                     <Reports v-show="show === 'Reports'"/>
 
@@ -300,6 +305,9 @@
                 }
             },
         },
+        mounted() {
+            document.addEventListener('keypress', this.$refs.qrcodes.onKeypress);
+        }
     }
 </script>
 
