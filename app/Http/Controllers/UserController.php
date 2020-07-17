@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -100,13 +101,20 @@ class UserController extends Controller
         ]);
 
         $user = User::find($id);
+
         if ( ! empty($request->client_id)) {
 
             $user->client()->associate($request->client_id);
         } else {
             $user->client()->disassociate();
         }
+
         $user->update($request->all());
+
+        if ( ! empty($request->password)) {
+            $user->password = Hash::make($request->password);
+            $user->save();
+        }
 
         if ( ! empty($request->roles)) {
 
