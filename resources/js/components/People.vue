@@ -44,7 +44,7 @@
                 { text: 'Stripes', value: 'stripes' },
                 { text: 'Email', value: 'email' },
                 { text: 'Client', value: 'client' },
-                { text: 'Last Check-in', value: 'lastcheckin' },
+                { text: 'Last Check-in', value: 'last_checkin' },
                 { text: 'Actions', value: 'action', sortable: false },
             ],
             loading: false,

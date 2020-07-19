@@ -129,7 +129,7 @@
             <v-menu offset-y>
 
                 <template v-slot:activator="{on}">
-                    <v-btn v-on="on">
+                    <v-btn v-on="on" class="indigo lighten-2" :depressed="true">
                         <span>{{user.name}}</span>
                         <v-icon>mdi-chevron-down</v-icon>
                     </v-btn>

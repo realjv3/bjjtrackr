@@ -39,6 +39,9 @@ const store = new Vuex.Store({
                 json = json.map( user => {
                     user.client = user.client ? user.client.name : null;
                     user.roles = user.roles.map( role => role.id);
+                    if (user.last_checkin) {
+                        user.last_checkin = user.last_checkin.checked_in_at;
+                    }
                     return user;
                 });
                 commit('setPeople', json);

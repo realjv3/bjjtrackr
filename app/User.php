@@ -50,4 +50,8 @@ class User extends Authenticatable
     public function checkins() {
         return $this->hasMany('App\Checkin');
     }
+
+    public function lastCheckin() {
+        return $this->hasOne('App\Checkin')->latest();
+    }
 }
