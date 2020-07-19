@@ -31,3 +31,10 @@ export function timeToLocalSql(time) {
     const d = new Date(time);
     return d.toLocaleTimeString([], {hour12: false});
 }
+
+
+export function utcToLocal(utcTime) {
+    if (utcTime) {
+        return new Date(utcTime + ' UTC').toLocaleString();
+    }
+}

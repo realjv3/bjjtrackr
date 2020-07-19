@@ -45,6 +45,7 @@
 <script>
 
 import {headers, isStudentOnly} from "../authorization";
+import {utcToLocal} from "../datetime_converters";
 
 export default {
     name: "Checkins",
@@ -77,9 +78,7 @@ export default {
         },
     },
     methods: {
-        utcToLocal(utcTime) {
-            return new Date(utcTime + ' UTC').toLocaleString();
-        },
+        utcToLocal,
         delCheckin(checkin) {
             if (! isStudentOnly()) {
                 confirm('Are you sure you want to delete this checkin?') &&
