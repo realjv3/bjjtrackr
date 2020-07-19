@@ -9,6 +9,7 @@ const store = new Vuex.Store({
         checkins: [],
         clients: [],
         people: [],
+        user: user(),
     },
     mutations: {
         setCheckins(state, checkins) {

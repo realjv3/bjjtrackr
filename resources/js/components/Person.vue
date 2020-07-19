@@ -32,6 +32,7 @@
                                 type="password"
                                 :placeholder="editing ? '••••••••' : 'required'"
                                 label="Password"
+                                :disabled="disablePassword"
                             />
                         </v-col>
                         <v-col cols="6">
@@ -41,6 +42,7 @@
                                 type="password"
                                 :placeholder="editing ? '••••••••' : 'required'"
                                 label="Confirm Password"
+                                :disabled="disablePassword"
                             />
                         </v-col>
                     </v-row>
@@ -184,6 +186,13 @@
             },
             clients() {
 		        return this.$store.state.clients;
+            },
+            disablePassword() {
+		        if (this.person.roles) {
+                    return !isSuperAdmin() && this.person.roles.includes(1);
+                } else {
+		            return false;
+                }
             },
         },
         methods: {

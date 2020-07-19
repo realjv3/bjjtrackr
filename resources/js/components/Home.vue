@@ -129,7 +129,8 @@
             <v-menu offset-y>
 
                 <template v-slot:activator="{on}">
-                    <v-btn icon v-on="on">
+                    <v-btn v-on="on">
+                        <span>{{user.name}}</span>
                         <v-icon>mdi-chevron-down</v-icon>
                     </v-btn>
                 </template>
@@ -267,6 +268,11 @@
             show: 'Reports',
             speedDial: false,
         }),
+        computed: {
+            user() {
+                return this.$store.state.user;
+            },
+        },
         methods: {
             isSuperAdmin,
             isAdmin,

@@ -109,12 +109,19 @@ class UserController extends Controller
             $user->client()->disassociate();
         }
 
-        $user->update($request->all());
-
         if ( ! empty($request->password)) {
-            $user->password = Hash::make($request->password);
-            $user->save();
+            if (
+                Gate::forUser($user)->allows('isSuperAdmin')
+                && Gate::denies('isSuperAdmin')
+            ) {
+                // non super-admins not allowed to change super-admins passwords
+            } else {
+                $user->password = Hash::make($request->password);
+                $user->save();
+            }
         }
+
+        $user->update($request->except('password'));
 
         if ( ! empty($request->roles)) {
 
