@@ -141,11 +141,9 @@
                             this.error = Object.assign(this.error, json.errors);
                             this.saving = false;
                         } else if (json.id) {
-                            this.$emit('save-checkin');
                             this.close();
                             const datetime = new Date(json.checked_in_at + ' UTC');
-                            this.snackbar.text = `Checked in at ${datetime.toLocaleString()}`;
-                            this.snackbar.show = true;
+                            this.$emit('save-checkin', `Checked in at ${datetime.toLocaleString()}`);
                         }
                     });
             },

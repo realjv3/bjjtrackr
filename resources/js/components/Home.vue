@@ -154,27 +154,24 @@
             <v-container class="fill-height" fluid>
                 <v-row align="center" justify="center">
 
-                    <People
-                        v-show="( ! isStudentOnly()) && show === 'People'"
-                        ref="people"
-                        @edit-person="onEditPerson"
-                    />
+                    <People v-show="( ! isStudentOnly()) && show === 'People'" ref="people" @edit-person="onEditPerson" />
 
                     <Clients v-show="isSuperAdmin() && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
 
                     <Checkins v-show="show === 'Check-ins'" ref="checkins" @edit-checkin="onEditCheckin" />
 
-                    <QRCodes
-                        v-show="show === 'QRCodes'"
-                        @edit-person="onEditPerson"
-                        @save-checkin="onSaveCheckin"
-                        ref="qrcodes"
-                    />
+                    <QRCodes v-show="show === 'QRCodes'" @save-checkin="onSaveCheckin" ref="qrcodes" />
 
                     <Reports v-show="show === 'Reports'"/>
 
                     <Settings v-show="show === 'Settings'"/>
                 </v-row>
+
+                <Client v-show="isSuperAdmin()" ref="client" @save-client="onSaveClient"/>
+
+                <Person v-show="isSuperAdmin() || isAdmin()" ref="person" @save-person="onSavePerson"/>
+
+                <Checkin v-show="! isStudentOnly()" ref="checkin" @save-checkin="onSaveCheckin"/>
 
                 <v-speed-dial
                     v-if="! isStudentOnly()"
@@ -218,11 +215,7 @@
 
                 </v-speed-dial>
 
-                <Client v-show="isSuperAdmin()" ref="client" @save-client="onSaveClient"/>
-
-                <Person v-show="isSuperAdmin() || isAdmin()" ref="person" @save-person="onSavePerson"/>
-
-                <Checkin v-show="! isStudentOnly()" ref="checkin" @save-checkin="onSaveCheckin"/>
+                <v-snackbar v-model="snackbar.show" :bottom="true" :multi-line="true">{{snackbar.text}}</v-snackbar>
             </v-container>
         </v-content>
     </v-app>
@@ -266,6 +259,10 @@
                 { icon: 'mdi-help-circle', text: 'Help' },
             ],
             show: 'Reports',
+            snackbar: {
+                show: false,
+                text: '',
+            },
             speedDial: false,
         }),
         computed: {
@@ -299,10 +296,13 @@
                     this.$refs.person.show = true;
                 }
             },
-            onSaveCheckin() {
+            onSaveCheckin(snackbarText) {
+                this.snackbar.text = snackbarText;
+                this.snackbar.show = true;
                 if (this.$refs.checkins) {
                     this.$refs.checkins.refresh();
                 }
+                this.$refs.people.refresh();
             },
             onEditCheckin(checkin) {
                 if (this.$refs.checkin && (! isStudentOnly())) {

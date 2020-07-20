@@ -21,7 +21,6 @@
                 </v-card-text>
             </v-card>
         </v-row>
-        <v-snackbar v-model="snackbar.show" :bottom="true" :multi-line="true">{{snackbar.text}}</v-snackbar>
     </v-container>
 </template>
 
@@ -32,10 +31,6 @@ export default {
     name: "QRCodes",
     data: () => ({
         scannedId: '',
-        snackbar: {
-            show: false,
-            text: '',
-        },
         timeStamp: 0,
         user: {},
     }),
@@ -74,10 +69,8 @@ export default {
                     if (json.errors) {
                         console.log(json.errors);
                     } else if (json.id) {
-                        this.$emit('save-checkin');
                         const datetime = new Date(json.checked_in_at + ' UTC');
-                        this.snackbar.text = `Checked in at ${datetime.toLocaleString()}`;
-                        this.snackbar.show = true;
+                        this.$emit('save-checkin', `Checked in at ${datetime.toLocaleString()}`);
                     }
                     this.reset();
                 });
@@ -97,6 +90,7 @@ export default {
                     this.scannedId += e.key;
                 }
                 if (e.keyCode === 13) {
+                    console.log(`Scanned ${this.scannedId}`);
                     this.checkin();
                 }
             }
