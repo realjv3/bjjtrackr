@@ -9,6 +9,7 @@ const store = new Vuex.Store({
         checkins: [],
         clients: [],
         people: [],
+        settings: initSettings,
         user: user(),
     },
     mutations: {
@@ -20,6 +21,9 @@ const store = new Vuex.Store({
         },
         setPeople(state, people) {
             state.people = people;
+        },
+        setSettings(state, settings) {
+            state.settings = settings;
         },
     },
     actions: {
@@ -47,12 +51,19 @@ const store = new Vuex.Store({
                 commit('setPeople', json);
             }
         },
-        async getCheckins({commit}) {
+        async getCheckins({commit, state}) {
             const
-                clientId = isSuperAdmin() ? '' : user().client_id,
+                clientId = isSuperAdmin() ? '' : state.user.client_id,
                 resp = await fetch(`/checkins/${clientId}`, {headers, credentials: "same-origin"}),
                 json = await resp.json();
             commit('setCheckins', json);
+        },
+        async getSettings({commit, state}) {
+            const
+                clientId = state.user.client_id,
+                resp = await fetch(`/settings/${clientId}`, {headers, credentials: "same-origin"}),
+                json = await resp.json();
+            commit('setSettings', json);
         },
     },
 });

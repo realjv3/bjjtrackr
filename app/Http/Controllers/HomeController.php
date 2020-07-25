@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Setting;
 use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -18,11 +17,13 @@ class HomeController extends Controller
 
     public function index() {
 
-        $raw_settings =  Setting::all();
+        $raw_settings =  Setting::where('client_id', Auth::user()->client_id)->get();
         $settings = [];
         $raw_settings->each(function($setting) use (&$settings) {
 
             $settings[$setting->belt] = [
+                'id' => $setting->id,
+                'client_id' => $setting->client_id,
                 'classes_til_stripe' => $setting->classes_til_stripe,
                 'times_absent_til_contact' => $setting->times_absent_til_contact,
             ];

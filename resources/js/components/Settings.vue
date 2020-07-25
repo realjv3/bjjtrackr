@@ -16,7 +16,6 @@
                                     label="Classes until next stripe"
                                     style="width: 150px"
                                     @change="update"
-                                    @keyup="update"
                                 />
                                 <v-text-field
                                     v-model="settings[belt].times_absent_til_contact"
@@ -24,7 +23,6 @@
                                     label="Times absent until contact"
                                     style="width: 150px"
                                     @change="update"
-                                    @keyup="update"
                                 />
                             </v-col>
                         </v-row>
@@ -50,11 +48,15 @@ export default {
             {value: 3, text: 'Purple'},
             {value: 4, text: 'Brown'},
         ],
-        settings,
     }),
+    computed: {
+        settings() {
+            return this.$store.state.settings;
+        },
+    },
     methods: {
         update() {
-            fetch('/settings', {
+            fetch(`/settings/${this.$store.state.user.client_id}`, {
                 method: 'POST',
                 headers,
                 credentials: "same-origin",
@@ -64,12 +66,11 @@ export default {
                     times_absent_til_contact: this.settings[this.belt].times_absent_til_contact,
                 }),
             })
-                .then( resp => {
-                    if (resp.ok) {
-                        return resp.json();
-                    }
-                })
-                .then( json => this.settings = json );
+                .then( resp => resp.json())
+                .then( () => this.refresh() );
+        },
+        async refresh() {
+            await this.$store.dispatch('getSettings');
         },
     },
 }
