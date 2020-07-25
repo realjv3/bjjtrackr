@@ -45,8 +45,8 @@ export default {
     data: () => ({
         headers: [
             { text: 'Name', align: 'left', value: 'name' },
-            { text: 'Belt', value: 'belt' },
-            { text: 'Stripes', value: 'stripes' },
+            { text: 'Belt', value: 'rank.belt' },
+            { text: 'Stripes', value: 'rank.stripes' },
             { text: 'Email', value: 'email' },
             { text: 'Client', value: 'client' },
             { text: 'Last Check-in', value: 'last_checkin' },
