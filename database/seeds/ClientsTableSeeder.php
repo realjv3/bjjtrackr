@@ -12,7 +12,7 @@ class ClientsTableSeeder extends Seeder
      */
     public function run()
     {
-        $user = new Client([
+        Client::create([
             'name' => 'Paulo Santana BJJ',
             'affiliation' => 'Lucas Lepri Association',
             'address1' => '1606 South Stratford Road',
@@ -22,6 +22,15 @@ class ClientsTableSeeder extends Seeder
             'zip' => '27103',
             'country' => 'USA',
         ]);
-        $user->save();
+        Client::create([
+            'name' => 'R&D Academy of Self Defense',
+            'affiliation' => 'Gracie Humaitá',
+            'address1' => '4755 Commercial Plaza Dr',
+            'address2' => '',
+            'city' => 'Winston-Salem',
+            'state' => 'NC',
+            'zip' => '27104',
+            'country' => 'USA',
+        ]);
     }
 }
