@@ -21,22 +21,14 @@
                                 v-for="field in fieldsPerRow"
                                 :class="{
                                     nextrank: true,
-                                    stripe1: field * row === Number(classesTilStripe) && user.rank.stripes === 0,
-                                    stripe2: field * row === Number(classesTilStripe) && user.rank.stripes === 1,
-                                    stripe3: field * row === Number(classesTilStripe) && user.rank.stripes === 2,
-                                    stripe4: field * row === Number(classesTilStripe) && user.rank.stripes === 3,
-                                    bluebelt: field * row === Number(classesTilStripe)
-                                            && user.rank.stripes === 4
-                                            && user.rank.belt === 1,
-                                    purplebelt: field * row === Number(classesTilStripe)
-                                            && user.rank.stripes === 4
-                                            && user.rank.belt === 2,
-                                    brownbelt: field * row === Number(classesTilStripe)
-                                            && user.rank.stripes === 4
-                                            && user.rank.belt === 3,
-                                    blackbelt: field * row === Number(classesTilStripe)
-                                            && user.rank.stripes === 4
-                                            && user.rank.belt === 4,
+                                    stripe1: showStripe(field, row, 1),
+                                    stripe2: showStripe(field, row, 2),
+                                    stripe3: showStripe(field, row, 3),
+                                    stripe4: showStripe(field, row, 4),
+                                    bluebelt: showBelt(field, row, 2),
+                                    purplebelt: showBelt(field, row, 3),
+                                    brownbelt: showBelt(field, row, 4),
+                                    blackbelt: showBelt(field, row, 5),
                                 }"
                             >
                                 <span
@@ -80,22 +72,28 @@ export default {
             return this.$store.state.people.filter(person => person.roles.includes(4));
         },
         classesTilStripe() {
-            return settings[this.user.rank.belt].classes_til_stripe;
+            return Number(this.settings[this.user.rank.belt].classes_til_stripe);
         },
         fieldsPerRow() {
-            return this.classesTilStripe / (this.user.rank.belt === 1 ? 3 : 5);
+            let fieldsPerRow = Math.round(this.classesTilStripe / (this.classesTilStripe <= 30 ? 3 : 5));
+            fieldsPerRow = fieldsPerRow > 20 ? 20 : fieldsPerRow;
+            fieldsPerRow = fieldsPerRow < 10 ? 10 : fieldsPerRow;
+            return fieldsPerRow;
         },
         rows() {
-            let rows = this.user.rank.belt === 1 ? 3 : 5;
+            let rows = Math.ceil(this.classesTilStripe / this.fieldsPerRow);
             if (this.checkins.length) {
                 const classesTilEligible = this.classesTilStripe - this.checkins.length;
-
+                // if student is eligible for next stripe but has not received
                 if (Math.sign(classesTilEligible) === -1) {
 
                     rows += Math.ceil(Math.abs(classesTilEligible) / (this.classesTilStripe / rows));
                 }
             }
             return rows;
+        },
+        settings() {
+            return this.$store.state.settings;
         },
     },
     methods: {
@@ -108,11 +106,24 @@ export default {
                 }
             }
         },
+        showBelt(field, row, beltId) {
+            return (
+                this.fieldsPerRow * (row - 1) + field === Number(this.classesTilStripe)
+                && this.user.rank.stripes === 4
+                && this.user.rank.belt === beltId - 1
+            );
+        },
+        showStripe(field, row, stripeNum) {
+            return (
+                this.fieldsPerRow * (row - 1) + field === Number(this.classesTilStripe)
+                && this.user.rank.stripes + 1 === stripeNum
+            );
+        },
     },
     watch: {
         users(newUsers) {
             this.user = newUsers[0];
-        }
+        },
     },
 }
 </script>

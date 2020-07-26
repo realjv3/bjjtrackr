@@ -13,15 +13,21 @@
                                 <v-text-field
                                     v-model="settings[belt].classes_til_stripe"
                                     type="number"
+                                    min="1"
+                                    max="255"
                                     label="Classes until next stripe"
                                     style="width: 150px"
+                                    :error-messages="errors.classes_til_stripe[0]"
                                     @change="update"
                                 />
                                 <v-text-field
                                     v-model="settings[belt].times_absent_til_contact"
                                     type="number"
+                                    min="1"
+                                    max="255"
                                     label="Times absent until contact"
                                     style="width: 150px"
+                                    :error-messages="errors.times_absent_til_contact[0]"
                                     @change="update"
                                 />
                             </v-col>
@@ -48,6 +54,10 @@ export default {
             {value: 3, text: 'Purple'},
             {value: 4, text: 'Brown'},
         ],
+        errors: {
+            classes_til_stripe: [],
+            times_absent_til_contact: [],
+        },
     }),
     computed: {
         settings() {
@@ -56,18 +66,32 @@ export default {
     },
     methods: {
         update() {
-            fetch(`/settings/${this.$store.state.user.client_id}`, {
+            this.errors = {
+                classes_til_stripe: [],
+                times_absent_til_contact: [],
+            };
+            fetch(`/settings/${this.settings[this.belt].id}`, {
                 method: 'POST',
                 headers,
                 credentials: "same-origin",
                 body: JSON.stringify({
-                    belt: this.belt,
                     classes_til_stripe: this.settings[this.belt].classes_til_stripe,
                     times_absent_til_contact: this.settings[this.belt].times_absent_til_contact,
                 }),
             })
                 .then( resp => resp.json())
-                .then( () => this.refresh() );
+                .then( json => {
+                    if (json.errors) {
+                        if (json.errors.classes_til_stripe) {
+                            this.errors.classes_til_stripe = json.errors.classes_til_stripe;
+                        }
+                        if (json.errors.times_absent_til_contact) {
+                            this.errors.times_absent_til_contact = json.errors.times_absent_til_contact;
+                        }
+                    } else {
+                        this.refresh();
+                    }
+                });
         },
         async refresh() {
             await this.$store.dispatch('getSettings');

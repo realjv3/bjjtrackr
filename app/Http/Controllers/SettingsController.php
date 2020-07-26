@@ -28,6 +28,10 @@ class SettingsController extends Controller
     public function update($id, Request $request)
     {
         if (Gate::allows('isSuperAdmin') || Gate::allows('isAdmin')) {
+            $request->validate([
+                'classes_til_stripe' => 'numeric|min:1|max:255',
+                'times_absent_til_contact' => 'numeric|min:1|max:255',
+            ]);
             $setting = Setting::find($id);
             $setting->update($request->all());
         }
