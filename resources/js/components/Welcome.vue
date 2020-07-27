@@ -14,16 +14,16 @@
                         sm="8"
                         md="4"
                     >
-                        <v-card class="elevation-12">
-                            <v-toolbar
-                                color="primary"
-                                dark
-                                flat
-                            >
-                                <v-toolbar-title>Welcome to BjjTrackr</v-toolbar-title>
-                            </v-toolbar>
-                            <v-card-text>
-                                <v-form>
+                        <v-form>
+                            <v-card class="elevation-12">
+                                <v-toolbar
+                                    color="primary"
+                                    dark
+                                    flat
+                                >
+                                    <v-toolbar-title>Welcome to BjjTrackr</v-toolbar-title>
+                                </v-toolbar>
+                                <v-card-text>
                                     <v-text-field
                                         label="Email"
                                         name="email"
@@ -42,18 +42,19 @@
                                         v-model="password"
                                         :error-messages="errors.password"
                                     />
-                                </v-form>
-                            </v-card-text>
-                            <v-card-actions>
-                                <v-spacer />
-                                <v-btn
-                                    :loading="loading"
-                                    :disabled="loading"
-                                    color="primary"
-                                    @click="clickLogin"
-                                >Login</v-btn>
-                            </v-card-actions>
-                        </v-card>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer />
+                                    <v-btn
+                                        :loading="loading"
+                                        :disabled="loading"
+                                        color="primary"
+                                        @click="clickLogin"
+                                        type="submit"
+                                    >Login</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-form>
                     </v-col>
                 </v-row>
             </v-container>
