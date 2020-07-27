@@ -77,7 +77,13 @@ export default {
         fieldsPerRow() {
             let fieldsPerRow = Math.round(this.classesTilStripe / (this.classesTilStripe <= 30 ? 3 : 5));
             fieldsPerRow = fieldsPerRow > 20 ? 20 : fieldsPerRow;
-            fieldsPerRow = fieldsPerRow < 10 ? 10 : fieldsPerRow;
+            if (fieldsPerRow < 10) {
+                fieldsPerRow = 10;
+            } else if (fieldsPerRow > 10 && window.innerWidth <= 752) {
+                fieldsPerRow = 10;
+            } else if (fieldsPerRow > 16 && window.innerWidth <= 845) {
+                fieldsPerRow = 16;
+            }
             return fieldsPerRow;
         },
         rows() {
