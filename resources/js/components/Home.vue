@@ -6,7 +6,6 @@
             app
         >
             <v-list>
-
                 <v-list-item v-if="isSuperAdmin()" key="clients" link @click="show = 'Clients'">
                     <v-list-item-action>
                         <v-icon>mdi-account-cash</v-icon>
@@ -22,33 +21,6 @@
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title>People</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-
-                <v-list-item key="checkins" link @click="show = 'Check-ins'">
-                    <v-list-item-action>
-                        <v-icon>mdi-history</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Check-ins</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-
-                <v-list-item key="qrcodes" link @click="show = 'QRCodes'">
-                    <v-list-item-action>
-                        <v-icon>mdi-qrcode</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>QR Codes</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-
-                <v-list-item key="reports" link @click="show = 'Reports'">
-                    <v-list-item-action>
-                        <v-icon>mdi-file-chart</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Reports</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
 
@@ -241,6 +213,9 @@
         data: () => ({
             drawer: null,
             items: [
+                { icon: 'mdi-history', text: 'Check-ins' },
+                { icon: 'mdi-qrcode', text: 'QRCodes' },
+                { icon: 'mdi-file-chart', text: 'Reports' },
                 { icon: 'mdi-settings', text: 'Settings' },
                 {
                     icon: 'mdi-chevron-up',
