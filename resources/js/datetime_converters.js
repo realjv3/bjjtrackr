@@ -29,7 +29,7 @@ export function dateToLocalSql(date) {
  */
 export function timeToLocalSql(time) {
     const d = new Date(time);
-    return d.toLocaleTimeString([], {hour12: false});
+    return d.toLocaleTimeString(['De'], {hour12: false});
 }
 
 
