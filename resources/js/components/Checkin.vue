@@ -111,6 +111,9 @@
                     .filter( person => person.client_id === this.checkin.client_id)
                     .map( person => ({text: person.name, value: person.id}));
             },
+            user() {
+                return this.$store.state.user;
+            },
         },
         watch: {
 		    'checkin.checked_in_at': function(newDt, oldDt) {
@@ -169,7 +172,7 @@
 		            const datetime = new Date();
 		            this.checkin = {
 		                id: null,
-		                client_id: user().client_id,
+		                client_id: this.user.client_id,
 		                user_id: null,
 		                checked_in_at:
                             datetime.toISOString().substr(0, 10)

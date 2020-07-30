@@ -6,7 +6,7 @@
                     Reports
                     <v-spacer></v-spacer>
                     <v-select
-                        v-model="user"
+                        v-model="selUser"
                         :items="users"
                         item-value="id"
                         item-text="name"
@@ -50,7 +50,7 @@ import {isStudentOnly} from "../authorization";
 export default {
     name: "Reports",
     data: () => ({
-        user: {
+        selUser: {
             id: null,
             rank: {
                 belt: 1,
@@ -62,17 +62,17 @@ export default {
     computed: {
         checkins() {
             return this.$store.state.checkins.filter(checkin =>
-                checkin.user_id === this.user.id && checkin.checked_in_at.slice(0, 10) > this.user.rank.last_ranked_up
+                checkin.user_id === this.selUser.id && checkin.checked_in_at.slice(0, 10) > this.selUser.rank.last_ranked_up
             );
         },
         users() {
             if (isStudentOnly()) {
-                return this.$store.state.people.filter(person => person.id === user().id);
+                return this.$store.state.people.filter(person => person.id === this.user.id);
             }
             return this.$store.state.people.filter(person => person.roles.includes(4));
         },
         classesTilStripe() {
-            return Number(this.settings[this.user.rank.belt].classes_til_stripe);
+            return Number(this.settings[this.selUser.rank.belt].classes_til_stripe);
         },
         fieldsPerRow() {
             let fieldsPerRow = Math.round(this.classesTilStripe / (this.classesTilStripe <= 30 ? 3 : 5));
@@ -101,6 +101,9 @@ export default {
         settings() {
             return this.$store.state.settings;
         },
+        user() {
+            return this.$store.state.user;
+        },
     },
     methods: {
         checkinIndex(row, field) {
@@ -115,20 +118,20 @@ export default {
         showBelt(field, row, beltId) {
             return (
                 this.fieldsPerRow * (row - 1) + field === Number(this.classesTilStripe)
-                && this.user.rank.stripes === 4
-                && this.user.rank.belt === beltId - 1
+                && this.selUser.rank.stripes === 4
+                && this.selUser.rank.belt === beltId - 1
             );
         },
         showStripe(field, row, stripeNum) {
             return (
                 this.fieldsPerRow * (row - 1) + field === Number(this.classesTilStripe)
-                && this.user.rank.stripes + 1 === stripeNum
+                && this.selUser.rank.stripes + 1 === stripeNum
             );
         },
     },
     watch: {
         users(newUsers) {
-            this.user = newUsers[0];
+            this.selUser = newUsers[0];
         },
     },
 }

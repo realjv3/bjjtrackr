@@ -6,7 +6,7 @@
                     QR Codes
                     <v-spacer></v-spacer>
                     <v-select
-                        v-model="user"
+                        v-model="selUser"
                         :items="users"
                         item-value="id"
                         item-text="name"
@@ -32,13 +32,16 @@ export default {
     data: () => ({
         scannedId: '',
         timeStamp: 0,
-        user: {},
+        selUser: {},
     }),
     computed: {
-        imgSrc() { return this.user && this.user.id ? `/qrcode/${this.user.id}` : ''; },
+        imgSrc() { return this.selUser && this.selUser.id ? `/qrcode/${this.selUser.id}` : ''; },
+        user() {
+            return this.$store.state.user;
+        },
         users() {
             if (isStudentOnly()) {
-                return this.$store.state.people.filter(person => person.id === user().id);
+                return this.$store.state.people.filter(person => person.id === this.user.id);
             }
             return this.$store.state.people.filter(person => person.roles.includes(4));
         },
@@ -103,7 +106,7 @@ export default {
     },
     watch: {
         users(newUsers) {
-            this.user = newUsers[0];
+            this.selUser = newUsers[0];
         }
     },
 }
