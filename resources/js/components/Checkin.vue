@@ -23,7 +23,6 @@
                                 :items="people"
                                 :error-messages="error.user_id"
                                 label="Person"
-                                :loading="loading.people"
                             />
                         </v-col>
                     </v-row>
@@ -84,10 +83,6 @@
                 error: {
                     client_id: null,
                     user_id: null,
-                },
-                loading: {
-                    clients: false,
-                    people: false,
                 },
                 saving: false,
                 show: {
