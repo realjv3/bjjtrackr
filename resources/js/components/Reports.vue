@@ -33,7 +33,7 @@
                             >
                                 <span
                                     v-if="checkins.length && checkins[checkinIndex(row, field)]">
-                                    {{checkins[checkinIndex(row, field)].checked_in_at}}
+                                    {{utcToLocal(checkins[checkinIndex(row, field)].checked_in_at)}}
                                 </span>
                             </td>
                         </tr>
@@ -46,6 +46,7 @@
 
 <script>
 import {isStudentOnly} from "../authorization";
+import {utcToLocal} from "../datetime_converters";
 
 export default {
     name: "Reports",
@@ -79,9 +80,11 @@ export default {
             fieldsPerRow = fieldsPerRow > 20 ? 20 : fieldsPerRow;
             if (fieldsPerRow < 10) {
                 fieldsPerRow = 10;
-            } else if (fieldsPerRow > 10 && window.innerWidth <= 752) {
+            } else if (fieldsPerRow > 10 && window.innerWidth <= 760) {
                 fieldsPerRow = 10;
-            } else if (fieldsPerRow > 16 && window.innerWidth <= 845) {
+            } else if (fieldsPerRow > 14 && window.innerWidth <= 938) {
+                fieldsPerRow = 14;
+            } else if (fieldsPerRow > 16 && window.innerWidth <= 1063) {
                 fieldsPerRow = 16;
             }
             return fieldsPerRow;
@@ -128,6 +131,7 @@ export default {
                 && this.selUser.rank.stripes + 1 === stripeNum
             );
         },
+        utcToLocal,
     },
     watch: {
         users(newUsers) {
