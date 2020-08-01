@@ -1,12 +1,16 @@
 /**
- * Convert passed date string to 'YYYY-MM-DD'
+ * Convert passed MySQL datetime string to 'YYYY-MM-DD'
  *
- * @param {string} date
+ * @param {string} dateTime
  * @return {string}
  */
-export function dateToLocalSql(date) {
+export function dateTimeToYMD(dateTime) {
+
+    if ( ! dateTime.match(new RegExp(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/))) {
+        return 'Invalid dateTime';
+    }
     let
-        d = new Date(date),
+        d = new Date(dateTime),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
@@ -22,19 +26,49 @@ export function dateToLocalSql(date) {
 }
 
 /**
- * Convert passed time string to 'HH-MM-SS'
+ * Convert passed MySQL datetime string to 'HH-MM-SS'
  *
- * @param time
+ * @param {string} dateTime
  * @return {string}
  */
-export function timeToLocalSql(time) {
-    const d = new Date(time);
+export function dateTimeTo24Time(dateTime) {
+
+    if ( ! dateTime.match(new RegExp(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/))) {
+        return 'Invalid dateTime';
+    }
+    const d = new Date(dateTime);
     return d.toLocaleTimeString(['De'], {hour12: false});
 }
 
+/**
+ * Convert passed UTC MySQL datetime string to locale datetime string
+ *
+ * @param {string} utcDateTime
+ * @return {string}
+ */
+export function utcDateTimeToLocal(utcDateTime) {
 
-export function utcToLocal(utcTime) {
-    if (utcTime) {
-        return new Date(utcTime + ' UTC').toLocaleString();
+    if (utcDateTime) {
+        if ( ! utcDateTime.match(new RegExp(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/))) {
+            return 'Invalid dateTime';
+        }
+        return new Date(utcDateTime + ' UTC').toLocaleString();
     }
+}
+
+/**
+ * Converts MySQL time string to locale
+ *
+ * @param {string} time
+ * @return {string}
+ */
+export function timeToLocale(time) {
+
+    if ( ! time.match(new RegExp(/\d{1}:\d{2}(:\d{2})*/))) {
+        return 'Invalid time';
+    }
+    const date = new Date();
+    date.setHours(time.slice(0, 2));
+    date.setMinutes(time.slice(3, 5));
+    return date.toLocaleTimeString();
 }

@@ -67,7 +67,7 @@
 
 <script>
     import {headers} from '../authorization';
-    import {dateToLocalSql, timeToLocalSql} from '../datetime_converters';
+    import {dateTimeToYMD, dateTimeTo24Time} from '../datetime_converters';
 
     export default {
 		name: "Checkin",
@@ -114,8 +114,8 @@
 		    'checkin.checked_in_at': function(newDt, oldDt) {
 
 		        if (newDt && (newDt !== oldDt)) {
-                    this.date = dateToLocalSql(this.checkin.checked_in_at + ' UTC');
-                    this.time = timeToLocalSql(this.checkin.checked_in_at + ' UTC');
+                    this.date = dateTimeToYMD(this.checkin.checked_in_at + ' UTC');
+                    this.time = dateTimeTo24Time(this.checkin.checked_in_at + ' UTC');
                 }
             },
         },

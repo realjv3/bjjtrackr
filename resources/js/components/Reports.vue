@@ -46,7 +46,7 @@
 
 <script>
 import {isStudentOnly} from "../authorization";
-import {utcToLocal} from "../datetime_converters";
+import {utcDateTimeToLocal} from "../datetime_converters";
 
 export default {
     name: "Reports",
@@ -131,7 +131,7 @@ export default {
                 && this.selUser.rank.stripes + 1 === stripeNum
             );
         },
-        utcToLocal,
+        utcToLocal: utcDateTimeToLocal,
     },
     watch: {
         users(newUsers) {
