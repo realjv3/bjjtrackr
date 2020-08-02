@@ -38,7 +38,7 @@
 
 <script>
 import {headers} from '../authorization';
-import {utcToLocal} from "../datetime_converters";
+import {utcDateTimeToLocal} from "../datetime_converters";
 
 export default {
     name: "People",
@@ -75,7 +75,7 @@ export default {
                     }
                 });
         },
-        utcToLocal,
+        utcToLocal: utcDateTimeToLocal,
     },
 }
 </script>

@@ -8,6 +8,7 @@ const store = new Vuex.Store({
     state: {
         checkins: [],
         clients: [],
+        days,
         people: [],
         settings: initSettings,
         user: user(),

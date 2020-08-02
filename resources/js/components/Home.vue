@@ -130,6 +130,8 @@
 
                     <Clients v-show="isSuperAdmin() && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
 
+                    <Schedule v-show="show === 'Schedule'" ref="schedule" @edit-event="onEditEvent" />
+
                     <Checkins v-show="show === 'Check-ins'" ref="checkins" @edit-checkin="onEditCheckin" />
 
                     <QRCodes v-show="show === 'QRCodes'" @save-checkin="onSaveCheckin" ref="qrcodes" />
@@ -142,6 +144,8 @@
                 <Client v-show="isSuperAdmin()" ref="client" @save-client="onSaveClient"/>
 
                 <Person v-show="isSuperAdmin() || isAdmin()" ref="person" @save-person="onSavePerson"/>
+
+                <Event v-show="isSuperAdmin() || isAdmin()" ref="event" @save-event="onSaveEvent"/>
 
                 <Checkin v-show="! isStudentOnly()" ref="checkin" @save-checkin="onSaveCheckin"/>
 
@@ -176,6 +180,15 @@
                         <span>Person</span>
                     </v-tooltip>
 
+                    <v-tooltip v-if="isAdmin() || isSuperAdmin()" left>
+                        <template v-slot:activator="{ on }">
+                            <v-btn @click="$refs.event.show.event = true" fab dark small color="primary" v-on="on">
+                                <v-icon>mdi-calendar-month-outline</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Class</span>
+                    </v-tooltip>
+
                     <v-tooltip v-if="isSuperAdmin()" left>
                         <template v-slot:activator="{ on }">
                             <v-btn @click="$refs.client.show = true" fab dark small color="primary" v-on="on">
@@ -194,102 +207,119 @@
 </template>
 
 <script>
-    import {isSuperAdmin, isAdmin, isStudentOnly} from "../authorization";
-    import People from "components/People";
-    import Person from "components/Person";
-    import Clients from "components/Clients";
-    import Client from "components/Client";
-    import Checkins from "components/Checkins";
-    import Checkin from "components/Checkin";
-    import QRCodes from "components/QRCodes";
-    import Reports from "components/Reports";
-    import Settings from "components/Settings";
+import {isSuperAdmin, isAdmin, isStudentOnly} from "../authorization";
+import People from "components/People";
+import Person from "components/Person";
+import Clients from "components/Clients";
+import Client from "components/Client";
+import Checkins from "components/Checkins";
+import Checkin from "components/Checkin";
+import QRCodes from "components/QRCodes";
+import Reports from "components/Reports";
+import Schedule from "components/Schedule";
+import Settings from "components/Settings";
+import Event from 'components/Event';
 
-    export default {
-        components: {Client, Clients, People, Person, Checkins, Checkin, QRCodes, Reports, Settings},
-        props: {
-            source: String,
+export default {
+    components: {
+        Client, Clients, Event, People, Person, Checkins, Checkin, QRCodes, Reports, Schedule, Settings},
+    props: {
+        source: String,
+    },
+    data: () => ({
+        drawer: null,
+        items: [
+            { icon: 'mdi-calendar-month-outline', text: 'Schedule' },
+            { icon: 'mdi-history', text: 'Check-ins' },
+            { icon: 'mdi-qrcode', text: 'QRCodes' },
+            { icon: 'mdi-file-chart', text: 'Reports' },
+            { icon: 'mdi-settings', text: 'Settings' },
+            {
+                icon: 'mdi-chevron-up',
+                'icon-alt': 'mdi-chevron-down',
+                text: 'More',
+                model: false,
+                children: [
+                    { text: 'Import' },
+                    { text: 'Export' },
+                    { text: 'Print' },
+                    { text: 'Undo changes' },
+                    { text: 'Other contacts' },
+                ],
+            },
+            { icon: 'mdi-message', text: 'Send feedback' },
+            { icon: 'mdi-help-circle', text: 'Help' },
+        ],
+        show: 'Reports',
+        snackbar: {
+            show: false,
+            text: '',
         },
-        data: () => ({
-            drawer: null,
-            items: [
-                { icon: 'mdi-history', text: 'Check-ins' },
-                { icon: 'mdi-qrcode', text: 'QRCodes' },
-                { icon: 'mdi-file-chart', text: 'Reports' },
-                { icon: 'mdi-settings', text: 'Settings' },
-                {
-                    icon: 'mdi-chevron-up',
-                    'icon-alt': 'mdi-chevron-down',
-                    text: 'More',
-                    model: false,
-                    children: [
-                        { text: 'Import' },
-                        { text: 'Export' },
-                        { text: 'Print' },
-                        { text: 'Undo changes' },
-                        { text: 'Other contacts' },
-                    ],
-                },
-                { icon: 'mdi-message', text: 'Send feedback' },
-                { icon: 'mdi-help-circle', text: 'Help' },
-            ],
-            show: 'Reports',
-            snackbar: {
-                show: false,
-                text: '',
-            },
-            speedDial: false,
-        }),
-        computed: {
-            user() {
-                return this.$store.state.user;
-            },
+        speedDial: false,
+    }),
+    computed: {
+        user() {
+            return this.$store.state.user;
         },
-        methods: {
-            isSuperAdmin,
-            isAdmin,
-            isStudentOnly,
-            onSaveClient() {
-                if (this.$refs.clients) {
-                    this.$refs.clients.refresh();
-                }
-            },
-            onEditClient(client) {
-                if (this.$refs.client && isSuperAdmin()) {
-                    this.$refs.client.client = Object.assign({}, client);
-                    this.$refs.client.show = true;
-                }
-            },
-            onSavePerson() {
-                if (this.$refs.people && (isSuperAdmin() || isAdmin())) {
-                    this.$refs.people.refresh();
-                }
-            },
-            onEditPerson(person) {
-                if (this.$refs.person && (isSuperAdmin() || isAdmin())) {
-                    this.$refs.person.person = Object.assign({}, person);
-                    this.$refs.person.show = true;
-                }
-            },
-            onSaveCheckin(snackbarText) {
-                this.snackbar.text = snackbarText;
-                this.snackbar.show = true;
-                if (this.$refs.checkins) {
-                    this.$refs.checkins.refresh();
-                }
+    },
+    methods: {
+        isSuperAdmin,
+        isAdmin,
+        isStudentOnly,
+        onSaveClient() {
+            if (this.$refs.clients) {
+                this.$refs.clients.refresh();
+            }
+        },
+        onEditClient(client) {
+            if (this.$refs.client && isSuperAdmin()) {
+                this.$refs.client.client = Object.assign({}, client);
+                this.$refs.client.show = true;
+            }
+        },
+        onSavePerson() {
+            if (this.$refs.people && (isSuperAdmin() || isAdmin())) {
                 this.$refs.people.refresh();
-            },
-            onEditCheckin(checkin) {
-                if (this.$refs.checkin && (! isStudentOnly())) {
-
-                    this.$refs.checkin.setCheckin(checkin);
-                }
-            },
+            }
         },
-        mounted() {
-            document.addEventListener('keypress', this.$refs.qrcodes.onKeypress);
-        }
+        onEditPerson(person) {
+            if (this.$refs.person && (isSuperAdmin() || isAdmin())) {
+                this.$refs.person.person = Object.assign({}, person);
+                this.$refs.person.show = true;
+            }
+        },
+        onSaveCheckin(snackbarText) {
+            this.snackbar.text = snackbarText;
+            this.snackbar.show = true;
+            if (this.$refs.checkins) {
+                this.$refs.checkins.refresh();
+            }
+            this.$refs.people.refresh();
+        },
+        onEditCheckin(checkin) {
+            if (this.$refs.checkin && (! isStudentOnly())) {
+
+                this.$refs.checkin.setCheckin(checkin);
+            }
+        },
+        onEditEvent(event) {
+            if (this.$refs.event && (isSuperAdmin() || isAdmin())) {
+
+                this.$refs.event.setEvent(event);
+            }
+        },
+        onSaveEvent(verb) {
+            this.snackbar.text = `The class has been ${verb}.`;
+            this.snackbar.show = true;
+            if (this.$refs.schedule) {
+                this.$refs.schedule.refresh();
+            }
+        },
+    },
+    mounted() {
+        document.addEventListener('keypress', this.$refs.qrcodes.onKeypress);
     }
+}
 </script>
 
 <style>

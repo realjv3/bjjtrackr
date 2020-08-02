@@ -64,11 +64,14 @@ export function utcDateTimeToLocal(utcDateTime) {
  */
 export function timeToLocale(time) {
 
-    if ( ! time.match(new RegExp(/\d{1}:\d{2}(:\d{2})*/))) {
-        return 'Invalid time';
+    if (time) {
+        if ( ! time.match(new RegExp(/\d{1}:\d{2}(:\d{2})*/))) {
+            return 'Invalid time';
+        }
+        const date = new Date();
+        date.setHours(time.slice(0, 2));
+        date.setMinutes(time.slice(3, 5));
+        date.setSeconds(time.length === 0 ? 0 : time.slice(7, 9));
+        return date.toLocaleTimeString();
     }
-    const date = new Date();
-    date.setHours(time.slice(0, 2));
-    date.setMinutes(time.slice(3, 5));
-    return date.toLocaleTimeString();
 }

@@ -39,3 +39,8 @@ Route::get('/qrcode/{id}', 'UserController@getQrCode');
 
 Route::get('/settings/{client_id}', 'SettingsController@read');
 Route::post('/settings/{id}', 'SettingsController@update');
+
+Route::get('/events/{client_id}/{event_id?}', 'EventController@read');
+Route::post('/event/', 'EventController@create');
+Route::post('/event/{id}', 'EventController@update');
+Route::delete('/event/{id}', 'EventController@delete');

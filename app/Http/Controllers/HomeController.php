@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Day;
 use App\Setting;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,7 @@ class HomeController extends Controller
         });
 
         return view('home', [
+            'days' => Day::all(),
             'user' => User::with('roles')->find(Auth::id()),
             'settings' => $settings,
         ]);

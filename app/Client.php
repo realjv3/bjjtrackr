@@ -18,6 +18,10 @@ class Client extends Model
         'notes',
     ];
 
+    public function events() {
+        return $this->hasMany('App\Event');
+    }
+
     public function checkins() {
         return $this->hasMany('App\Checkin');
     }
