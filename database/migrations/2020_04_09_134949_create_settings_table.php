@@ -19,7 +19,7 @@ class CreateSettingsTable extends Migration
             $table->unsignedTinyInteger('belt');
             $table->unsignedTinyInteger('classes_til_stripe');
             $table->unsignedTinyInteger('times_absent_til_contact');
-            $table->boolean('combine_same_day_events');
+            $table->boolean('combine_same_day_checkins');
             $table->timestamps();
         });
 

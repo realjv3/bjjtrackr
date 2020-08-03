@@ -17,7 +17,7 @@ class SettingsTableSeeder extends Seeder
             'belt' => 1,
             'classes_til_stripe' => 30,
             'times_absent_til_contact' => 15,
-            'combine_same_day_events' => true,
+            'combine_same_day_checkins' => true,
         ]);
 
         Setting::create([
@@ -25,7 +25,7 @@ class SettingsTableSeeder extends Seeder
             'belt' => 2,
             'classes_til_stripe' => 70,
             'times_absent_til_contact' => 15,
-            'combine_same_day_events' => true,
+            'combine_same_day_checkins' => true,
         ]);
 
         Setting::create([
@@ -33,7 +33,7 @@ class SettingsTableSeeder extends Seeder
             'belt' => 3,
             'classes_til_stripe' => 80,
             'times_absent_til_contact' => 15,
-            'combine_same_day_events' => true,
+            'combine_same_day_checkins' => true,
         ]);
 
         Setting::create([
@@ -41,7 +41,7 @@ class SettingsTableSeeder extends Seeder
             'belt' => 4,
             'classes_til_stripe' => 90,
             'times_absent_til_contact' => 15,
-            'combine_same_day_events' => true,
+            'combine_same_day_checkins' => true,
         ]);
 
         Setting::create([
@@ -49,7 +49,7 @@ class SettingsTableSeeder extends Seeder
             'belt' => 1,
             'classes_til_stripe' => 30,
             'times_absent_til_contact' => 15,
-            'combine_same_day_events' => true,
+            'combine_same_day_checkins' => true,
         ]);
 
         Setting::create([
@@ -57,7 +57,7 @@ class SettingsTableSeeder extends Seeder
             'belt' => 2,
             'classes_til_stripe' => 70,
             'times_absent_til_contact' => 15,
-            'combine_same_day_events' => true,
+            'combine_same_day_checkins' => true,
         ]);
 
         Setting::create([
@@ -65,7 +65,7 @@ class SettingsTableSeeder extends Seeder
             'belt' => 3,
             'classes_til_stripe' => 80,
             'times_absent_til_contact' => 15,
-            'combine_same_day_events' => true,
+            'combine_same_day_checkins' => true,
         ]);
 
         Setting::create([
@@ -73,7 +73,7 @@ class SettingsTableSeeder extends Seeder
             'belt' => 4,
             'classes_til_stripe' => 90,
             'times_absent_til_contact' => 15,
-            'combine_same_day_events' => true,
+            'combine_same_day_checkins' => true,
         ]);
     }
 }
