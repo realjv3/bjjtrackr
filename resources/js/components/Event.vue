@@ -56,7 +56,7 @@
                     <v-row justify="end">
                         <v-card-actions>
                             <v-btn text @click="clickSave" :loading="saving">Save</v-btn>
-                            <v-btn text @click="clickDelete" :disabled="saving" color="red">Delete</v-btn>
+                            <v-btn v-if="event.id" text @click="clickDelete" :disabled="saving" color="red">Delete</v-btn>
                             <v-btn text color="primary" @click="close">Close</v-btn>
                         </v-card-actions>
                     </v-row>
@@ -64,10 +64,10 @@
             </v-card>
         </v-dialog>
         <v-dialog v-model="show.startTimePicker" class="mx-auto" width="290px">
-            <v-time-picker v-model="event.start" ampm-in-title />
+            <v-time-picker v-model="event.start" ampm-in-title :allowed-hours="hoursAllowed" />
         </v-dialog>
         <v-dialog v-model="show.endTimePicker" class="mx-auto" width="290px">
-            <v-time-picker v-model="event.end" ampm-in-title />
+            <v-time-picker v-model="event.end" ampm-in-title :allowed-hours="hoursAllowed" />
         </v-dialog>
     </div>
 </template>
@@ -97,6 +97,7 @@ export default {
                 start: null,
                 end: null,
             },
+            hoursAllowed: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
             saving: false,
             show: {
                 event: false,
