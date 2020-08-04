@@ -64,7 +64,7 @@
 		        this.loading = false;
             },
 		    delClient(client) {
-                confirm('Are you sure you want to delete this client?') &&
+                ! this.loading && confirm('Are you sure you want to delete this client?') &&
                 fetch(`/clients/${client.id}`, {
                     method: 'DELETE',
                     headers,

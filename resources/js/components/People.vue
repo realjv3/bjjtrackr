@@ -67,7 +67,7 @@ export default {
             this.loading = false;
         },
         delPerson(person) {
-            confirm('Are you sure you want to delete this person?') &&
+            ! this.loading && confirm('Are you sure you want to delete this person?') &&
             fetch(`/users/${person.id}`, {method: 'DELETE', headers, credentials: "same-origin"})
                 .then( resp => {
                     if (resp.ok) {

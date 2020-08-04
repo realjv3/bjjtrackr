@@ -80,19 +80,17 @@ export default {
     methods: {
         utcToLocal: utcDateTimeToLocal,
         delCheckin(checkin) {
-            if (! isStudentOnly()) {
-                confirm('Are you sure you want to delete this checkin?') &&
-                fetch(`/checkin/${checkin.id}`, {
-                    method: 'DELETE',
-                    headers,
-                    credentials: "same-origin",
-                })
-                    .then( resp => {
-                        if (resp.ok) {
-                            this.refresh();
-                        }
-                    });
-            }
+            ! this.loading && ! isStudentOnly() && confirm('Are you sure you want to delete this checkin?') &&
+            fetch(`/checkin/${checkin.id}`, {
+                method: 'DELETE',
+                headers,
+                credentials: "same-origin",
+            })
+                .then( resp => {
+                    if (resp.ok) {
+                        this.refresh();
+                    }
+                });
         },
         async refresh() {
             this.loading = true;
