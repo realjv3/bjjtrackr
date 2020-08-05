@@ -57,26 +57,8 @@ export default {
                 isoStr = new Date().toISOString(),
                 checked_in_at = isoStr.substr(0, 10) + ' ' + isoStr.substr(11, 8);
 
-            fetch(`/checkin`, {
-                method: 'POST',
-                headers,
-                credentials: "same-origin",
-                body: JSON.stringify({
-                    client_id: person.client_id,
-                    user_id: person.id,
-                    checked_in_at,
-                }),
-            })
-                .then(resp => resp.json())
-                .then(json => {
-                    if (json.errors) {
-                        console.log(json.errors);
-                    } else if (json.id) {
-                        const datetime = new Date(json.checked_in_at + ' UTC');
-                        this.$emit('save-checkin', `Checked in at ${datetime.toLocaleString()}`);
-                    }
-                    this.reset();
-                });
+            this.$emit('save-checkin', {client_id: person.client_id, user_id: person.id, checked_in_at});
+            this.reset();
         },
         onKeypress(e) {
             // if there is more than a few milliseconds bw current key press and and last one, start from scratch

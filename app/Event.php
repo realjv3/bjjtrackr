@@ -15,4 +15,8 @@ class Event extends Model
     public function day() {
         return $this->hasOne('App\Day');
     }
+
+    public function checkins() {
+        return $this->hasMany('App\Checkin');
+    }
 }

@@ -15,7 +15,7 @@ class Checkin extends Model
         'checked_in_at' => 'datetime',
     ];
 
-    protected $fillable = ['user_id', 'client_id', 'checked_in_at'];
+    protected $fillable = ['user_id', 'client_id', 'event_id', 'checked_in_at'];
 
     public function client() {
         return $this->belongsTo('App\Client');
@@ -23,5 +23,9 @@ class Checkin extends Model
 
     public function user() {
         return $this->belongsTo('App\User');
+    }
+
+    public function event() {
+        return $this->belongsTo('App\Event');
     }
 }

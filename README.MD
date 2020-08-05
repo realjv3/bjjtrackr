@@ -10,6 +10,7 @@
 9. Run ```npm run dev``` to develop, ```npm run build``` to deploy.
 10. To create the database tables, ```vagrant ssh``` into the virtual machine, ```cd``` into the project root and run ```php artisan migrate```.
 11. Then seed the database tables with users and roles with ```php artisan db:seed```.
+12. Set the default timezone in php.ini
 
 At this point, the web app should be up at https://bjjtrackr.local, according to _hostname_ in Homestead.yaml.
 

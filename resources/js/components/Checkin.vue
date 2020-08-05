@@ -46,6 +46,18 @@
                             />
                         </v-col>
                     </v-row>
+                    <v-row class="mx-2">
+                        <v-col cols="8">
+                            <v-select
+                                v-model="checkin.event_id"
+                                :items="daysEvents"
+                                :item-text="item =>
+                                `${item.name} - ${timeToLocale(item.start.slice(-8))} - ${timeToLocale(item.end.slice(-8))}`"
+                                item-value="id"
+                                label="Class"
+                            />
+                        </v-col>
+                    </v-row>
                     <v-row justify="end">
                         <v-card-actions>
                             <v-btn text @click="clickSave" :loading="saving">Save</v-btn>
@@ -67,7 +79,7 @@
 
 <script>
     import {headers} from '../authorization';
-    import {dateTimeToYMD, dateTimeTo24Time} from '../datetime_converters';
+    import {dateTimeToYMD, dateTimeTo24Time, timeToLocale} from '../datetime_converters';
 
     export default {
 		name: "Checkin",
@@ -77,6 +89,7 @@
                     id: null,
                     client_id: null,
                     user_id: null,
+                    event_id: null,
                     checked_in_at: null,
                 },
                 date: null,
@@ -100,6 +113,17 @@
         computed: {
             clients() {
                 return this.$store.state.clients;
+            },
+            daysEvents() {
+                if (this.date) {
+                    const d = new Date();
+                    d.setDate(Number(this.date.slice(-2)));
+                    d.setMonth(Number(this.date.slice(5, 7)) - 1);
+                    const dayId = d.getDay();
+                    return this.$store.state.events.filter(event => event.day_id === dayId);
+                } else {
+                    return [];
+                }
             },
             people() {
                 return this.$store.state.people
@@ -169,6 +193,7 @@
 		                id: null,
 		                client_id: this.user.client_id,
 		                user_id: null,
+		                event_id: null,
 		                checked_in_at:
                             datetime.toISOString().substr(0, 10)
                             + ' '
@@ -177,6 +202,7 @@
                 }
                 this.show.checkin = true;
             },
+            timeToLocale,
         },
     }
 </script>

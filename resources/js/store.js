@@ -9,6 +9,7 @@ const store = new Vuex.Store({
         checkins: [],
         clients: [],
         days,
+        events: [],
         people: [],
         settings: initSettings,
         user: user(),
@@ -19,6 +20,9 @@ const store = new Vuex.Store({
         },
         setClients(state, clients) {
             state.clients = clients;
+        },
+        setEvents(state, events) {
+            state.events = events;
         },
         setPeople(state, people) {
             state.people = people;
@@ -58,6 +62,36 @@ const store = new Vuex.Store({
                 resp = await fetch(`/checkins/${clientId}`, {headers, credentials: "same-origin"}),
                 json = await resp.json();
             commit('setCheckins', json);
+        },
+        async getEvents({commit, state}) {
+            const
+                resp = await fetch(`/events/${state.user.client_id}`, {headers, credentials: "same-origin"}),
+                events = await resp.json();
+                commit('setEvents', events.map(event => {
+                    const
+                        now = new Date(),
+                        today = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+                        curDay = now.getDay(),
+                        diffDaysToEventDay = curDay - event.day_id;
+                    let dateStr = today;
+
+                    if (diffDaysToEventDay < 0) {
+                        // event is on a weekday after today
+                        now.setDate(now.getDate() + Math.abs(diffDaysToEventDay));
+                        dateStr = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+                    } else if (diffDaysToEventDay > 0) {
+                        // event is on a weekday prior to today
+                        now.setDate(now.getDate() - diffDaysToEventDay);
+                        dateStr = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+                    }
+                    return {
+                        id: event.id,
+                        day_id: event.day_id,
+                        name: event.name,
+                        start: `${dateStr} ${event.start}`,
+                        end: `${dateStr} ${event.end}`,
+                    };
+                }));
         },
         async getSettings({commit, state}) {
             const

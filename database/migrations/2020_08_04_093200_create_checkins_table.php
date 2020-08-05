@@ -17,6 +17,7 @@ class CreateCheckinsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('client_id');
+            $table->unsignedBigInteger('event_id')->nullable();
             $table->dateTime('checked_in_at')->comment('UTC Timezone');
             $table->timestamps();
         });
@@ -24,6 +25,7 @@ class CreateCheckinsTable extends Migration
         Schema::table('checkins', function(Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
         });
     }
 
@@ -37,6 +39,7 @@ class CreateCheckinsTable extends Migration
         Schema::table('checkins', function(Blueprint $table) {
             $table->dropForeign('checkins_user_id_foreign');
             $table->dropForeign('checkins_client_id_foreign');
+            $table->dropForeign('checkins_event_id_foreign');
         });
 
         Schema::dropIfExists('checkins');

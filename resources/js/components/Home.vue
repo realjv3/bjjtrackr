@@ -134,7 +134,7 @@
 
                     <Checkins v-show="show === 'Check-ins'" ref="checkins" @edit-checkin="onEditCheckin" />
 
-                    <QRCodes v-show="show === 'QRCodes'" @save-checkin="onSaveCheckin" ref="qrcodes" />
+                    <QRCodes v-show="show === 'QRCodes'" @save-checkin="onEditCheckin" ref="qrcodes" />
 
                     <Reports v-show="show === 'Reports'"/>
 

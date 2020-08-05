@@ -19,7 +19,7 @@ class CheckinController extends Controller
         if (Gate::allows('isStudentOnly')) {
 
             $user = Auth::user();
-            return Checkin::with(['user'])
+            return Checkin::with(['user', 'event'])
                 ->where('user_id', $user->id)
                 ->orderBy('checked_in_at')
                 ->get();
@@ -27,17 +27,17 @@ class CheckinController extends Controller
         } else if (Gate::allows('isSuperAdmin')) {
 
             if ( ! empty($clientId)) {
-                return Checkin::with(['user'])
+                return Checkin::with(['user', 'event'])
                     ->where('client_id', $clientId)
                     ->orderBy('checked_in_at')
                     ->get();
             } else {
-                return Checkin::with(['user'])->orderBy('checked_in_at')->get();
+                return Checkin::with(['user', 'event'])->orderBy('checked_in_at')->get();
             }
         } else {
             $user = Auth::user();
             $client = $user->client;
-            return Checkin::with(['user'])
+            return Checkin::with(['user', 'event'])
                 ->orderBy('checked_in_at')
                 ->where('client_id', $client->id)
                 ->get();
@@ -49,12 +49,14 @@ class CheckinController extends Controller
         $request->validate([
             'client_id' => 'required|integer',
             'user_id' => 'required|integer',
+            'event_id' => 'nullable|integer',
             'checked_in_at' => 'date_format:Y-m-d H:i:s',
         ]);
 
         $checkin = new Checkin();
         $checkin->client()->associate($request->client_id);
         $checkin->user()->associate($request->user_id);
+        $checkin->event()->associate($request->event_id);
         $checkin->checked_in_at = ! empty($request->checked_in_at) ? $request->checked_in_at : gmdate('Y-m-d H:i:s');
         $checkin->save();
 
@@ -66,6 +68,7 @@ class CheckinController extends Controller
         $request->validate([
             'client_id' => 'required|integer',
             'user_id' => 'required|integer',
+            'event_id' => 'nullable|integer',
             'checked_in_at' => 'required|date_format:Y-m-d H:i:s',
         ]);
 

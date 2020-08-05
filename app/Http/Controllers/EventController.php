@@ -40,6 +40,7 @@ class EventController extends Controller
         } else {
             return Event::where('client_id', $client_id)
                 ->orderBy('day_id')
+                ->orderBy('start')
                 ->get();
         }
     }

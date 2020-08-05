@@ -22,15 +22,16 @@
 </template>
 
 <script>
-import {headers} from '../authorization';
-
 export default {
     name: "Schedule",
-    data: () => ({
-        today: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
-        events: [],
-    }),
     computed: {
+        events() {
+            return this.$store.state.events;
+        },
+        today() {
+            const d = new Date();
+            return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+        },
         user() {
             return this.$store.state.user;
         },
@@ -40,34 +41,7 @@ export default {
             this.$emit('edit-event', e.event);
         },
         refresh() {
-            fetch(`/events/${this.user.client_id}`, {headers, credentials: "same-origin"})
-                .then(resp => resp.json())
-                .then(events => {
-                    events = events.map(event => {
-                        let dateStr = this.today;
-                        const
-                            now = new Date(),
-                            curDay = now.getDay(),
-                            diffDaysToEventDay = curDay - event.day_id;
-
-                        if (diffDaysToEventDay < 0) {
-                            // event is on a weekday after today
-                            now.setDate(now.getDate() + Math.abs(diffDaysToEventDay));
-                            dateStr = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
-                        } else if (diffDaysToEventDay > 0) {
-                            // event is on a weekday prior to today
-                            now.setDate(now.getDate() - diffDaysToEventDay);
-                            dateStr = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
-                        }
-                        return {
-                            id: event.id,
-                            name: event.name,
-                            start: `${dateStr} ${event.start}`,
-                            end: `${dateStr} ${event.end}`,
-                        };
-                    });
-                    this.events = events;
-                });
+            this.$store.dispatch('getEvents');
         },
     },
     created() {

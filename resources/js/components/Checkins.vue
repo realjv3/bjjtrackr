@@ -54,6 +54,7 @@ export default {
         headers: [
             { text: 'Name', align: 'left', value: 'user.name' },
             { text: 'Check-in', value: 'checked_in_at' },
+            { text: 'Class', value: 'event.name' },
             { text: 'Actions', value: 'action', sortable: false },
         ],
         loading: false,
