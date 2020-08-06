@@ -27,6 +27,7 @@ class HomeController extends Controller
                 'client_id' => $setting->client_id,
                 'classes_til_stripe' => $setting->classes_til_stripe,
                 'times_absent_til_contact' => $setting->times_absent_til_contact,
+                'combine_same_day_checkins' => $setting->combine_same_day_checkins,
             ];
         });
 

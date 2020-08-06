@@ -19,6 +19,7 @@ class SettingsController extends Controller
                 'client_id' => $setting->client_id,
                 'classes_til_stripe' => $setting->classes_til_stripe,
                 'times_absent_til_contact' => $setting->times_absent_til_contact,
+                'combine_same_day_checkins' => $setting->combine_same_day_checkins,
             ];
         });
         return $settings;
@@ -31,10 +32,12 @@ class SettingsController extends Controller
             $request->validate([
                 'classes_til_stripe' => 'numeric|min:1|max:255',
                 'times_absent_til_contact' => 'numeric|min:1|max:255',
+                'combine_same_day_checkins' => 'boolean'
             ]);
             $setting = Setting::find($id);
             $setting->update($request->all());
+            return $this->read(['success' => true]);
         }
-        return $this->read($request->client_id);
+        return $this->read(['success' => false]);
     }
 }

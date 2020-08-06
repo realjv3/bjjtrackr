@@ -30,6 +30,11 @@
                                     :error-messages="errors.times_absent_til_contact[0]"
                                     @change="update"
                                 />
+                                <v-switch
+                                    v-model="settings[belt].combine_same_day_checkins"
+                                    label="Combine same day checkins"
+                                    @change="update"
+                                ></v-switch>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -43,6 +48,9 @@
 <script>
 
 import {headers} from "../authorization";
+import Fetches from "../fetches";
+
+const fetches = new Fetches();
 
 export default {
     name: "Settings",
@@ -70,13 +78,16 @@ export default {
                 classes_til_stripe: [],
                 times_absent_til_contact: [],
             };
+            fetches.cancelFetches();
             fetch(`/settings/${this.settings[this.belt].id}`, {
                 method: 'POST',
                 headers,
                 credentials: "same-origin",
+                signal: fetches.getSignal(),
                 body: JSON.stringify({
                     classes_til_stripe: this.settings[this.belt].classes_til_stripe,
                     times_absent_til_contact: this.settings[this.belt].times_absent_til_contact,
+                    combine_same_day_checkins: this.settings[this.belt].combine_same_day_checkins,
                 }),
             })
                 .then( resp => resp.json())
