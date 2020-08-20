@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-row justify="center">
-            <v-card>
+            <v-card style="width: 70vw">
                 <v-card-title>
                     Reports
                     <v-spacer></v-spacer>
@@ -15,29 +15,27 @@
                     ></v-select>
                 </v-card-title>
                 <v-card-text>
-                    <table>
-                        <tr v-for="row in rows">
-                            <td
-                                v-for="field in fieldsPerRow"
+                    <v-container>
+                        <v-row>
+                            <div
+                                class="td"
+                                v-for="(checkin, index) in checkins"
                                 :class="{
                                     nextrank: true,
-                                    stripe1: showStripe(field, row, 1),
-                                    stripe2: showStripe(field, row, 2),
-                                    stripe3: showStripe(field, row, 3),
-                                    stripe4: showStripe(field, row, 4),
-                                    bluebelt: showBelt(field, row, 2),
-                                    purplebelt: showBelt(field, row, 3),
-                                    brownbelt: showBelt(field, row, 4),
-                                    blackbelt: showBelt(field, row, 5),
+                                    stripe1: showStripe(index, 1),
+                                    stripe2: showStripe(index, 2),
+                                    stripe3: showStripe(index, 3),
+                                    stripe4: showStripe(index, 4),
+                                    bluebelt: showBelt(index, 2),
+                                    purplebelt: showBelt(index, 3),
+                                    brownbelt: showBelt(index, 4),
+                                    blackbelt: showBelt(index, 5),
                                 }"
                             >
-                                <span
-                                    v-if="checkins.length && checkins[checkinIndex(row, field)]">
-                                    {{utcToLocal(checkins[checkinIndex(row, field)].checked_in_at)}}
-                                </span>
-                            </td>
-                        </tr>
-                    </table>
+                                <span v-html="renderCheckin(index)"></span>
+                            </div>
+                        </v-row>
+                    </v-container>
                 </v-card-text>
             </v-card>
         </v-row>
@@ -61,45 +59,60 @@ export default {
         },
     }),
     computed: {
+        combineSameDayCheckins() {
+            return this.settings[this.selUser.rank.belt].combine_same_day_checkins;
+        },
         checkins() {
-            return this.$store.state.checkins.filter(checkin =>
+            const selUsersCheckins = this.$store.state.checkins.filter(checkin =>
                 checkin.user_id === this.selUser.id && checkin.checked_in_at.slice(0, 10) > this.selUser.rank.last_ranked_up
             );
+            let
+                result = [],
+                aggrUsersCheckins = [];
+
+            if (selUsersCheckins.length && this.combineSameDayCheckins) {
+                for (let i = 0; i < selUsersCheckins.length; i++) {
+                    if (selUsersCheckins[i]) {
+                        let
+                            j = 1,
+                            combinedCheckins = [selUsersCheckins[i]];
+                        // if there more checkins with same date,
+                        // combine into array at index of first of them & delete the subsequent same-date checkins
+                        const dateStr = selUsersCheckins[i].checked_in_at.slice(0, 10);
+                        while (
+                            selUsersCheckins[i + j]
+                            && selUsersCheckins[i + j].checked_in_at.slice(0, 10) === dateStr
+                        ) {
+                            combinedCheckins.push(selUsersCheckins[i + j]);
+                            j++;
+                        }
+                        if (combinedCheckins.length > 1) {
+                            aggrUsersCheckins.push(combinedCheckins);
+                            i = i + j - 1;
+                        } else {
+                            aggrUsersCheckins.push(selUsersCheckins[i]);
+                        }
+                    }
+                }
+            }
+            result = aggrUsersCheckins.length ? aggrUsersCheckins : selUsersCheckins;
+            // add empty array elements to selUsersCheckins so that enough boxes render til next rank up
+            if (result.length <= this.classesTilStripe) {
+                const diff = this.classesTilStripe - result.length;
+                for (let i = 0; i < diff; i++) {
+                    result.push(null);
+                }
+            }
+            return result;
         },
         users() {
             if (isStudentOnly()) {
                 return this.$store.state.people.filter(person => person.id === this.user.id);
             }
-            return this.$store.state.people.filter(person => person.roles.includes(4));
+            return this.$store.state.people.filter(person => person.roles.includes(4) && person.rank.belt !== 5);
         },
         classesTilStripe() {
-            return Number(this.settings[this.selUser.rank.belt].classes_til_stripe);
-        },
-        fieldsPerRow() {
-            let fieldsPerRow = Math.round(this.classesTilStripe / (this.classesTilStripe <= 30 ? 3 : 5));
-            fieldsPerRow = fieldsPerRow > 20 ? 20 : fieldsPerRow;
-            if (fieldsPerRow < 10) {
-                fieldsPerRow = 10;
-            } else if (fieldsPerRow > 10 && window.innerWidth <= 760) {
-                fieldsPerRow = 10;
-            } else if (fieldsPerRow > 14 && window.innerWidth <= 938) {
-                fieldsPerRow = 14;
-            } else if (fieldsPerRow > 16 && window.innerWidth <= 1063) {
-                fieldsPerRow = 16;
-            }
-            return fieldsPerRow;
-        },
-        rows() {
-            let rows = Math.ceil(this.classesTilStripe / this.fieldsPerRow);
-            if (this.checkins.length) {
-                const classesTilEligible = this.classesTilStripe - this.checkins.length;
-                // if student is eligible for next stripe but has not received
-                if (Math.sign(classesTilEligible) === -1) {
-
-                    rows += Math.ceil(Math.abs(classesTilEligible) / (this.classesTilStripe / rows));
-                }
-            }
-            return rows;
+            return Number(this.settings[this.selUser.rank.belt].sessions_til_stripe);
         },
         settings() {
             return this.$store.state.settings;
@@ -109,25 +122,25 @@ export default {
         },
     },
     methods: {
-        checkinIndex(row, field) {
-            if (this.checkins[field - 1]) {
-                if (row === 1) {
-                    return row * field - 1;
+        renderCheckin(index) {
+            if (this.checkins[index])
+                if(Array.isArray(this.checkins[index])) {
+                    const dateStr = new Date(this.checkins[index][0].checked_in_at).toLocaleDateString();
+                    return `${dateStr}<br/>${this.checkins[index].length}X checkin`;
                 } else {
-                    return ((this.fieldsPerRow * (row - 1) ) + field) - 1;
-                }
+                    return this.utcToLocal(this.checkins[index].checked_in_at);
             }
         },
-        showBelt(field, row, beltId) {
+        showBelt(index, beltId) {
             return (
-                this.fieldsPerRow * (row - 1) + field === Number(this.classesTilStripe)
+                index + 1 === Number(this.classesTilStripe)
                 && this.selUser.rank.stripes === 4
                 && this.selUser.rank.belt === beltId - 1
             );
         },
-        showStripe(field, row, stripeNum) {
+        showStripe(index, stripeNum) {
             return (
-                this.fieldsPerRow * (row - 1) + field === Number(this.classesTilStripe)
+                index + 1 === Number(this.classesTilStripe)
                 && this.selUser.rank.stripes + 1 === stripeNum
             );
         },
@@ -146,10 +159,9 @@ export default {
         border-collapse: collapse;
     }
 
-    td {
-        position: relative;
-        height: 50px;
-        width: 50px;
+    .td {
+        height: 60px;
+        width: 60px;
         padding-left: 2px;
         border: 1px solid;
         font-size: 10px;
@@ -159,13 +171,9 @@ export default {
     .nextrank::after {
         content: "";
         opacity: .35;
-        height: 50px;
-        width: 50px;
+        height: 60px;
+        width: 60px;
         position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
     }
 
     .stripe1::after {

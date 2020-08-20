@@ -10,14 +10,19 @@
                         <v-row class="mx-2">
                             <v-col cols="12">
                                 <v-select v-model="belt" :items="belts" label="Belt" style="width: 100px"></v-select>
+                                <v-switch
+                                    v-model="settings[belt].combine_same_day_checkins"
+                                    :label="sessionLabel"
+                                    @change="update"
+                                ></v-switch>
                                 <v-text-field
-                                    v-model="settings[belt].classes_til_stripe"
+                                    v-model="settings[belt].sessions_til_stripe"
                                     type="number"
                                     min="1"
                                     max="255"
-                                    label="Classes until next stripe"
+                                    label="Sessions until next stripe"
                                     style="width: 150px"
-                                    :error-messages="errors.classes_til_stripe[0]"
+                                    :error-messages="errors.sessions_til_stripe[0]"
                                     @change="update"
                                 />
                                 <v-text-field
@@ -30,11 +35,6 @@
                                     :error-messages="errors.times_absent_til_contact[0]"
                                     @change="update"
                                 />
-                                <v-switch
-                                    v-model="settings[belt].combine_same_day_checkins"
-                                    label="Combine same day checkins"
-                                    @change="update"
-                                ></v-switch>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -63,11 +63,15 @@ export default {
             {value: 4, text: 'Brown'},
         ],
         errors: {
-            classes_til_stripe: [],
+            sessions_til_stripe: [],
             times_absent_til_contact: [],
         },
     }),
     computed: {
+        sessionLabel() {
+            return this.$store.state.settings[this.belt].combine_same_day_checkins ?
+                `1 day's training equals 1 session` : `1 class equals 1 session`;
+        },
         settings() {
             return this.$store.state.settings;
         },
@@ -75,7 +79,7 @@ export default {
     methods: {
         update() {
             this.errors = {
-                classes_til_stripe: [],
+                sessions_til_stripe: [],
                 times_absent_til_contact: [],
             };
             fetches.cancelFetches();
@@ -85,7 +89,7 @@ export default {
                 credentials: "same-origin",
                 signal: fetches.getSignal(),
                 body: JSON.stringify({
-                    classes_til_stripe: this.settings[this.belt].classes_til_stripe,
+                    sessions_til_stripe: this.settings[this.belt].sessions_til_stripe,
                     times_absent_til_contact: this.settings[this.belt].times_absent_til_contact,
                     combine_same_day_checkins: this.settings[this.belt].combine_same_day_checkins,
                 }),
@@ -93,8 +97,8 @@ export default {
                 .then( resp => resp.json())
                 .then( json => {
                     if (json.errors) {
-                        if (json.errors.classes_til_stripe) {
-                            this.errors.classes_til_stripe = json.errors.classes_til_stripe;
+                        if (json.errors.sessions_til_stripe) {
+                            this.errors.sessions_til_stripe = json.errors.sessions_til_stripe;
                         }
                         if (json.errors.times_absent_til_contact) {
                             this.errors.times_absent_til_contact = json.errors.times_absent_til_contact;

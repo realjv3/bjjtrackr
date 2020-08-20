@@ -17,7 +17,7 @@ class SettingsController extends Controller
             $settings[$setting->belt] = [
                 'id' => $setting->id,
                 'client_id' => $setting->client_id,
-                'classes_til_stripe' => $setting->classes_til_stripe,
+                'sessions_til_stripe' => $setting->sessions_til_stripe,
                 'times_absent_til_contact' => $setting->times_absent_til_contact,
                 'combine_same_day_checkins' => $setting->combine_same_day_checkins,
             ];
@@ -30,7 +30,7 @@ class SettingsController extends Controller
     {
         if (Gate::allows('isSuperAdmin') || Gate::allows('isAdmin')) {
             $request->validate([
-                'classes_til_stripe' => 'numeric|min:1|max:255',
+                'sessions_til_stripe' => 'numeric|min:1|max:255',
                 'times_absent_til_contact' => 'numeric|min:1|max:255',
                 'combine_same_day_checkins' => 'boolean'
             ]);
