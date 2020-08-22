@@ -14,7 +14,7 @@ class SettingsTableSeeder extends Seeder
     {
         Setting::create([
             'client_id' => 1,
-            'belt' => 1,
+            'belt_id' => 1,
             'sessions_til_stripe' => 30,
             'times_absent_til_contact' => 15,
             'combine_same_day_checkins' => true,
@@ -22,7 +22,7 @@ class SettingsTableSeeder extends Seeder
 
         Setting::create([
             'client_id' => 1,
-            'belt' => 2,
+            'belt_id' => 2,
             'sessions_til_stripe' => 70,
             'times_absent_til_contact' => 15,
             'combine_same_day_checkins' => true,
@@ -30,7 +30,7 @@ class SettingsTableSeeder extends Seeder
 
         Setting::create([
             'client_id' => 1,
-            'belt' => 3,
+            'belt_id' => 3,
             'sessions_til_stripe' => 80,
             'times_absent_til_contact' => 15,
             'combine_same_day_checkins' => true,
@@ -38,7 +38,7 @@ class SettingsTableSeeder extends Seeder
 
         Setting::create([
             'client_id' => 1,
-            'belt' => 4,
+            'belt_id' => 4,
             'sessions_til_stripe' => 90,
             'times_absent_til_contact' => 15,
             'combine_same_day_checkins' => true,
@@ -46,7 +46,7 @@ class SettingsTableSeeder extends Seeder
 
         Setting::create([
             'client_id' => 2,
-            'belt' => 1,
+            'belt_id' => 1,
             'sessions_til_stripe' => 30,
             'times_absent_til_contact' => 15,
             'combine_same_day_checkins' => true,
@@ -54,7 +54,7 @@ class SettingsTableSeeder extends Seeder
 
         Setting::create([
             'client_id' => 2,
-            'belt' => 2,
+            'belt_id' => 2,
             'sessions_til_stripe' => 70,
             'times_absent_til_contact' => 15,
             'combine_same_day_checkins' => true,
@@ -62,7 +62,7 @@ class SettingsTableSeeder extends Seeder
 
         Setting::create([
             'client_id' => 2,
-            'belt' => 3,
+            'belt_id' => 3,
             'sessions_til_stripe' => 80,
             'times_absent_til_contact' => 15,
             'combine_same_day_checkins' => true,
@@ -70,7 +70,7 @@ class SettingsTableSeeder extends Seeder
 
         Setting::create([
             'client_id' => 2,
-            'belt' => 4,
+            'belt_id' => 4,
             'sessions_til_stripe' => 90,
             'times_absent_til_contact' => 15,
             'combine_same_day_checkins' => true,

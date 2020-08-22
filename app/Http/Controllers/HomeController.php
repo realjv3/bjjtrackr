@@ -22,7 +22,7 @@ class HomeController extends Controller
         $settings = [];
         $raw_settings->each(function($setting) use (&$settings) {
 
-            $settings[$setting->belt] = [
+            $settings[$setting->belt_id] = [
                 'id' => $setting->id,
                 'client_id' => $setting->client_id,
                 'sessions_til_stripe' => $setting->sessions_til_stripe,

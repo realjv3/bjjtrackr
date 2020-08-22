@@ -23,19 +23,19 @@ class UserController extends Controller
 
         if (Gate::allows('isSuperAdmin')) {
             if ( ! empty($client_id)) {
-                return User::with(['rank', 'roles', 'client', 'lastCheckin'])
+                return User::with(['rank.belt', 'roles', 'client', 'lastCheckin'])
                     ->where('client_id', $client_id)
                     ->orderBy('name')
                     ->get();
             } else {
-                return User::with(['rank', 'roles', 'client', 'lastCheckin'])
+                return User::with(['rank.belt', 'roles', 'client', 'lastCheckin'])
                     ->orderBy('name')
                     ->get();
             }
         } else {
             $user = Auth::user();
             $clientId = $user->client_id;
-            return User::with(['rank', 'client', 'roles', 'lastCheckin'])
+            return User::with(['rank.belt', 'client', 'roles', 'lastCheckin'])
                 ->where('client_id', $clientId)
                 ->orderBy('name')
                 ->get();
@@ -49,7 +49,7 @@ class UserController extends Controller
             'email' => 'required|unique:users|email',
             'password' => 'required|confirmed',
             'roles' => 'required|array',
-            'rank.belt' => 'required|numeric',
+            'rank.belt_id' => 'required|numeric',
             'rank.stripes' => 'required|numeric',
             'client_id' => Rule::requiredIf( ! in_array(1, $request->roles ? $request->roles : [])),
             'start_date' => 'nullable|date',
@@ -60,7 +60,6 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'belt' => $request->belt,
             'stripes' => $request->stripes,
             'notes' => $request->notes,
             'start_date' => $request->start_date,
@@ -78,7 +77,7 @@ class UserController extends Controller
 
             $rank = new Rank([
                 'user_id' => $user->id,
-                'belt' => $request->rank['belt'],
+                'belt_id' => $request->rank['belt_id'],
                 'stripes' => $request->rank['stripes'],
                 'last_ranked_up' => date('Y-m-d'),
             ]);
@@ -93,7 +92,7 @@ class UserController extends Controller
             'email' => 'required|email',
             'password' => 'confirmed',
             'roles' => 'required|array',
-            'rank.belt' => 'required|numeric',
+            'rank.belt_id' => 'required|numeric',
             'rank.stripes' => 'required|numeric',
             'rank.last_ranked_up' => 'nullable|date',
             'client_id' => Rule::requiredIf( ! in_array(1, $request->roles ? $request->roles : [])),
@@ -131,7 +130,7 @@ class UserController extends Controller
         if ( ! empty($request->rank)) {
 
             $rank = Rank::where('user_id', $request->id)->get()->first();
-            $rank->belt = $request->rank['belt'];
+            $rank->belt_id = $request->rank['belt_id'];
             $rank->stripes = $request->rank['stripes'];
             $rank->last_ranked_up = $request->rank['last_ranked_up'];
             $rank->save();

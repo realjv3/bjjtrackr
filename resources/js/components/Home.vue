@@ -24,6 +24,15 @@
                     </v-list-item-content>
                 </v-list-item>
 
+                <v-list-item v-if="isSuperAdmin() || isAdmin()" key="settings" link @click="show = 'Settings'">
+                    <v-list-item-action>
+                        <v-icon>mdi-settings</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Settings</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
                 <template v-for="item in items">
 
                     <v-row v-if="item.heading" :key="item.heading" align="center">
@@ -233,7 +242,6 @@ export default {
             { icon: 'mdi-history', text: 'Check-ins' },
             { icon: 'mdi-qrcode', text: 'QRCodes' },
             { icon: 'mdi-file-chart', text: 'Reports' },
-            { icon: 'mdi-settings', text: 'Settings' },
             {
                 icon: 'mdi-chevron-up',
                 'icon-alt': 'mdi-chevron-down',
@@ -242,9 +250,6 @@ export default {
                 children: [
                     { text: 'Import' },
                     { text: 'Export' },
-                    { text: 'Print' },
-                    { text: 'Undo changes' },
-                    { text: 'Other contacts' },
                 ],
             },
             { icon: 'mdi-message', text: 'Send feedback' },

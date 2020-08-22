@@ -14,13 +14,13 @@ class RanksTableSeeder extends Seeder
     {
         Rank::create([
             'user_id' => 1,
-            'belt' => 3,
+            'belt_id' => 3,
             'stripes' => 1,
             'last_ranked_up' => '2019-06-01',
         ]);
         Rank::create([
             'user_id' => 2,
-            'belt' => 5,
+            'belt_id' => 5,
             'stripes' => 1,
             'last_ranked_up' => '2012-08-02',
         ]);

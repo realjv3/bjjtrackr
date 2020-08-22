@@ -16,7 +16,7 @@ class CreateSettingsTable extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->tinyIncrements('id');
             $table->unsignedBigInteger('client_id');
-            $table->unsignedTinyInteger('belt');
+            $table->unsignedTinyInteger('belt_id');
             $table->unsignedTinyInteger('sessions_til_stripe');
             $table->unsignedTinyInteger('times_absent_til_contact');
             $table->boolean('combine_same_day_checkins');
@@ -26,7 +26,7 @@ class CreateSettingsTable extends Migration
         Schema::table('settings', function(Blueprint $table) {
 
             $table->foreign('client_id')->references('id')->on('clients');
-            $table->foreign('belt')->references('id')->on('belts');
+            $table->foreign('belt_id')->references('id')->on('belts');
         });
     }
 
@@ -40,7 +40,7 @@ class CreateSettingsTable extends Migration
         Schema::table('settings', function(Blueprint $table) {
 
             $table->dropForeign('settings_client_id_foreign');
-            $table->dropForeign('settings_belt_foreign');
+            $table->dropForeign('settings_belt_id_foreign');
         });
 
         Schema::dropIfExists('settings');

@@ -49,7 +49,7 @@
                     <v-row class="mx-2">
                         <v-col cols="4">
                             <v-select
-                                v-model="person.rank.belt"
+                                v-model="person.rank.belt_id"
                                 :items="[
                                     {value: 1, text: 'White'},
                                     {value: 2, text: 'Blue'},
@@ -59,7 +59,7 @@
                                 ]"
                                 label="Belt"
                                 value="White"
-                                :error-messages="error.belt"
+                                :error-messages="error.belt_id"
                             />
                         </v-col>
                         <v-col cols="2">
@@ -151,7 +151,7 @@
                     name: null,
                     email: null,
                     rank: {
-                        belt: 1,
+                        belt_id: 1,
                         stripes: 0,
                         last_ranked_up: null,
                     },
@@ -166,7 +166,7 @@
                     email: null,
                     password: null,
                     password_confirmation: null,
-                    belt: null,
+                    belt_id: null,
                     stripes: null,
                     roles: null,
                     client_id: null,
@@ -243,7 +243,7 @@
                     name: null,
                     email: null,
                     rank: {
-                        belt: 'White',
+                        belt_id: 1,
                         stripes: 0,
                         last_ranked_up: null,
                     },

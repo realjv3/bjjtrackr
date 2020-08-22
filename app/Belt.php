@@ -17,4 +17,9 @@ class Belt extends Model
 
         return $this->hasMany('App\Setting');
     }
+
+    public function ranks() {
+
+        return $this->hasMany('App\Rank');
+    }
 }

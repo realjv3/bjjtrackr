@@ -52,7 +52,7 @@ export default {
         selUser: {
             id: null,
             rank: {
-                belt: 1,
+                belt_id: 1,
                 stripes: 0,
                 last_ranked_up: null,
             },
@@ -60,7 +60,7 @@ export default {
     }),
     computed: {
         combineSameDayCheckins() {
-            return this.settings[this.selUser.rank.belt].combine_same_day_checkins;
+            return this.settings[this.selUser.rank.belt_id].combine_same_day_checkins;
         },
         checkins() {
             const selUsersCheckins = this.$store.state.checkins.filter(checkin =>
@@ -109,10 +109,10 @@ export default {
             if (isStudentOnly()) {
                 return this.$store.state.people.filter(person => person.id === this.user.id);
             }
-            return this.$store.state.people.filter(person => person.roles.includes(4) && person.rank.belt !== 5);
+            return this.$store.state.people.filter(person => person.roles.includes(4) && person.rank.belt_id !== 5);
         },
         classesTilStripe() {
-            return Number(this.settings[this.selUser.rank.belt].sessions_til_stripe);
+            return Number(this.settings[this.selUser.rank.belt_id].sessions_til_stripe);
         },
         settings() {
             return this.$store.state.settings;
@@ -135,7 +135,7 @@ export default {
             return (
                 index + 1 === Number(this.classesTilStripe)
                 && this.selUser.rank.stripes === 4
-                && this.selUser.rank.belt === beltId - 1
+                && this.selUser.rank.belt_id === beltId - 1
             );
         },
         showStripe(index, stripeNum) {

@@ -16,7 +16,7 @@ class CreateRanksTable extends Migration
         Schema::create('ranks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedTinyInteger('belt')->nullable();
+            $table->unsignedTinyInteger('belt_id')->nullable();
             $table->unsignedTinyInteger('stripes')->nullable();
             $table->date('last_ranked_up')->nullable();
             $table->timestamps();
@@ -24,7 +24,7 @@ class CreateRanksTable extends Migration
 
         Schema::table('ranks', function(Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('belt')->references('id')->on('belts');
+            $table->foreign('belt_id')->references('id')->on('belts');
         });
     }
 
@@ -37,7 +37,7 @@ class CreateRanksTable extends Migration
     {
         Schema::table('ranks', function(Blueprint $table) {
             $table->dropForeign('ranks_user_id_foreign');
-            $table->dropForeign('ranks_belt_foreign');
+            $table->dropForeign('ranks_belt_id_foreign');
         });
 
         Schema::dropIfExists('ranks');
