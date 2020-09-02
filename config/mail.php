@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'support@bjjtrackr.com'),
+        'name' => env('MAIL_FROM_NAME', 'BJJTrackr Support'),
     ],
 
     /*
@@ -133,4 +133,13 @@ return [
 
     'log_channel' => env('MAIL_LOG_CHANNEL'),
 
+    /**
+     * Mailgun
+     */
+    'mailgun' => [
+        'domain' => env('MAILGUN_DOMAIN'),
+        'api_key' => env('MAILGUN_API_KEY'),
+        'url' => env('MAILGUN_URL'),
+        'to' => env('MAILGUN_TO_ADDR'),
+    ],
 ];

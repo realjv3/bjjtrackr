@@ -30,6 +30,7 @@
                                         prepend-icon="mdi-account-circle"
                                         type="text"
                                         v-model="email"
+                                        :disabled="loading"
                                         :error-messages="errors.email"
                                     />
 
@@ -40,6 +41,7 @@
                                         prepend-icon="mdi-lock"
                                         type="password"
                                         v-model="password"
+                                        :disabled="loading"
                                         :error-messages="errors.password"
                                     />
                                 </v-card-text>

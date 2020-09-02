@@ -101,6 +101,7 @@ export default {
     },
     created() {
         this.refresh();
+        this.clientId =  this.$store.state.user.client_id;
     }
 }
 </script>

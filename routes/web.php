@@ -45,3 +45,5 @@ Route::get('/events/{client_id}/{event_id?}', 'EventController@read');
 Route::post('/event/', 'EventController@create');
 Route::post('/event/{id}', 'EventController@update');
 Route::delete('/event/{id}', 'EventController@delete');
+
+Route::post('/feedback/', 'FeedbackController@create');

@@ -6,33 +6,6 @@
             app
         >
             <v-list>
-                <v-list-item v-if="isSuperAdmin(user)" key="clients" link @click="show = 'Clients'">
-                    <v-list-item-action>
-                        <v-icon>mdi-account-cash</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Clients</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-
-                <v-list-item v-if="isSuperAdmin(user) || isAdmin(user)" key="people" link @click="show = 'People'">
-                    <v-list-item-action>
-                        <v-icon>mdi-contacts</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>People</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-
-                <v-list-item v-if="isSuperAdmin(user) || isAdmin(user)" key="settings" link @click="show = 'Settings'">
-                    <v-list-item-action>
-                        <v-icon>mdi-settings</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Settings</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-
                 <template v-for="item in items">
 
                     <v-row v-if="item.heading" :key="item.heading" align="center">
@@ -76,7 +49,7 @@
                         </v-list-item>
                     </v-list-group>
 
-                    <v-list-item v-else :key="item.text" link @click="show = item.text">
+                    <v-list-item v-else-if="item.allowed" :key="item.text" link @click="show = item.text">
                         <v-list-item-action>
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-list-item-action>
@@ -147,7 +120,9 @@
 
                     <Reports v-show="show === 'Reports'"/>
 
-                    <Settings v-show="show === 'Settings'"/>
+                    <Settings v-show="isSuperAdmin(user) || isAdmin(user) && show === 'Settings'"/>
+
+                    <Feedback v-show="isSuperAdmin(user) || isAdmin(user) && show === 'Send feedback'" />
                 </v-row>
 
                 <Client v-show="isSuperAdmin(user)" ref="client" @save-client="onSaveClient"/>
@@ -228,33 +203,17 @@ import Reports from "components/Reports";
 import Schedule from "components/Schedule";
 import Settings from "components/Settings";
 import Event from 'components/Event';
+import Feedback from "components/Feedback";
 
 export default {
     components: {
-        Client, Clients, Event, People, Person, Checkins, Checkin, QRCodes, Reports, Schedule, Settings},
+        Client, Clients, Event, People, Person, Checkins, Checkin, QRCodes, Reports, Schedule, Settings, Feedback},
     props: {
         source: String,
     },
     data: () => ({
         drawer: null,
-        items: [
-            { icon: 'mdi-calendar-month-outline', text: 'Schedule' },
-            { icon: 'mdi-history', text: 'Check-ins' },
-            { icon: 'mdi-qrcode', text: 'QRCodes' },
-            { icon: 'mdi-file-chart', text: 'Reports' },
-            {
-                icon: 'mdi-chevron-up',
-                'icon-alt': 'mdi-chevron-down',
-                text: 'More',
-                model: false,
-                children: [
-                    { text: 'Import' },
-                    { text: 'Export' },
-                ],
-            },
-            { icon: 'mdi-message', text: 'Send feedback' },
-            { icon: 'mdi-help-circle', text: 'Help' },
-        ],
+        items: [],
         show: 'Reports',
         snackbar: {
             show: false,
@@ -320,6 +279,30 @@ export default {
                 this.$refs.schedule.refresh();
             }
         },
+    },
+    created() {
+        this.items = [
+            { icon: 'mdi-account-cash', text: 'Clients', allowed: this.isSuperAdmin(this.user) },
+            { icon: 'mdi-contacts', text: 'People', allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user) },
+            { icon: 'mdi-calendar-month-outline', text: 'Schedule', allowed: true },
+            { icon: 'mdi-history', text: 'Check-ins', allowed: true },
+            { icon: 'mdi-qrcode', text: 'QRCodes', allowed: true },
+            { icon: 'mdi-file-chart', text: 'Reports', allowed: true },
+            { icon: 'mdi-settings', text: 'Settings', allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user) },
+            { icon: 'mdi-message', text: 'Send feedback', allowed: true },
+            {
+                icon: 'mdi-chevron-up',
+                'icon-alt': 'mdi-chevron-down',
+                text: 'More',
+                allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user),
+                model: false,
+                children: [
+                    { text: 'Import' },
+                    { text: 'Export' },
+                ],
+            },
+            { icon: 'mdi-help-circle', text: 'Help', allowed: true },
+        ];
     },
     mounted() {
         document.addEventListener('keypress', this.$refs.qrcodes.onKeypress);
