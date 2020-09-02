@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import {headers, isStudentOnly} from "../authorization";
+import {isStudentOnly} from "../authorization";
 
 export default {
     name: "QRCodes",
@@ -40,7 +40,7 @@ export default {
             return this.$store.state.user;
         },
         users() {
-            if (isStudentOnly()) {
+            if (isStudentOnly(this.user)) {
                 return this.$store.state.people.filter(person => person.id === this.user.id);
             }
             return this.$store.state.people.filter(person => person.roles.includes(4));

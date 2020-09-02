@@ -14,7 +14,7 @@
     </head>
 
     <body>
-        <div id="body"></div>
+        <div id="body" style="height: 100%; width: 100%; background-color: #121212"></div>
 
         @yield('content')
     </body>

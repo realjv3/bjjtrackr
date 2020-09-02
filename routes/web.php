@@ -26,6 +26,7 @@ Route::post('/clients/{id}', 'ClientsController@update');
 Route::delete('/clients/{id}', 'ClientsController@delete');
 
 Route::get('/users/{client_id?}', 'UserController@read');
+Route::get('/user', 'UserController@getLoggedInUser');
 Route::post('/users', 'UserController@create');
 Route::post('/users/{id}', 'UserController@update');
 Route::delete('/users/{id}', 'UserController@delete');

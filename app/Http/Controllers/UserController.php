@@ -42,6 +42,14 @@ class UserController extends Controller
         }
     }
 
+    public function getLoggedInUser() {
+        $user = Auth::user();
+        $userId = $user->id;
+        return User::with(['rank.belt', 'client', 'roles', 'lastCheckin'])
+            ->where('id', $userId)
+            ->get();
+    }
+
     public function create(Request $request) {
 
         $request->validate([

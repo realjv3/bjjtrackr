@@ -6,7 +6,7 @@
             app
         >
             <v-list>
-                <v-list-item v-if="isSuperAdmin()" key="clients" link @click="show = 'Clients'">
+                <v-list-item v-if="isSuperAdmin(user)" key="clients" link @click="show = 'Clients'">
                     <v-list-item-action>
                         <v-icon>mdi-account-cash</v-icon>
                     </v-list-item-action>
@@ -15,7 +15,7 @@
                     </v-list-item-content>
                 </v-list-item>
 
-                <v-list-item v-if="isSuperAdmin() || isAdmin()" key="people" link @click="show = 'People'">
+                <v-list-item v-if="isSuperAdmin(user) || isAdmin(user)" key="people" link @click="show = 'People'">
                     <v-list-item-action>
                         <v-icon>mdi-contacts</v-icon>
                     </v-list-item-action>
@@ -24,7 +24,7 @@
                     </v-list-item-content>
                 </v-list-item>
 
-                <v-list-item v-if="isSuperAdmin() || isAdmin()" key="settings" link @click="show = 'Settings'">
+                <v-list-item v-if="isSuperAdmin(user) || isAdmin(user)" key="settings" link @click="show = 'Settings'">
                     <v-list-item-action>
                         <v-icon>mdi-settings</v-icon>
                     </v-list-item-action>
@@ -135,9 +135,9 @@
             <v-container class="fill-height" fluid>
                 <v-row align="center" justify="center">
 
-                    <People v-show="( ! isStudentOnly()) && show === 'People'" ref="people" @edit-person="onEditPerson" />
+                    <People v-show="( ! isStudentOnly(user)) && show === 'People'" ref="people" @edit-person="onEditPerson" />
 
-                    <Clients v-show="isSuperAdmin() && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
+                    <Clients v-show="isSuperAdmin(user) && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
 
                     <Schedule v-show="show === 'Schedule'" ref="schedule" @edit-event="onEditEvent" />
 
@@ -150,16 +150,16 @@
                     <Settings v-show="show === 'Settings'"/>
                 </v-row>
 
-                <Client v-show="isSuperAdmin()" ref="client" @save-client="onSaveClient"/>
+                <Client v-show="isSuperAdmin(user)" ref="client" @save-client="onSaveClient"/>
 
-                <Person v-show="isSuperAdmin() || isAdmin()" ref="person" @save-person="onSavePerson"/>
+                <Person v-show="isSuperAdmin(user) || isAdmin(user)" ref="person" @save-person="onSavePerson"/>
 
-                <Event v-show="isSuperAdmin() || isAdmin()" ref="event" @save-event="onSaveEvent"/>
+                <Event v-show="isSuperAdmin(user) || isAdmin(user)" ref="event" @save-event="onSaveEvent"/>
 
-                <Checkin v-show="! isStudentOnly()" ref="checkin" @save-checkin="onSaveCheckin"/>
+                <Checkin v-show="! isStudentOnly(user)" ref="checkin" @save-checkin="onSaveCheckin"/>
 
                 <v-speed-dial
-                    v-if="! isStudentOnly()"
+                    v-if="! isStudentOnly(user)"
                     v-model="speedDial"
                     bottom right fixed open-on-hover
                 >
@@ -171,7 +171,7 @@
                         </v-btn>
                     </template>
 
-                    <v-tooltip v-if="! isStudentOnly()" left>
+                    <v-tooltip v-if="! isStudentOnly(user)" left>
                         <template v-slot:activator="{ on }">
                             <v-btn @click="$refs.checkin.setCheckin(null)" fab dark small color="primary" v-on="on">
                                 <v-icon>mdi-history</v-icon>
@@ -180,7 +180,7 @@
                         <span>Check-in</span>
                     </v-tooltip>
 
-                    <v-tooltip v-if="isAdmin() || isSuperAdmin()" left>
+                    <v-tooltip v-if="isAdmin(user) || isSuperAdmin(user)" left>
                         <template v-slot:activator="{ on }">
                             <v-btn @click="$refs.person.show = true" fab dark small color="primary" v-on="on">
                                 <v-icon>mdi-contacts</v-icon>
@@ -189,7 +189,7 @@
                         <span>Person</span>
                     </v-tooltip>
 
-                    <v-tooltip v-if="isAdmin() || isSuperAdmin()" left>
+                    <v-tooltip v-if="isAdmin(user) || isSuperAdmin(user)" left>
                         <template v-slot:activator="{ on }">
                             <v-btn @click="$refs.event.show.event = true" fab dark small color="primary" v-on="on">
                                 <v-icon>mdi-calendar-month-outline</v-icon>
@@ -198,7 +198,7 @@
                         <span>Class</span>
                     </v-tooltip>
 
-                    <v-tooltip v-if="isSuperAdmin()" left>
+                    <v-tooltip v-if="isSuperAdmin(user)" left>
                         <template v-slot:activator="{ on }">
                             <v-btn @click="$refs.client.show = true" fab dark small color="primary" v-on="on">
                                 <v-icon>mdi-account-cash</v-icon>
@@ -277,18 +277,18 @@ export default {
             }
         },
         onEditClient(client) {
-            if (this.$refs.client && isSuperAdmin()) {
+            if (this.$refs.client && isSuperAdmin(this.user)) {
                 this.$refs.client.client = Object.assign({}, client);
                 this.$refs.client.show = true;
             }
         },
         onSavePerson() {
-            if (this.$refs.people && (isSuperAdmin() || isAdmin())) {
+            if (this.$refs.people && (isSuperAdmin(this.user) || isAdmin(this.user))) {
                 this.$refs.people.refresh();
             }
         },
         onEditPerson(person) {
-            if (this.$refs.person && (isSuperAdmin() || isAdmin())) {
+            if (this.$refs.person && (isSuperAdmin(this.user) || isAdmin(this.user))) {
                 this.$refs.person.person = Object.assign({}, person);
                 this.$refs.person.show = true;
             }
@@ -302,13 +302,13 @@ export default {
             this.$refs.people.refresh();
         },
         onEditCheckin(checkin) {
-            if (this.$refs.checkin && (! isStudentOnly())) {
+            if (this.$refs.checkin && (! isStudentOnly(this.user))) {
 
                 this.$refs.checkin.setCheckin(checkin);
             }
         },
         onEditEvent(event) {
-            if (this.$refs.event && (isSuperAdmin() || isAdmin())) {
+            if (this.$refs.event && (isSuperAdmin(this.user) || isAdmin(this.user))) {
 
                 this.$refs.event.setEvent(event);
             }

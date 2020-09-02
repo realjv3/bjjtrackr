@@ -26,12 +26,15 @@ const vuetify = new Vuetify({
     },
 });
 Vue.use(Vuetify);
+
 store.dispatch('getClients');
 store.dispatch('getPeople');
-
-new Vue({
-    el: '#body',
-    store,
-    vuetify,
-    ...Home,
-});
+store.dispatch('getUser')
+    .then(() =>
+        new Vue({
+            el: '#body',
+            store,
+            vuetify,
+            ...Home,
+        })
+    )

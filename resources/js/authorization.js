@@ -3,47 +3,52 @@
  */
 
 /**
- * Is the currently logged in user a super admin
+ * Is the user a super admin
+ * @param {Object} user
  * @return {boolean | *}
  */
-export function isSuperAdmin() {
-    const userRoles = user().roles.map(role => role.id);
+export function isSuperAdmin(user) {
+    const userRoles = user.roles.map(role => role.id);
     return userRoles.includes(1);
 }
 
 /**
- * Is the currently logged in user an administrator
+ * Is the user an administrator
+ * @param {Object} user
  * @return {boolean | *}
  */
-export function isAdmin() {
-    const userRoles = user().roles.map(role => role.id);
+export function isAdmin(user) {
+    const userRoles = user.roles.map(role => role.id);
     return userRoles.includes(2);
 }
 
 /**
- * Is the currently logged in user an instructor
+ * Is the user an instructor
+ * @param {Object} user
  * @return {boolean | *}
  */
-export function isInstructor() {
-    const userRoles = user().roles.map(role => role.id);
+export function isInstructor(user) {
+    const userRoles = user.roles.map(role => role.id);
     return userRoles.includes(3);
 }
 
 /**
- * Is the currently logged in user a student
+ * Is the user a student
+ * @param {Object} user
  * @return {boolean | *}
  */
-export function isStudent() {
-    const userRoles = user().roles.map(role => role.id);
+export function isStudent(user) {
+    const userRoles = user.roles.map(role => role.id);
     return userRoles.includes(4);
 }
 
 /**
- * Is the currently logged in user a student
+ * Is the user a student
+ * @param {Object} user
  * @return {boolean | *}
  */
-export function isStudentOnly() {
-    return ! isSuperAdmin() && ! isAdmin() && ! isInstructor();
+export function isStudentOnly(user) {
+    return ! isSuperAdmin(user) && ! isAdmin(user) && ! isInstructor(user);
 }
 
 /**

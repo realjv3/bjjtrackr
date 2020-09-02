@@ -189,10 +189,13 @@
             },
             disablePassword() {
 		        if (this.person.roles) {
-                    return !isSuperAdmin() && this.person.roles.includes(1);
+                    return !isSuperAdmin(this.user) && this.person.roles.includes(1);
                 } else {
 		            return false;
                 }
+            },
+            user() {
+                return this.$store.state.user;
             },
         },
         methods: {
@@ -255,10 +258,10 @@
             },
             setRoles() {
 		        const roles = [];
-		        if (isSuperAdmin()) {
+		        if (isSuperAdmin(this.user)) {
 		            roles.push({value: 1, text: 'Super Admin'});
                 }
-		        if (isSuperAdmin() || isAdmin()) {
+		        if (isSuperAdmin(this.user) || isAdmin(this.user)) {
 		            roles.push({value: 2, text: 'Administrator'});
 		            roles.push({value: 3, text: 'Instructor'});
                 }

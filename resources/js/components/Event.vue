@@ -85,7 +85,7 @@ export default {
         return  {
             event: {
                 id: null,
-                client_id: user().client_id,
+                client_id: this.$store.state.user.client_id,
                 name: null,
                 day_id: 1,
                 start: '18:00',
