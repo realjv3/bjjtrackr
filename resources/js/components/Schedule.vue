@@ -18,7 +18,6 @@
             </v-sheet>
         </v-row>
     </v-container>
-
 </template>
 
 <script>
@@ -50,6 +49,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+    div.v-calendar-daily__scroll-area {
+       overflow-y: visible;
+    }
 </style>

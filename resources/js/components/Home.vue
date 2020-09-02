@@ -104,7 +104,7 @@
             </v-menu>
         </v-app-bar>
 
-        <v-content>
+        <v-main>
             <v-container class="fill-height" fluid>
                 <v-row align="center" justify="center">
 
@@ -188,7 +188,7 @@
 
                 <v-snackbar v-model="snackbar.show" :bottom="true" :multi-line="true">{{snackbar.text}}</v-snackbar>
             </v-container>
-        </v-content>
+        </v-main>
     </v-app>
 </template>
 

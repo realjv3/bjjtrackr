@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" style="overflow-y: auto">
 
     <head>
         <meta charset="utf-8">
@@ -13,8 +13,8 @@
         <script type="application/javascript"> const CSRFToken = '{{ csrf_token() }}'; </script>
     </head>
 
-    <body>
-        <div id="body" style="height: 100%; width: 100%; background-color: #121212"></div>
+    <body style="background-color: #121212">
+        <div id="body"></div>
 
         @yield('content')
     </body>

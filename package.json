@@ -13,26 +13,26 @@
   },
   "homepage": "https://bjjtrackr.com",
   "dependencies": {
-    "@babel/core": "^7.8.7",
-    "@babel/preset-env": "^7.8.7",
-    "babel-loader": "^8.0.6",
-    "css-loader": "^3.4.2",
+    "@babel/core": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^3.6.0",
     "deepmerge": "^4.2.2",
-    "fibers": "^4.0.2",
-    "sass": "^1.26.2",
+    "fibers": "^4.0.3",
+    "sass": "^1.26.10",
     "sass-loader": "^8.0.2",
-    "vue-loader": "^15.9.0",
+    "vue": "^2.6.12",
+    "vue-loader": "^15.9.3",
     "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.6.11",
-    "vuetify": "^2.2.15",
-    "vuetify-loader": "^1.4.3",
-    "webpack": "^4.42.0",
-    "vue": "^2.6.11",
-    "vuex": "^3.1.2",
-    "webpack-cli": "^3.3.11"
+    "vue-template-compiler": "^2.6.12",
+    "vuetify": "^2.3.10",
+    "vuetify-loader": "^1.6.0",
+    "vuex": "^3.5.1",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "devDependencies": {
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
     "dev": "webpack-dev-server --mode development --https",
