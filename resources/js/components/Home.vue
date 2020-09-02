@@ -120,9 +120,9 @@
 
                     <Reports v-show="show === 'Reports'"/>
 
-                    <Settings v-show="isSuperAdmin(user) || isAdmin(user) && show === 'Settings'"/>
+                    <Settings v-show="(isSuperAdmin(user) || isAdmin(user)) && show === 'Settings'"/>
 
-                    <Feedback v-show="isSuperAdmin(user) || isAdmin(user) && show === 'Send feedback'" />
+                    <Feedback v-show="(isSuperAdmin(user) || isAdmin(user)) && show === 'Send feedback'" />
                 </v-row>
 
                 <Client v-show="isSuperAdmin(user)" ref="client" @save-client="onSaveClient"/>
