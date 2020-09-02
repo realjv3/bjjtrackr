@@ -122,7 +122,9 @@
 
                     <Settings v-show="(isSuperAdmin(user) || isAdmin(user)) && show === 'Settings'"/>
 
-                    <Feedback v-show="(isSuperAdmin(user) || isAdmin(user)) && show === 'Send feedback'" />
+                    <Feedback
+                        v-show="(isSuperAdmin(user) || isAdmin(user) || isInstructor(user)) && show === 'Send feedback'"
+                    />
                 </v-row>
 
                 <Client v-show="isSuperAdmin(user)" ref="client" @save-client="onSaveClient"/>
@@ -191,7 +193,7 @@
 </template>
 
 <script>
-import {isSuperAdmin, isAdmin, isStudentOnly} from "../authorization";
+import {isSuperAdmin, isAdmin, isInstructor, isStudentOnly} from "../authorization";
 import People from "components/People";
 import Person from "components/Person";
 import Clients from "components/Clients";
@@ -229,6 +231,7 @@ export default {
     methods: {
         isSuperAdmin,
         isAdmin,
+        isInstructor,
         isStudentOnly,
         onSaveClient() {
             if (this.$refs.clients) {
@@ -289,7 +292,11 @@ export default {
             { icon: 'mdi-qrcode', text: 'QRCodes', allowed: true },
             { icon: 'mdi-file-chart', text: 'Reports', allowed: true },
             { icon: 'mdi-settings', text: 'Settings', allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user) },
-            { icon: 'mdi-message', text: 'Send feedback', allowed: true },
+            {
+                icon: 'mdi-message',
+                text: 'Send feedback',
+                allowed:  this.isSuperAdmin(this.user) || this.isAdmin(this.user) || this.isInstructor(this.user),
+            },
             {
                 icon: 'mdi-chevron-up',
                 'icon-alt': 'mdi-chevron-down',
