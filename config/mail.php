@@ -56,7 +56,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'support@bjjtrackr.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'john@bjjtrackr.com'),
         'name' => env('MAIL_FROM_NAME', 'BJJTrackr Support'),
     ],
 
