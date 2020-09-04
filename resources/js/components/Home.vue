@@ -8,7 +8,7 @@
             <v-list>
                 <template v-for="item in items">
 
-                    <v-row v-if="item.heading" :key="item.heading" align="center">
+                    <v-row v-if="item.allowed && item.heading" :key="item.heading" align="center">
                         <v-col cols="6">
                             <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
                         </v-col>
@@ -18,7 +18,7 @@
                     </v-row>
 
                     <v-list-group
-                        v-else-if="item.children"
+                        v-else-if="item.allowed && item.children"
                         :key="item.text"
                         v-model="item.model"
                         :prepend-icon="item.model ? item.icon : item['icon-alt']"
