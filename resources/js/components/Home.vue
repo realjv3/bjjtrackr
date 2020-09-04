@@ -308,7 +308,11 @@ export default {
                     { text: 'Export' },
                 ],
             },
-            { icon: 'mdi-help-circle', text: 'Help', allowed: true },
+            {
+                icon: 'mdi-help-circle',
+                text: 'Help',
+                allowed:  this.isSuperAdmin(this.user) || this.isAdmin(this.user) || this.isInstructor(this.user),
+            },
         ];
     },
     mounted() {
