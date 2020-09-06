@@ -49,10 +49,10 @@ export function dateTimeTo24Time(dateTime) {
 export function utcDateTimeToLocal(utcDateTime) {
 
     if (utcDateTime) {
-        if ( ! utcDateTime.match(new RegExp(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/))) {
+        if ( ! utcDateTime.match(new RegExp(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.000000Z/))) {
             return 'Invalid dateTime';
         }
-        return new Date(utcDateTime + ' UTC').toLocaleString();
+        return new Date(utcDateTime).toLocaleString();
     }
 }
 

@@ -10,18 +10,18 @@ class SettingsController extends Controller
 {
     public function read($client_id)
     {
-        $raw_settings = Setting::where('client_id', $client_id)->get();
+        $raw_settings = Setting::where('client_id', $client_id)->get()->toArray();
         $settings = [];
-        $raw_settings->each(function ($setting) use (&$settings) {
+        for ($i = 0; $i < count($raw_settings); $i++) {
 
-            $settings[$setting->belt] = [
-                'id' => $setting->id,
-                'client_id' => $setting->client_id,
-                'sessions_til_stripe' => $setting->sessions_til_stripe,
-                'times_absent_til_contact' => $setting->times_absent_til_contact,
-                'combine_same_day_checkins' => $setting->combine_same_day_checkins,
+            $settings[$raw_settings[$i]['belt_id']] = [
+                'id' => $raw_settings[$i]['id'],
+                'client_id' => $raw_settings[$i]['client_id'],
+                'sessions_til_stripe' => $raw_settings[$i]['sessions_til_stripe'],
+                'times_absent_til_contact' => $raw_settings[$i]['times_absent_til_contact'],
+                'combine_same_day_checkins' => $raw_settings[$i]['combine_same_day_checkins'],
             ];
-        });
+        }
         return $settings;
     }
 

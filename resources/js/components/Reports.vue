@@ -19,7 +19,7 @@
                         <v-row>
                             <div
                                 class="td"
-                                v-for="(checkin, index) in checkins"
+                                v-for="(_, index) in checkins"
                                 :class="{
                                     nextrank: true,
                                     stripe1: showStripe(index, 1),

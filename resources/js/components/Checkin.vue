@@ -79,7 +79,7 @@
 
 <script>
     import {headers} from '../authorization';
-    import {dateTimeToYMD, dateTimeTo24Time, timeToLocale} from '../datetime_converters';
+    import {dateTimeToYMD, dateTimeTo24Time, timeToLocale, utcDateTimeToLocal} from '../datetime_converters';
 
     export default {
 		name: "Checkin",
@@ -164,8 +164,7 @@
                             this.saving = false;
                         } else if (json.id) {
                             this.close();
-                            const datetime = new Date(json.checked_in_at + ' UTC');
-                            this.$emit('save-checkin', `Checked in at ${datetime.toLocaleString()}`);
+                            this.$emit('save-checkin', `Checked in at ${utcDateTimeToLocal(json.checked_in_at)}`);
                         }
                     });
             },

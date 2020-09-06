@@ -69,7 +69,7 @@ export default {
     }),
     computed: {
         sessionLabel() {
-            return this.$store.state.settings[this.belt].combine_same_day_checkins ?
+            return this.settings[this.belt].combine_same_day_checkins ?
                 `1 day's training equals 1 session` : `1 class equals 1 session`;
         },
         settings() {
@@ -104,7 +104,7 @@ export default {
                             this.errors.times_absent_til_contact = json.errors.times_absent_til_contact;
                         }
                     } else {
-                        this.refresh();
+                        this.$store.commit('setSettings', json);
                     }
                 });
         },
