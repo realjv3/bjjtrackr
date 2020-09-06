@@ -81,9 +81,9 @@
             password: null,
         }),
         methods: {
-            clickLogin() {
+            async clickLogin() {
                 this.loading = true;
-                fetch('/login', {
+                const resp = await fetch('/login', {
                     headers,
                     credentials: "same-origin",
                     method: 'POST',
@@ -91,15 +91,9 @@
                         email: this.email,
                         password: this.password,
                     }),
-                })
-                .then( resp => {
-                    if (resp.status === 200) {
-                        window.location = '/';
-                    } else {
-                        return resp.json();
-                    }
-                })
-                .then( json => {
+                });
+                if (resp.status >= 400) {
+                    const json = await resp.json();
                     this.loading = false;
                     if (json && json.errors) {
                         this.errors.email = json.errors.email;
@@ -109,7 +103,9 @@
                             this.errors.password = json.errors.email;
                         }
                     }
-                });
+                } else {
+                    window.location = '/';
+                }
             },
         },
     }
