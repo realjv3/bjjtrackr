@@ -12,10 +12,10 @@ class FeedbackController extends Controller
 
         $name = Auth::user()->name;
         $email = Auth::user()->email;
-        $domain = config('mail.mailgun.domain');
-        $apiKey = config('mail.mailgun.api_key');
-        $url = config('mail.mailgun.url');
-        $to = config('mail.mailgun.to');
+        $domain = config('services.mailgun.domain');
+        $apiKey = config('services.mailgun.api_key');
+        $url = config('services.mailgun.endpoint');
+        $to = config('mail.from.address');
 
         $mg = Mailgun::create($apiKey, $url);
         $mg->messages()->send($domain, [
