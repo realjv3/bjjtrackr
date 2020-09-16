@@ -16,7 +16,14 @@
                 </v-card-title>
                 <v-card-text>
                     <v-container>
-                        <v-row>
+                        <v-row
+                            :class="{
+                        white_border: selUser.rank.belt_id === 1,
+                        blue_border: selUser.rank.belt_id === 2,
+                        purple_border: selUser.rank.belt_id === 3,
+                        brown_border: selUser.rank.belt_id === 4,
+                        black_border: selUser.rank.belt_id === 5,
+                }">
                             <div
                                 class="td"
                                 v-for="(_, index) in checkins"
@@ -160,8 +167,8 @@ export default {
     }
 
     .td {
-        height: 60px;
-        width: 60px;
+        height: 61.4px;
+        width: 61.4px;
         padding-left: 2px;
         border: 1px solid;
         font-size: 10px;
@@ -207,5 +214,25 @@ export default {
 
     .blackbelt::after {
         background-image: url("/storage/ranks/black.png");
+    }
+
+    .white_border {
+        border: 3px solid white;
+    }
+
+    .blue_border {
+        border: 3px solid blue;
+    }
+
+    .purple_border {
+        border: 3px solid rebeccapurple;
+    }
+
+    .brown_border {
+        border: 3px solid saddlebrown;
+    }
+
+    .black_border {
+        border: 3px solid black;
     }
 </style>
