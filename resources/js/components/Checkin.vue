@@ -195,8 +195,9 @@
 		                event_id: null,
 		                checked_in_at:
                             datetime.toISOString().substr(0, 10)
-                            + ' '
-                            + datetime.toISOString().substr(11, 8),
+                            + 'T'
+                            + datetime.toISOString().substr(11, 8)
+                            +'.000000Z',
                     };
                 }
                 this.show.checkin = true;
