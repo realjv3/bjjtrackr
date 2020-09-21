@@ -138,8 +138,8 @@
 		    'checkin.checked_in_at': function(newDt, oldDt) {
 
 		        if (newDt && (newDt !== oldDt)) {
-                    this.date = dateTimeToYMD(this.checkin.checked_in_at + ' UTC');
-                    this.time = dateTimeTo24Time(this.checkin.checked_in_at + ' UTC');
+                    this.date = dateTimeToYMD(this.checkin.checked_in_at);
+                    this.time = dateTimeTo24Time(this.checkin.checked_in_at);
                 }
             },
         },

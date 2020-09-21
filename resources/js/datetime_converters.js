@@ -6,7 +6,7 @@
  */
 export function dateTimeToYMD(dateTime) {
 
-    if ( ! dateTime.match(new RegExp(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/))) {
+    if ( ! dateTime.match(new RegExp(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.000000Z/))) {
         return 'Invalid dateTime';
     }
     let
@@ -33,7 +33,7 @@ export function dateTimeToYMD(dateTime) {
  */
 export function dateTimeTo24Time(dateTime) {
 
-    if ( ! dateTime.match(new RegExp(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/))) {
+    if ( ! dateTime.match(new RegExp(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.000000Z/))) {
         return 'Invalid dateTime';
     }
     const d = new Date(dateTime);
