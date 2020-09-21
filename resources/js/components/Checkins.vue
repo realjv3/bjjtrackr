@@ -70,6 +70,9 @@ export default {
         clients() {
             return this.$store.state.clients;
         },
+        user() {
+            return this.$store.state.user;
+        },
     },
     watch: {
         clients(newClients) {
@@ -81,7 +84,7 @@ export default {
     methods: {
         utcToLocal: utcDateTimeToLocal,
         delCheckin(checkin) {
-            ! this.loading && ! isStudentOnly() && confirm('Are you sure you want to delete this checkin?') &&
+            ! this.loading && ! isStudentOnly(this.user) && confirm('Are you sure you want to delete this checkin?') &&
             fetch(`/checkin/${checkin.id}`, {
                 method: 'DELETE',
                 headers,
