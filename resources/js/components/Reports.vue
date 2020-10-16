@@ -158,6 +158,9 @@ export default {
             this.selUser = newUsers[0];
         },
     },
+    created() {
+        this.selUser = this.user;
+    },
 }
 </script>
 
