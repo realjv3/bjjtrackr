@@ -143,6 +143,11 @@
 <script>
     import {isSuperAdmin, isAdmin, headers} from "../authorization";
 
+    /**
+     * Form for user CRUD
+     *
+     * @emits {'save-person'}
+     */
     export default {
 		name: "Person",
         data: function() {
@@ -202,17 +207,22 @@
 		    clickSave() {
                 this.saving = true;
                 this.resetErrors();
-                fetch('/users' + (this.person.hasOwnProperty('id') ? `/${this.person.id}` : ''), {
-                    method: 'POST',
-                    headers,
+                const updating = this.person.hasOwnProperty('id');
+
+                fetch('/api/users' + (updating ? `/${this.person.id}` : ''), {
+                    method: updating ? 'PUT' : 'POST',
+                    headers: {
+                        ...headers,
+                        Authorization: 'Bearer ' + API_KEY,
+                    },
                     credentials: "same-origin",
                     body: JSON.stringify(this.person),
                 })
                     .then( resp => {
-                        if (resp.status === 422) {
+                        if (resp.status > 210) {
                             return resp.json();
                         } else {
-                            this.$emit('save-person');
+                            this.$emit('save-person', true);
                             this.close();
                         }
                     })

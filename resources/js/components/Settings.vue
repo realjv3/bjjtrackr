@@ -1,13 +1,16 @@
 <template>
     <v-container fluid>
         <v-row justify="center">
-            <v-card>
-                <v-card-title>
-                    Settings
-                </v-card-title>
+            <v-card style="min-width: 33vw">
+                <v-card-title class="grey darken-2">Settings</v-card-title>
                 <v-card-text>
                     <v-container>
                         <v-row class="mx-2">
+                            <v-col cols="12">
+                                <h3>Promotion Eligibility</h3>
+                            </v-col>
+                        </v-row>
+                        <v-row class="mx-2" style="border-bottom: 1px solid white">
                             <v-col cols="12">
                                 <v-select v-model="belt" :items="belts" label="Belt" style="width: 100px"></v-select>
                                 <v-switch
@@ -37,6 +40,39 @@
                                 />
                             </v-col>
                         </v-row>
+                        <v-row class="mx-2 my-5">
+                            <v-col cols="12">
+                                <h3>Payment Info</h3>
+                            </v-col>
+                        </v-row>
+                        <v-row class="mx-2">
+                            <v-col cols="11">
+                                <div id="card"></div>
+                            </v-col>
+                            <v-col cols="1">
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn
+                                            color="indigo lighten-2"
+                                            elevation="2"
+                                            icon
+                                            small
+                                            :disabled="saving"
+                                            :loading="saving"
+                                            v-on="on"
+                                            style="bottom: 6px"
+                                            @click="clickSaveCard"
+                                        >
+                                            <v-icon dark>mdi-content-save</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Save Card</span>
+                                </v-tooltip>
+                            </v-col>
+                        </v-row>
+                        <v-row class="mx-4>">
+                            <span id="card-errors" role="alert">{{errors.card}}</span>
+                        </v-row>
                     </v-container>
                 </v-card-text>
             </v-card>
@@ -49,8 +85,10 @@
 
 import {headers} from "../authorization";
 import Fetches from "../fetches";
+import {loadStripe} from '@stripe/stripe-js';
 
 const fetches = new Fetches();
+let stripe;
 
 export default {
     name: "Settings",
@@ -62,10 +100,13 @@ export default {
             {value: 3, text: 'Purple'},
             {value: 4, text: 'Brown'},
         ],
+        card: null,
         errors: {
+            card: '',
             sessions_til_stripe: [],
             times_absent_til_contact: [],
         },
+        saving: false,
     }),
     computed: {
         sessionLabel() {
@@ -77,6 +118,27 @@ export default {
         },
     },
     methods: {
+        changeCard(event) {
+            this.errors.card = event.error ? event.error.message : '';
+        },
+        clickSaveCard() {
+            this.saving = true;
+            if ( ! this.errors.card) {
+                fetches.cancelFetches();
+                fetch(`/settings/${this.settings[this.belt].id}`, {
+                    method: 'POST',
+                    headers,
+                    credentials: "same-origin",
+                    signal: fetches.getSignal(),
+                    body: JSON.stringify({
+                        sessions_til_stripe: this.settings[this.belt].sessions_til_stripe,
+                        times_absent_til_contact: this.settings[this.belt].times_absent_til_contact,
+                        combine_same_day_checkins: this.settings[this.belt].combine_same_day_checkins,
+                    }),
+                })
+                    .then( resp => resp.json())
+            }
+        },
         update() {
             this.errors = {
                 sessions_til_stripe: [],
@@ -112,5 +174,36 @@ export default {
             await this.$store.dispatch('getSettings');
         },
     },
+    async mounted() {
+        stripe = await loadStripe(STRIPE_PUB_KEY);
+        const
+            elements = stripe.elements(),
+            style = {
+                base: {
+                    color: "#FFF",
+                    fontFamily: 'Roboto, sans-serif',
+                    fontSmoothing: "antialiased",
+                    fontSize: "16px",
+                    "::placeholder": {
+                        color: "#aab7c4"
+                    }
+                },
+                invalid: {
+                    color: "#ff5252",
+                    iconColor: "#ff5252"
+                },
+            };
+        this.card = elements.create('card', {style});
+        this.card.mount('#card');
+        this.card.on('change', this.changeCard);
+    },
 }
 </script>
+
+<style scoped>
+
+#card-errors {
+    color: #ff5252;
+    margin-left: 31px;
+}
+</style>

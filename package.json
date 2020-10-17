@@ -7,7 +7,7 @@
     "url": "git+https://github.com/realjv3/bjjtrackr.git"
   },
   "author": "John Verity",
-  "license": "ISC",
+  "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/realjv3/bjjtrackr/issues"
   },
@@ -19,6 +19,7 @@
     "babel-loader": "^8.1.0",
     "css-loader": "^3.6.0",
     "deepmerge": "^4.2.2",
+    "dotenv": "^8.2.0",
     "fibers": "^4.0.3",
     "sass": "^1.26.10",
     "sass-loader": "^8.0.2",

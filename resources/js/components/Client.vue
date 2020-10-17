@@ -59,6 +59,11 @@
 <script>
     import {headers} from '../authorization';
 
+    /**
+     * Form for client CRUD
+     *
+     * @emits {'save-client'}
+     */
     export default {
 		name: "Client",
         data: function() {
@@ -89,7 +94,7 @@
                     body: JSON.stringify(this.client),
                 })
                     .then( resp => {
-                        if (resp.status === 422) {
+                        if (resp.status > 210) {
                             return resp.json();
                         } else {
                             this.$emit('save-client');

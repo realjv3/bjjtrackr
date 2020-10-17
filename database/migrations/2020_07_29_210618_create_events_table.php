@@ -24,8 +24,8 @@ class CreateEventsTable extends Migration
         });
 
         Schema::table('events', function(Blueprint $table) {
-            $table->foreign('client_id')->references('id')->on('clients');
-            $table->foreign('day_id')->references('id')->on('days');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->foreign('day_id')->references('id')->on('days')->onDelete('cascade');
         });
     }
 

@@ -25,8 +25,8 @@ class CreateSettingsTable extends Migration
 
         Schema::table('settings', function(Blueprint $table) {
 
-            $table->foreign('client_id')->references('id')->on('clients');
-            $table->foreign('belt_id')->references('id')->on('belts');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->foreign('belt_id')->references('id')->on('belts')->onDelete('cascade');
         });
     }
 

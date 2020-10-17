@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\Gate;
 
 class CheckinController extends Controller
 {
-    public function __construct() {
-
-        $this->middleware('auth');
-    }
-
     public function read(Request $request,  $clientId = null) {
 
         if (Gate::allows('isStudentOnly')) {

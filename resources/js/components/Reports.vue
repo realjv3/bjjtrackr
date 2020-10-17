@@ -16,14 +16,13 @@
                 </v-card-title>
                 <v-card-text>
                     <v-container>
-                        <v-row
-                            :class="{
-                        white_border: selUser.rank.belt_id === 1,
-                        blue_border: selUser.rank.belt_id === 2,
-                        purple_border: selUser.rank.belt_id === 3,
-                        brown_border: selUser.rank.belt_id === 4,
-                        black_border: selUser.rank.belt_id === 5,
-                }">
+                        <v-row :class="{
+                            white_border: selUser.rank.belt_id === 1,
+                            blue_border: selUser.rank.belt_id === 2,
+                            purple_border: selUser.rank.belt_id === 3,
+                            brown_border: selUser.rank.belt_id === 4,
+                            black_border: selUser.rank.belt_id === 5,
+                        }">
                             <div
                                 class="td"
                                 v-for="(_, index) in checkins"

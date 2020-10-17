@@ -1,7 +1,6 @@
 import Vue from 'vue';
-import Vuetify from "vuetify/lib";
+import vuetify from "./global";
 import Home from 'components/Home';
-import colors from 'vuetify/lib/util/colors';
 import store from '../store';
 
 const ignoreWarnMessage = 'The .native modifier for v-on is only valid on components but it was used on <div>.';
@@ -14,22 +13,11 @@ Vue.config.warnHandler = function (msg, vm, trace) {
     }
 }
 
-const vuetify = new Vuetify({
-    theme: {
-        dark: true,
-        themes: {
-            dark: {
-                primary: colors.indigo.lighten2,
-                secondary: colors.pink.lighten2,
-            },
-        },
-    },
-});
-Vue.use(Vuetify);
-
-store.dispatch('getClients');
-store.dispatch('getPeople');
-store.dispatch('getUser')
+Promise.all([
+    store.dispatch('getClients'),
+    store.dispatch('getPeople'),
+    store.dispatch('getUser'),
+])
     .then(() =>
         new Vue({
             el: '#body',
@@ -37,4 +25,4 @@ store.dispatch('getUser')
             vuetify,
             ...Home,
         })
-    )
+    );

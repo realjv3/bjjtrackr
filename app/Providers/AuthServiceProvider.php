@@ -71,5 +71,10 @@ class AuthServiceProvider extends ServiceProvider
 
             return Gate::denies('isSuperAdmin') && Gate::denies('isAdmin') && Gate::denies('isInstructor');
         });
+
+        Gate::define('subscriptionActive', function ($user) {
+
+            return ! empty($user->subscription) && $user->subscription->status == 'active';
+        });
     }
 }

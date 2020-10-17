@@ -22,12 +22,14 @@ class CreateUsersTable extends Migration
             $table->date('start_date')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('api_token', 60)->unique()->nullable();
+            $table->string('cust_id', 25)->unique()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
 
         Schema::table('users', function(Blueprint $table) {
-            $table->foreign('client_id')->references('id')->on('clients');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
         });
     }
 

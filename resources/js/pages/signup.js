@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import vuetify from "./global";
-import Welcome from 'components/Welcome';
+import Signup from 'components/Signup';
 
 new Vue({
     el: '#body',
     vuetify,
-    ...Welcome,
+    ...Signup,
 });

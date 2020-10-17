@@ -158,7 +158,7 @@ export default {
         close() {
             this.event = {
                 id: null,
-                client_id: user().client_id,
+                client_id: this.user.client_id,
                 name: null,
                 day_id: 1,
                 start: '18:00',

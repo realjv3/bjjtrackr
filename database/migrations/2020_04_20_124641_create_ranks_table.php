@@ -23,8 +23,13 @@ class CreateRanksTable extends Migration
         });
 
         Schema::table('ranks', function(Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('belt_id')->references('id')->on('belts');
+            $table
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('belt_id')->references('id')->on('belts')->onDelete('cascade');
         });
     }
 

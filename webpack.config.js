@@ -1,7 +1,10 @@
+require('dotenv').config()
+
 const
     path = require('path'),
     { VueLoaderPlugin } = require('vue-loader'),
-    VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+    VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin'),
+    webpack = require("webpack");
 
 module.exports = {
     devServer: {
@@ -62,8 +65,14 @@ module.exports = {
     plugins: [
         new VueLoaderPlugin(),
         new VuetifyLoaderPlugin(),
+        new webpack.DefinePlugin({
+            API_KEY: JSON.stringify(process.env.API_KEY),
+            STRIPE_PUB_KEY: JSON.stringify(process.env.STRIPE_PUB_KEY),
+        }),
     ],
     entry: {
+        signup: './resources/js/pages/signup.js',
+        payment_method: './resources/js/pages/payment_method.js',
         welcome: './resources/js/pages/welcome.js',
         home: './resources/js/pages/home.js',
     },

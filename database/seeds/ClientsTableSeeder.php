@@ -22,15 +22,5 @@ class ClientsTableSeeder extends Seeder
             'zip' => '27103',
             'country' => 'USA',
         ]);
-        Client::create([
-            'name' => 'R&D Academy of Self Defense',
-            'affiliation' => 'Gracie Humaitá',
-            'address1' => '4755 Commercial Plaza Dr',
-            'address2' => '',
-            'city' => 'Winston-Salem',
-            'state' => 'NC',
-            'zip' => '27104',
-            'country' => 'USA',
-        ]);
     }
 }

@@ -15,25 +15,21 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password', 'notes', 'start_date'];
+    protected $fillable = ['name', 'email', 'password', 'notes', 'start_date', 'cust_id', 'api_token'];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token', 'cust_id', 'api_token'];
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    protected $casts = ['email_verified_at' => 'datetime'];
 
     public function roles() {
         return $this->belongsToMany('App\Role', 'user_role')->withTimestamps();
@@ -53,5 +49,9 @@ class User extends Authenticatable
 
     public function lastCheckin() {
         return $this->hasOne('App\Checkin')->latest();
+    }
+
+    public function subscription() {
+        return $this->hasOne('App\Subscription');
     }
 }

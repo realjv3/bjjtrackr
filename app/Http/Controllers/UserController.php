@@ -23,19 +23,19 @@ class UserController extends Controller
 
         if (Gate::allows('isSuperAdmin')) {
             if ( ! empty($client_id)) {
-                return User::with(['rank.belt', 'roles', 'client', 'lastCheckin'])
+                return User::with(['rank.belt', 'roles', 'client', 'lastCheckin', 'subscription'])
                     ->where('client_id', $client_id)
                     ->orderBy('name')
                     ->get();
             } else {
-                return User::with(['rank.belt', 'roles', 'client', 'lastCheckin'])
+                return User::with(['rank.belt', 'roles', 'client', 'lastCheckin', 'subscription'])
                     ->orderBy('name')
                     ->get();
             }
         } else {
             $user = Auth::user();
             $clientId = $user->client_id;
-            return User::with(['rank.belt', 'client', 'roles', 'lastCheckin'])
+            return User::with(['rank.belt', 'client', 'roles', 'lastCheckin', 'subscription'])
                 ->where('client_id', $clientId)
                 ->orderBy('name')
                 ->get();
@@ -45,7 +45,7 @@ class UserController extends Controller
     public function getLoggedInUser() {
         $user = Auth::user();
         $userId = $user->id;
-        return User::with(['rank.belt', 'client', 'roles', 'lastCheckin'])
+        return User::with(['rank.belt', 'client', 'roles', 'lastCheckin', 'subscription'])
             ->where('id', $userId)
             ->get();
     }
@@ -68,7 +68,6 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'stripes' => $request->stripes,
             'notes' => $request->notes,
             'start_date' => $request->start_date,
         ]);
@@ -97,7 +96,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email',
             'password' => 'confirmed',
             'roles' => 'required|array',
             'rank.belt_id' => 'required|numeric',
@@ -108,6 +107,11 @@ class UserController extends Controller
         ]);
 
         $user = User::find($id);
+
+        if ($request->email != $user->email) {
+
+            $request->validate(['email' => 'unique:users']);
+        }
 
         if ( ! empty($request->client_id)) {
 
