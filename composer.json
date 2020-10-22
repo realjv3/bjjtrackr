@@ -1,15 +1,11 @@
 {
-    "name": "laravel/laravel",
+    "name": "realjv3/bjjtrackr",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": [
-        "framework",
-        "laravel"
-    ],
-    "license": "MIT",
+    "description": "BjjTrackr",
+    "license": "Unlicensed",
     "require": {
         "php": "^7.2",
-        "bacon/bacon-qr-code": "2.0.0",
+        "bacon/bacon-qr-code": "^2.0.0",
         "fideloper/proxy": "^4.0",
         "kriswallsmith/buzz": "^1.1",
         "laravel/framework": "^7.27",
