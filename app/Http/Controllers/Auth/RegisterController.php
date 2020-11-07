@@ -2,28 +2,20 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Client;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Rank;
+use App\Setting;
 use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
-    use RegistersUsers;
-
     /**
      * Where to redirect users after registration.
      *
@@ -31,43 +23,124 @@ class RegisterController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
+    public function signup(Request $request) {
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        $request->validate([
+            'client.id' => Rule::requiredIf(! empty($request->person['id'])),
+            'client.name' => 'required',
+            'person.id' => Rule::requiredIf(! empty($request->client['id'])),
+            'person.name' => 'required',
+            'person.email' => 'required|email',
+            'person.rank.belt_id' => 'required|numeric',
+            'person.rank.stripes' => 'required|numeric',
+            'person.start_date' => 'nullable|date',
+            'person.rank.last_ranked_up' => 'nullable|date',
         ]);
+
+        $creating = ! Auth::check();
+
+        if ($creating) {
+
+            $request->validate(['person.password' => 'required|confirmed']);
+            $validator = Validator::make(['email' => $request->person['email']], ['unique:users']);
+            $validator->validate();
+
+            $client = new Client($request->client);
+            $client->save();
+
+            $this->insertSettings($client->id);
+
+            $user = new User([
+                'name' => $request->person['name'],
+                'email' => $request->person['email'],
+                'password' => bcrypt($request->person['password']),
+                'start_date' => empty($request->person['start_date']) ? date('Y-m-d') : $request->person['start_date'],
+            ]);
+            $user->client()->associate($client->id);
+            $user->save();
+            $user->roles()->attach(2);
+            $rank = new Rank([
+                'user_id' => $user->id,
+                'belt_id' => $request->person['rank']['belt_id'],
+                'stripes' => $request->person['rank']['stripes'],
+                'last_ranked_up' => date('Y-m-d'),
+            ]);
+            $rank->save();
+        } else {
+            $request->validate(['person.password' => 'confirmed']);
+
+            $client = Client::find($request->client['id']);
+            $user = User::find($request->person['id']);
+            $rank = Rank::find($request->person['rank']['id']);
+
+            if ($request->email != $user['email']) {
+
+                $request->validate(['email' => 'unique:users']);
+            }
+
+            $client->update($request->client);
+            $userProps = collect($request->person);
+            $user->update($userProps->except('password')->toArray());
+            if ( ! empty($request->person['password'])) {
+
+                $user->password = Hash::make($userProps['password']);
+                $user->save();
+            }
+            $rank->update($userProps['rank']);
+        }
+
+        if ($creating) {
+            Auth::loginUsingId($user->id);
+        }
+
+        return ['success' => true, 'client' => $client, 'person' => $user];
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Inserts initial settings for passed client
      *
-     * @param  array  $data
-     * @return \App\User
+     * @param int $client_id
      */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+    private function insertSettings(int $client_id) {
+
+        Setting::create([
+            'client_id' => $client_id,
+            'belt_id' => 1,
+            'sessions_til_stripe' => 30,
+            'times_absent_til_contact' => 15,
+            'combine_same_day_checkins' => 1,
+        ]);
+
+        Setting::create([
+            'client_id' => $client_id,
+            'belt_id' => 2,
+            'sessions_til_stripe' => 70,
+            'times_absent_til_contact' => 15,
+            'combine_same_day_checkins' => 1,
+        ]);
+
+        Setting::create([
+            'client_id' => $client_id,
+            'belt_id' => 3,
+            'sessions_til_stripe' => 80,
+            'times_absent_til_contact' => 15,
+            'combine_same_day_checkins' => 1,
+        ]);
+
+        Setting::create([
+            'client_id' => $client_id,
+            'belt_id' => 4,
+            'sessions_til_stripe' => 90,
+            'times_absent_til_contact' => 15,
+            'combine_same_day_checkins' => 1,
+        ]);
+
+        Setting::create([
+            'client_id' => $client_id,
+            'belt_id' => 5,
+            'sessions_til_stripe' => 0,
+            'times_absent_til_contact' => 0,
+            'combine_same_day_checkins' => 1,
         ]);
     }
 }

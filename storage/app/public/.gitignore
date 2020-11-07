@@ -1,15 +1,4 @@
 *
 !.gitignore
-!/ranks/stripe4.png
-!/ranks/blue.png
-!/ranks/purple.png
-!/ranks/stripe3.png
-!/ranks/
-!/ranks/brown.png
-!/ranks/stripe2.png
-!/ranks/stripe1.png
-!/ranks/black.png
-!/img/BjjTrackr-QR.png
-!/img/BjjTrackr-Reports.png
-!/img/BjjTrackr-Schedule.png
-!/img/BjjTrackr-Settings.png
+!/ranks
+!/img

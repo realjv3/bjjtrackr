@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Subscription;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -60,6 +59,86 @@ class PaymentController extends Controller
     }
 
     /**
+     * Gets all of the Stripe customer's payment methods
+     *
+     * @return array
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    public function getPaymentMethods() {
+
+        if (Gate::denies('isAdmin')) {
+            http_response_code(401);
+            return 'Unauthorized';
+        }
+
+        $custId = Subscription::where(['user_id' => Auth::user()->id])->get()->first()->cust_id;
+        $customer = $this->stripe->customers->retrieve($custId);
+        $paymentMethods = $this->stripe->paymentMethods->all(['customer' => $custId, 'type' => 'card']);
+
+        return array_merge(
+            $paymentMethods->toArray(),
+            ['default_payment_method' => $customer->invoice_settings->default_payment_method]
+        );
+    }
+
+    /**
+     * Sets Stripe default payment method
+     *
+     * @param Request $request
+     */
+    public function setDefaultPaymentMethod(Request $request) {
+
+        if (Gate::denies('isAdmin')) {
+            http_response_code(401);
+            return 'Unauthorized';
+        }
+
+        $request->validate([
+            'custId' => 'string',
+            'paymentMethodId' => 'string|required',
+        ]);
+
+        if (empty($request->custId)) {
+            $custId = Subscription::where(['user_id' => Auth::user()->id])->get()->first()->cust_id;
+        } else {
+            $custId = $request->custId;
+        }
+
+        $payment_method = $this->stripe->paymentMethods->retrieve($request->paymentMethodId);
+        $payment_method->attach(['customer' => $custId]);
+
+        // Set the default payment method on the customer
+        $this->stripe->customers->update($custId, [
+            'invoice_settings' => ['default_payment_method' => $request->paymentMethodId],
+        ]);
+
+        return $this->getPaymentMethods();
+    }
+
+    public function deletePaymentMethod(Request $request) {
+
+        if (Gate::denies('isAdmin')) {
+            http_response_code(401);
+            return 'Unauthorized';
+        }
+
+        $this->stripe->paymentMethods->detach($request->id);
+
+        $custId = Subscription::where(['user_id' => Auth::user()->id])->get()->first()->cust_id;
+        $paymentMethods = $this->stripe->paymentMethods->all(['customer' => $custId, 'type' => 'card']);
+        if ( ! empty($paymentMethods->count())) {
+            $this->stripe->customers->update($custId, [
+                'invoice_settings' => ['default_payment_method' => $paymentMethods->data[0]->id],
+            ]);
+        }
+
+        return array_merge(
+            $paymentMethods->toArray(),
+            ['default_payment_method' => $paymentMethods->count() ? $paymentMethods->data[0]->id : null]
+        );
+    }
+
+    /**
      * Attaches Stripe customer to Stripe payment method, then sets it as default payment method;
      * Upserts Stripe subscription;
      *
@@ -74,10 +153,7 @@ class PaymentController extends Controller
             return 'Unauthorized';
         }
 
-        $request->validate([
-            'custId' => 'string|required',
-            'paymentMethodId' => 'string|required',
-        ]);
+        $request->validate(['custId' => 'string|required']);
 
         $sub = Subscription::where(['user_id' => Auth::user()->id, 'cust_id' => $request->custId])->first();
 
@@ -86,17 +162,7 @@ class PaymentController extends Controller
             return 'Subscription record not found.';
         }
 
-        $payment_method = $this->stripe->paymentMethods->retrieve($request->paymentMethodId);
-        $payment_method->attach(['customer' => $request->custId]);
-
-        // Set the default payment method on the customer
-        $this->stripe->customers->update($request->custId, [
-            'invoice_settings' => [
-                'default_payment_method' => $request->paymentMethodId,
-            ],
-        ]);
-
-        if ( ! empty($sub) && ! empty($sub->subscription_id)) {
+        if (! empty($sub->subscription_id)) {
 
             $subscription = $this->stripe->subscriptions->retrieve($sub->subscription_id);
         } else {

@@ -17,10 +17,10 @@ Route::middleware(['guest'])->group(function() {
 
     Route::view('welcome', 'welcome')->name('welcome');
     Route::view('signup', 'signup')->name('signup');
-    Route::post('signup', 'ClientsController@signup');
 });
 
 Route::post('login', 'Auth\LoginController@login')->name('login');
+Route::post('signup', 'Auth\RegisterController@signup');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::middleware(['auth:web'])->group(function () {
@@ -58,5 +58,8 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/feedback/', 'FeedbackController@create');
 
     Route::get('/customer', 'PaymentController@findOrCreateCustomer');
+    Route::get('/payment_methods', 'PaymentController@getPaymentMethods');
+    Route::post('/payment_method', 'PaymentController@setDefaultPaymentMethod');
+    Route::delete('payment_method/{id}', 'PaymentController@deletePaymentMethod');
     Route::post('/subscription', 'PaymentController@upsertSubscription');
 });

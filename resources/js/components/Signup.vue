@@ -74,7 +74,7 @@
                                     <p class="text-center mt-5 mx-auto">
                                         <v-icon class="text-h1" color="secondary">mdi-currency-usd</v-icon>
                                     </p>
-                                    <p class="text-center mt-5 mx-auto">Pay only for what you use. The price is $3 per student per month.</p>
+                                    <p class="text-center mt-5 mx-auto">Pay only for what you use. The price is $3 per active student per month. Cancel anytime.</p>
                                 </v-carousel-item>
                             </v-carousel>
 
@@ -188,6 +188,7 @@
                                         v-model="client.name"
                                         :error-messages="errors['client.name']"
                                         placeholder="Academy name (required)"
+                                        :disabled="saving"
                                     />
                                 </v-col>
 
@@ -198,39 +199,44 @@
                                         @click="show.pickStartDate = true"
                                         prepend-inner-icon="mdi-calendar-month-outline"
                                         :error-messages="errors['person.start_date']"
+                                        :disabled="saving"
                                     />
                                 </v-col>
 
                                 <v-dialog v-model="show.pickStartDate" class="mx-auto" width="290px">
-                                    <v-date-picker v-model="person.start_date" />
+                                    <v-date-picker v-model="person.start_date" :disabled="saving"/>
                                 </v-dialog>
 
                                 <v-col cols="5">
-                                    <v-text-field v-model="client.affiliation" placeholder="Affiliation" />
+                                    <v-text-field
+                                        v-model="client.affiliation"
+                                        placeholder="Affiliation"
+                                        :disabled="saving"
+                                    />
                                 </v-col>
 
                                 <v-col cols="12">
-                                    <v-text-field v-model="client.address1" placeholder="Address 1" />
+                                    <v-text-field v-model="client.address1" placeholder="Address 1" :disabled="saving"/>
                                 </v-col>
 
                                 <v-col cols="12">
-                                    <v-text-field v-model="client.address2" placeholder="Address 2" />
+                                    <v-text-field v-model="client.address2" placeholder="Address 2" :disabled="saving"/>
                                 </v-col>
 
                                 <v-col cols="6">
-                                    <v-text-field v-model="client.city" placeholder="City" />
+                                    <v-text-field v-model="client.city" placeholder="City" :disabled="saving" />
                                 </v-col>
 
                                 <v-col cols="4">
-                                    <v-text-field v-model="client.state" placeholder="State/Province" />
+                                    <v-text-field v-model="client.state" placeholder="State/Province" :disabled="saving"/>
                                 </v-col>
 
                                 <v-col cols="2">
-                                    <v-text-field v-model="client.zip" placeholder="Postal code" />
+                                    <v-text-field v-model="client.zip" placeholder="Postal code" :disabled="saving"/>
                                 </v-col>
 
                                 <v-col cols="6">
-                                    <v-text-field v-model="client.country" placeholder="Country" />
+                                    <v-text-field v-model="client.country" placeholder="Country" :disabled="saving"/>
                                 </v-col>
                             </v-row>
 
@@ -248,9 +254,14 @@
                         <v-card class="mb-12" height="74vh">
                             <v-card-title class="grey darken-2 mb-2">Payment Method</v-card-title>
                             <v-row class="ma-6">
-                                <v-col>
-                                    <div id="card"></div>
-                                    <div id="card-errors" role="alert">{{errors.card}}</div>
+                                <div class="text-body-1">
+                                    Please input your card info.<br/>
+                                    After a 30 day free trial, the monthly subscription fee will be charged to the card. The price will be calculated as $3 per active student. Cancel anytime.
+                                </div>
+                            </v-row>
+                            <v-row class="ma-6">
+                                <v-col cols="5">
+                                    <PaymentMethods @created-payment-method="window.location = '/'" />
                                 </v-col>
                             </v-row>
                             <v-row justify="end" class="mx-2">
@@ -269,14 +280,11 @@
 <script>
 
 import {headers} from "../authorization";
-import {loadStripe} from '@stripe/stripe-js';
-import Fetches from "../fetches";
-
-const fetches = new Fetches();
-let stripe;
+import PaymentMethods from "components/PaymentMethods";
 
 export default {
     name: "Signup",
+    components: {PaymentMethods},
     data: function () {
         return {
             client: {
@@ -290,9 +298,7 @@ export default {
                 country: null,
             },
             card: null,
-            errors: {
-                card: null,
-            },
+            errors: {},
             person: {
                 id: null,
                 name: null,
@@ -325,88 +331,10 @@ export default {
         },
     },
     methods: {
-        changeCard({error, empty, complete}) {
-            this.errors.card = error ? error.message : '';
-            if ( ! empty && complete) {
-                this.card.update({ disabled: true });
-                this.findOrCreateStripeCustomer();
-            }
-        },
-        async findOrCreateStripeCustomer() {
-            this.saving = true;
-            fetches.cancelFetches();
-            if ( ! this.errors.card) {
-                const
-                    resp = await fetch(`/customer`, {
-                        headers,
-                        credentials: "same-origin",
-                        signal: fetches.getSignal(),
-                    }),
-                    json = await resp.json();
-                if (json.id && json.object === 'customer') {
-                    this.createPaymentMethod(json.id);
-                } else {
-                    this.errors.card = "There was a problem creating the customer record."
-                }
-            }
-        },
-        /**
-         * Creates a stripe payment method
-         *
-         * @param custId {String}
-         */
-        createPaymentMethod(custId) {
-            return stripe.createPaymentMethod({
-                type: 'card',
-                card: this.card,
-            })
-            .then( result => {
-                if (result.error) {
-                    this.errors.card = result.error;
-                } else {
-                    this.createSubscription({
-                        custId,
-                        paymentMethodId: result.paymentMethod.id,
-                    });
-                }
-            });
-        },
-        /**
-         * Hits backend to create stripe subscription
-         *
-         * @param stripeCustId {String}
-         * @param paymentMethodId {String}
-         */
-        createSubscription({custId, paymentMethodId}) {
-            fetches.cancelFetches();
-            return (
-                fetch('/subscription', {
-                    method: 'POST',
-                    headers,
-                    credentials: 'same-origin',
-                    signal: fetches.getSignal(),
-                    body: JSON.stringify({
-                        custId,
-                        paymentMethodId: paymentMethodId,
-                    }),
-                })
-                    .then( resp => resp.json())
-                    .then( subscription => {
-                        if (subscription.error) {
-                            this.errors.card = subscription.error;
-                        }
-                        if (subscription.status === 'active') {
-                            window.location = '/';
-                        }
-                    })
-            );
-        },
         async savePersonClient() {
             this.saving = true;
             fetches.cancelFetches();
-            this.errors = {
-                card: null,
-            };
+            this.errors = {};
             const
                 resp = await fetch(`/signup`, {
                 method: 'POST',
@@ -435,36 +363,5 @@ export default {
             this.client = this.$store.state.clients.find(client => client.id === this.user.client_id);
         }
     },
-    async mounted() {
-        stripe = await loadStripe(STRIPE_PUB_KEY);
-        const
-            elements = stripe.elements(),
-            style = {
-                base: {
-                    color: "#FFF",
-                    fontFamily: 'Roboto, sans-serif',
-                    fontSmoothing: "antialiased",
-                    fontSize: "16px",
-                    "::placeholder": {
-                        color: "#aab7c4"
-                    }
-                },
-                invalid: {
-                    color: "#ff5252",
-                    iconColor: "#ff5252"
-                },
-            };
-        this.card = elements.create('card', {style});
-        this.card.mount('#card');
-        this.card.on('change', this.changeCard);
-    },
 }
 </script>
-
-<style scoped>
-
-#card-errors {
-    color: #ff5252;
-    margin-left: 31px;
-}
-</style>
