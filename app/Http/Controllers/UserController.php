@@ -23,19 +23,19 @@ class UserController extends Controller
 
         if (Gate::allows('isSuperAdmin')) {
             if ( ! empty($client_id)) {
-                return User::with(['rank.belt', 'roles', 'client', 'lastCheckin', 'subscription'])
+                return User::with(['rank.belt', 'roles', 'client', 'lastCheckin'])
                     ->where('client_id', $client_id)
                     ->orderBy('name')
                     ->get();
             } else {
-                return User::with(['rank.belt', 'roles', 'client', 'lastCheckin', 'subscription'])
+                return User::with(['rank.belt', 'roles', 'client', 'lastCheckin'])
                     ->orderBy('name')
                     ->get();
             }
         } else {
             $user = Auth::user();
             $clientId = $user->client_id;
-            return User::with(['rank.belt', 'client', 'roles', 'lastCheckin', 'subscription'])
+            return User::with(['rank.belt', 'client', 'roles', 'lastCheckin'])
                 ->where('client_id', $clientId)
                 ->orderBy('name')
                 ->get();
@@ -45,7 +45,7 @@ class UserController extends Controller
     public function getLoggedInUser() {
         $user = Auth::user();
         $userId = $user->id;
-        return User::with(['rank.belt', 'client', 'roles', 'lastCheckin', 'subscription'])
+        return User::with(['rank.belt', 'client', 'roles', 'lastCheckin'])
             ->where('id', $userId)
             ->get();
     }

@@ -16,7 +16,7 @@ class CreateSubscriptionsTable extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
 
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id')->unique();
+            $table->unsignedBigInteger('client_id')->unique();
             $table->string('cust_id', 30);
             $table->string('subscription_id', 30)->nullable();
             $table->string('item_id', 30)->nullable();
@@ -28,7 +28,7 @@ class CreateSubscriptionsTable extends Migration
 
         Schema::table('subscriptions', function(Blueprint $table) {
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
         });
     }
 
@@ -41,7 +41,7 @@ class CreateSubscriptionsTable extends Migration
     {
         Schema::table('subscriptions', function(Blueprint $table) {
 
-            $table->dropForeign('subscriptions_user_id_foreign');
+            $table->dropForeign('subscriptions_client_id_foreign');
         });
         Schema::dropIfExists('subscriptions');
     }

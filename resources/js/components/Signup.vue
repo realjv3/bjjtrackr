@@ -261,7 +261,7 @@
                             </v-row>
                             <v-row class="ma-6">
                                 <v-col cols="5">
-                                    <PaymentMethods @created-payment-method="window.location = '/'" />
+                                    <PaymentMethods @created-payment-method="redirectHome" />
                                 </v-col>
                             </v-row>
                             <v-row justify="end" class="mx-2">
@@ -331,6 +331,9 @@ export default {
         },
     },
     methods: {
+        redirectHome() {
+            window.location = '/';
+        },
         async savePersonClient() {
             this.saving = true;
             fetches.cancelFetches();

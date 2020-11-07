@@ -8,7 +8,7 @@ class Subscription extends Model
 {
     protected $fillable = [
         'id',
-        'user_id',
+        'client_id',
         'cust_id',
         'subscription_id',
         'item_id',
@@ -17,7 +17,7 @@ class Subscription extends Model
         'status',
     ];
 
-    public function user() {
-        $this->belongsTo('App\User');
+    public function client() {
+        $this->belongsTo('App\Client');
     }
 }

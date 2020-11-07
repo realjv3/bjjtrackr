@@ -40,7 +40,7 @@ class PaymentController extends Controller
         }
 
         $user = Auth::user();
-        $subscription = Subscription::where(['user_id' => $user->id])->first();
+        $subscription = Subscription::where(['client_id' => $user->client->id])->first();
 
         if ( ! empty($subscription) && ! empty($subscription->cust_id)) {
 
@@ -49,9 +49,9 @@ class PaymentController extends Controller
             $customer = $this->stripe->customers->create([
                 'name' => $user->name,
                 'email' => $user->email,
-                'metadata' => ['user_id' => $user->id],
+                'metadata' => ['client_id' => $user->client->id],
             ]);
-            $subscription = new Subscription(['user_id' => $user->id, 'cust_id' => $customer->id]);
+            $subscription = new Subscription(['client_id' => $user->client->id, 'cust_id' => $customer->id]);
             $subscription->save();
         }
 
@@ -61,7 +61,7 @@ class PaymentController extends Controller
     /**
      * Gets all of the Stripe customer's payment methods
      *
-     * @return array
+     * @return array|string
      * @throws \Stripe\Exception\ApiErrorException
      */
     public function getPaymentMethods() {
@@ -71,13 +71,19 @@ class PaymentController extends Controller
             return 'Unauthorized';
         }
 
-        $custId = Subscription::where(['user_id' => Auth::user()->id])->get()->first()->cust_id;
-        $customer = $this->stripe->customers->retrieve($custId);
-        $paymentMethods = $this->stripe->paymentMethods->all(['customer' => $custId, 'type' => 'card']);
+        $paymentMethods = collect();
+        $sub = Subscription::where(['client_id' => Auth::user()->client->id])->get()->first();
+        $defaultPaymentMethod = null;
+        if ( ! empty($sub)) {
+            $custId = $sub->cust_id;
+            $customer = $this->stripe->customers->retrieve($custId);
+            $paymentMethods = $this->stripe->paymentMethods->all(['customer' => $custId, 'type' => 'card']);
+            $defaultPaymentMethod = $customer->invoice_settings->default_payment_method;
+        }
 
         return array_merge(
             $paymentMethods->toArray(),
-            ['default_payment_method' => $customer->invoice_settings->default_payment_method]
+            ['default_payment_method' => $defaultPaymentMethod]
         );
     }
 
@@ -99,7 +105,7 @@ class PaymentController extends Controller
         ]);
 
         if (empty($request->custId)) {
-            $custId = Subscription::where(['user_id' => Auth::user()->id])->get()->first()->cust_id;
+            $custId = Subscription::where(['client_id' => Auth::user()->client->id])->get()->first()->cust_id;
         } else {
             $custId = $request->custId;
         }
@@ -124,7 +130,7 @@ class PaymentController extends Controller
 
         $this->stripe->paymentMethods->detach($request->id);
 
-        $custId = Subscription::where(['user_id' => Auth::user()->id])->get()->first()->cust_id;
+        $custId = Subscription::where(['client_id' => Auth::user()->client->id])->get()->first()->cust_id;
         $paymentMethods = $this->stripe->paymentMethods->all(['customer' => $custId, 'type' => 'card']);
         if ( ! empty($paymentMethods->count())) {
             $this->stripe->customers->update($custId, [
@@ -155,7 +161,7 @@ class PaymentController extends Controller
 
         $request->validate(['custId' => 'string|required']);
 
-        $sub = Subscription::where(['user_id' => Auth::user()->id, 'cust_id' => $request->custId])->first();
+        $sub = Subscription::where(['client_id' => Auth::user()->client->id, 'cust_id' => $request->custId])->first();
 
         if (empty($sub)) {
             http_response_code(404);

@@ -74,7 +74,9 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('subscriptionActive', function ($user) {
 
-            return ! empty($user->subscription) && $user->subscription->status == 'active';
+            $client = $user->client;
+
+            return ! empty($client->subscription) && $client->subscription->status == 'active';
         });
     }
 }
