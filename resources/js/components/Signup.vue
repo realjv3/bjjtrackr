@@ -281,7 +281,9 @@
 
 import {headers} from "../authorization";
 import PaymentMethods from "components/PaymentMethods";
-import fetches from "../fetches";
+import Fetches from "../fetches";
+
+const fetches = new Fetches();
 
 export default {
     name: "Signup",
