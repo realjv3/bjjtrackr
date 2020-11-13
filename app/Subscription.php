@@ -18,6 +18,6 @@ class Subscription extends Model
     ];
 
     public function client() {
-        $this->belongsTo('App\Client');
+        return $this->belongsTo('App\Client');
     }
 }

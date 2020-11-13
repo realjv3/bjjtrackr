@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ProcessedPayment;
 use App\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Stripe\Exception\SignatureVerificationException;
 use Stripe\StripeClient;
+use Stripe\Webhook;
 
 class PaymentController extends Controller
 {
@@ -175,7 +180,7 @@ class PaymentController extends Controller
             // Create the subscription
             $subscription = $this->stripe->subscriptions->create([
                 'customer' => $request->custId,
-                'items' => [['price' => 'price_1HQEPnAdSpfz7pjghEYUL7FD']],
+                'items' => [['price' => 'price_1HmJC7AdSpfz7pjgcTUb2tkl']],
                 'expand' => ['latest_invoice.payment_intent'],
             ]);
             $sub->subscription_id = $subscription->id;
@@ -189,27 +194,57 @@ class PaymentController extends Controller
         return $subscription;
     }
 
-    public function handle(Request $request) {
+    /**
+     * Stripe webhook handler
+     *
+     * @param Request $request
+     */
+    public function handle(Request $request, StripeClient $stripeClient) {
+        $endpoint_secret = config('services.stripe.webhook_secret');
 
-        switch ($request->type) {
+        $payload = @file_get_contents('php://input');
+        $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
+        $event = null;
+
+        try {
+            $event = Webhook::constructEvent(
+                $payload, $sig_header, $endpoint_secret
+            );
+        } catch(\UnexpectedValueException $e) {
+            // Invalid payload
+            http_response_code(400);
+            exit();
+        } catch(SignatureVerificationException $e) {
+            // Invalid signature
+            http_response_code(400);
+            exit();
+        }
+        $paymentIntent = $event->data->object;
+        $subscription = Subscription::where(['cust_id' => $paymentIntent->customer])->get()->first();
+        $stripeSub = $stripeClient->subscriptions->retrieve($subscription->subscription_id);
+        $subscription->status = $stripeSub->status;
+        $subscription->current_period_end = $stripeSub->current_period_end;
+        $subscription->save();
+        $client = $subscription->client;
+        $to = DB::table('users')
+            ->join('user_role', 'users.id', '=', 'user_role.user_id')
+            ->where(['users.client_id' => $subscription->client_id, 'user_role.role_id' => 2, 'active' => true])
+            ->first();
+
+        switch ($event->type) {
             case 'invoice.paid':
-                // The status of the invoice will show up as paid. Store the status in your
-                // database to reference when a user accesses your service to avoid hitting rate
-                // limits.
-                Log::info('Stripe Webhook ' . $request->type . $request->all());
+                Log::info("Payment succeeded for $client->name");
+                Mail::to($to)->bcc(config('mail.from.address'))
+                    ->send(new ProcessedPayment($subscription, $paymentIntent, $client) );
                 break;
             case 'invoice.payment_failed':
-                // If the payment fails or the customer does not have a valid payment method,
-                // an invoice.payment_failed event is sent, the subscription becomes past_due.
-                // Use this webhook to notify your user that their payment has
-                // failed and to retrieve new card details.
-                Log::info('Stripe Webhook ' . $request->type . $request->all());
+                Log::info("Payment failed for $client->name");
+                Mail::to($to)->bcc(config('mail.from.address'))
+                    ->send(new ProcessedPayment($subscription, $paymentIntent, $client) );
                 break;
             default:
                 // Unhandled event type
-                Log::info('Stripe Webhook ' . $request->type . $request->all());
+                Log::info('Stripe Webhook ' . $request->type . $event->all()->toJSON());
         }
-
-        return ['msg' => $request->all()];
     }
 }

@@ -17,6 +17,7 @@ Route::middleware(['guest'])->group(function() {
 
     Route::view('welcome', 'welcome')->name('welcome');
     Route::view('signup', 'signup')->name('signup');
+    Route::post('payments', 'PaymentController@handle')->name('payments');
 });
 
 Route::post('login', 'Auth\LoginController@login')->name('login');

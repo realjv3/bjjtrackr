@@ -18,6 +18,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('password'),
             'client_id' => 1,
             'start_date' => '2009-12-19',
+            'active' => true,
         ]);
 
         User::create([
@@ -26,6 +27,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('password'),
             'client_id' => 1,
             'start_date' => '2015-06-01',
+            'active' => true,
         ]);
     }
 }
