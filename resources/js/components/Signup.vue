@@ -281,6 +281,7 @@
 
 import {headers} from "../authorization";
 import PaymentMethods from "components/PaymentMethods";
+import fetches from "../fetches";
 
 export default {
     name: "Signup",
