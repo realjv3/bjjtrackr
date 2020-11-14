@@ -149,13 +149,15 @@
                 this.resetErrors();
 
                 const isoStr = new Date(`${this.date} ${this.time}`).toISOString();
-                this.checkin.checked_in_at = isoStr.substr(0, 10) + ' ' + isoStr.substr(11, 8);
 
                 fetch(`/checkin/` + (this.checkin.id ? this.checkin.id : ''), {
                     method: 'POST',
                     headers,
                     credentials: "same-origin",
-                    body: JSON.stringify(this.checkin),
+                    body: JSON.stringify({
+                        ...this.checkin,
+                        checked_in_at: isoStr.substr(0, 10) + ' ' + isoStr.substr(11, 8)
+                    }),
                 })
                     .then(resp => resp.json())
                     .then(json => {
@@ -169,12 +171,21 @@
                     });
             },
             close() {
+                this.checkin = {
+                    id: null,
+                    client_id: null,
+                    user_id: null,
+                    event_id: null,
+                    checked_in_at: null,
+                };
                 this.show = {
                     checkin: false,
                     datepicker: false,
                     timepicker: false,
                 };
                 this.saving = false;
+                this.date = null;
+                this.time = null;
                 this.resetErrors();
             },
             resetErrors() {
