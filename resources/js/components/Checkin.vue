@@ -55,6 +55,7 @@
                                 `${item.name} - ${timeToLocale(item.start.slice(-8))} - ${timeToLocale(item.end.slice(-8))}`"
                                 item-value="id"
                                 label="Class"
+                                @change="selectClass"
                             />
                         </v-col>
                     </v-row>
@@ -193,6 +194,10 @@
                     client_id: null,
                     user_id: null,
                 };
+            },
+            selectClass() {
+		        const event = this.daysEvents.find(event => this.checkin.event_id === event.id);
+		        this.time = event.start.slice(11);
             },
             setCheckin(checkin) {
 		        if (checkin) {
