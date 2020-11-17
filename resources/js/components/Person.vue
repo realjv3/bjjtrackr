@@ -113,6 +113,9 @@
                                 :error-messages="error.start_date"
                             />
                         </v-col>
+                        <v-col>
+                            <v-checkbox v-model="person.active" label="Active" />
+                        </v-col>
                     </v-row>
                     <v-row class="mx-2">
                         <v-col cols="12">
@@ -165,6 +168,7 @@
                     password: null,
                     password_confirmation: null,
                     start_date: null,
+                    active: true,
                 },
                 error: {
                     name: null,
@@ -264,6 +268,7 @@
                     client_id: null,
                     start_date: null,
                     password_confirmation: null,
+                    active: true,
                 };
             },
             setRoles() {

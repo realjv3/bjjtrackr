@@ -62,6 +62,7 @@ class UserController extends Controller
             'client_id' => Rule::requiredIf( ! in_array(1, $request->roles ? $request->roles : [])),
             'start_date' => 'nullable|date',
             'rank.last_ranked_up' => 'nullable|date',
+            'active' => 'required|boolean',
         ]);
 
         $user = new User([
@@ -70,6 +71,7 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
             'notes' => $request->notes,
             'start_date' => $request->start_date,
+            'active' => $request->active,
         ]);
         if ( ! empty($request->client_id)) {
             $user->client()->associate($request->client_id);
@@ -104,6 +106,7 @@ class UserController extends Controller
             'rank.last_ranked_up' => 'nullable|date',
             'client_id' => Rule::requiredIf( ! in_array(1, $request->roles ? $request->roles : [])),
             'start_date' => 'nullable|date',
+            'active' => 'required|boolean',
         ]);
 
         $user = User::find($id);
