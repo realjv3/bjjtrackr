@@ -7,45 +7,44 @@
                         <v-form>
                             <v-card class="elevation-12">
                                 <v-toolbar color="primary" dark flat>
-                                    <v-toolbar-title>Welcome to BjjTrackr</v-toolbar-title>
+                                    <v-toolbar-title>Reset your password</v-toolbar-title>
                                 </v-toolbar>
                                 <v-card-text>
                                     <v-text-field
                                         label="Email"
-                                        name="email"
                                         prepend-icon="mdi-account-circle"
                                         type="text"
-                                        v-model="email"
-                                        :disabled="loading"
+                                        :value="email"
+                                        :disabled="true"
                                         :error-messages="errors.email"
                                     />
-
                                     <v-text-field
-                                        id="password"
-                                        label="Password"
-                                        name="password"
-                                        prepend-icon="mdi-lock"
                                         type="password"
+                                        label="New Password"
+                                        prepend-icon="mdi-lock"
                                         v-model="password"
+                                        :disabled="loading"
+                                        :error-messages="errors.password"
+                                    />
+                                    <v-text-field
+                                        label="Confirm Password"
+                                        type="password"
+                                        prepend-icon="mdi-lock"
+                                        v-model="password_confirmation"
                                         :disabled="loading"
                                         :error-messages="errors.password"
                                     />
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-col cols="3">
-                                        <a href="/signup">Sign up</a>
-                                    </v-col>
-                                    <v-col>
-                                        <a href="/send-reset">Forgot Password</a>
-                                    </v-col>
-                                    <v-spacer />
-                                    <v-btn
-                                        :loading="loading"
-                                        :disabled="loading"
-                                        color="primary"
-                                        @click="clickLogin"
-                                        type="submit"
-                                    >Login</v-btn>
+                                    <v-row justify="end" class="pr-5">
+                                        <v-btn
+                                            :loading="loading"
+                                            :disabled="loading"
+                                            color="primary"
+                                            @click="clickReset"
+                                            type="submit"
+                                        >Reset Password</v-btn>
+                                    </v-row>
                                 </v-card-actions>
                             </v-card>
                         </v-form>
@@ -60,42 +59,50 @@
     import {headers} from '../authorization';
 
     export default {
+        props: {
+            email: {type: String, required: true},
+            token: {type: String, required: true},
+        },
         data: () => ({
-            email: null,
+            password: null,
+            password_confirmation: null,
             errors: {
                 email: null,
-                password: null
+                password: null,
             },
             loading: false,
-            password: null,
         }),
         methods: {
-            async clickLogin() {
+            async clickReset() {
                 this.loading = true;
-                const resp = await fetch('/login', {
+                this.resetErrors();
+                const resp = await fetch('/reset-password', {
                     headers,
                     credentials: "same-origin",
                     method: 'POST',
                     body: JSON.stringify({
                         email: this.email,
                         password: this.password,
+                        password_confirmation: this.password_confirmation,
+                        token: this.token,
                     }),
                 });
                 if (resp.status >= 400) {
                     const json = await resp.json();
                     this.loading = false;
                     if (json && json.errors) {
-                        this.errors.email = json.errors.email;
-                        this.errors.password = json.errors.password;
-
-                        if (json.errors.email && json.errors.email[0].match(new RegExp(/do not match/))) {
-                            this.errors.password = json.errors.email;
-                        }
+                        this.errors = json.errors;
                     }
                 } else {
                     window.location = '/';
                 }
             },
-        },
+            resetErrors() {
+                this.errors = {
+                    email: null,
+                    password: null,
+                };
+            },
+         },
     }
 </script>

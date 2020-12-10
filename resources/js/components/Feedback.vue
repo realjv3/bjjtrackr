@@ -12,6 +12,8 @@
                                 :loading="submitting"
                                 :readonly="submitting"
                                 :outlined="true"
+                                :error="error"
+                                :error-messages="errorMsg"
                             />
                         </v-row>
                         <v-row justify="end">
@@ -33,6 +35,8 @@ import {headers} from "../authorization";
 export default {
     name: "Feedback",
     data: () => ({
+        error: false,
+        errorMsg: null,
         message: '',
         submitting: false,
         snackbar: {
@@ -41,21 +45,31 @@ export default {
         }
     }),
     methods: {
-        clickSubmit() {
+        async clickSubmit() {
 
             this.submitting = true;
+            this.error = false;
+            this.errorMsg = null;
 
-            fetch(`/feedback`, {
+            const resp = await fetch(`/feedback`, {
                 method: 'POST',
                 headers,
                 credentials: "same-origin",
                 body: JSON.stringify({message: this.message}),
-            })
-                .then(() => {
-                    this.submitting = false;
-                    this.message = '';
-                    this.snackbar.show = true;
-                });
+            });
+
+            if (resp.status < 400) {
+                this.submitting = false;
+                this.message = '';
+                this.snackbar.show = true;
+                this.error = null;
+            } else {
+                const json = await resp.json();
+                this.error = true;
+                this.errorMsg = json.message;
+                this.submitting = false;
+                this.message = '';
+            }
         },
     },
 }

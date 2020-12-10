@@ -6,4 +6,4 @@
         initSettings = @json($settings);
 </script>
 
-<script type="application/javascript" src="<?= config('app.js_url') ?>/payment_method.bundle.js" defer></script>
+<script type="application/javascript" src="{{config('app.js_url')}}/payment_method.bundle.js" defer></script>

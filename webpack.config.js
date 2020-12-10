@@ -74,6 +74,8 @@ module.exports = {
         signup: './resources/js/pages/signup.js',
         payment_method: './resources/js/pages/payment_method.js',
         welcome: './resources/js/pages/welcome.js',
+        send_reset: './resources/js/pages/send-reset.js',
+        reset: './resources/js/pages/reset.js',
         home: './resources/js/pages/home.js',
     },
     output: {

@@ -210,9 +210,6 @@ import Feedback from "components/Feedback";
 export default {
     components: {
         Client, Clients, Event, People, Person, Checkins, Checkin, QRCodes, Reports, Schedule, Settings, Feedback},
-    props: {
-        source: String,
-    },
     data: () => ({
         drawer: null,
         items: [],

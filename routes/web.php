@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['guest'])->group(function() {
 
     Route::view('welcome', 'welcome')->name('welcome');
+    Route::view('send-reset', 'auth.passwords.send-reset');
+    Route::post('forgot-password', 'Auth\ResetPasswordController@forgotPassword');
+    Route::get('reset-password/{token}', 'Auth\ResetPasswordController@showResetForm')
+        ->name('password.reset');
+    Route::post('reset-password', 'Auth\ResetPasswordController@reset');
     Route::view('signup', 'signup')->name('signup');
     Route::post('payments', 'PaymentController@handle')->name('payments');
 });
