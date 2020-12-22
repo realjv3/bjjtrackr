@@ -204,21 +204,9 @@ class PaymentController extends Controller
 
         $payload = @file_get_contents('php://input');
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
-        $event = null;
-
-        try {
-            $event = Webhook::constructEvent(
-                $payload, $sig_header, $endpoint_secret
-            );
-        } catch(\UnexpectedValueException $e) {
-            // Invalid payload
-            http_response_code(400);
-            exit();
-        } catch(SignatureVerificationException $e) {
-            // Invalid signature
-            http_response_code(400);
-            exit();
-        }
+        $event = Webhook::constructEvent(
+            $payload, $sig_header, $endpoint_secret
+        );
         $paymentIntent = $event->data->object;
         $subscription = Subscription::where(['cust_id' => $paymentIntent->customer])->get()->first();
         $stripeSub = $stripeClient->subscriptions->retrieve($subscription->subscription_id);
