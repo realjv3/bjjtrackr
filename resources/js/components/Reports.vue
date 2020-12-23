@@ -84,10 +84,10 @@ export default {
                             combinedCheckins = [selUsersCheckins[i]];
                         // if there more checkins with same date,
                         // combine into array at index of first of them & delete the subsequent same-date checkins
-                        const dateStr = selUsersCheckins[i].checked_in_at.slice(0, 10);
+                        const dateStr = this.utcToLocal(selUsersCheckins[i].checked_in_at).slice(0, 10);
                         while (
                             selUsersCheckins[i + j]
-                            && selUsersCheckins[i + j].checked_in_at.slice(0, 10) === dateStr
+                            && this.utcToLocal(selUsersCheckins[i + j].checked_in_at).slice(0, 10) === dateStr
                         ) {
                             combinedCheckins.push(selUsersCheckins[i + j]);
                             j++;
@@ -129,12 +129,13 @@ export default {
     },
     methods: {
         renderCheckin(index) {
-            if (this.checkins[index])
-                if(Array.isArray(this.checkins[index])) {
+            if (this.checkins[index]) {
+                if (Array.isArray(this.checkins[index])) {
                     const dateStr = new Date(this.checkins[index][0].checked_in_at).toLocaleDateString();
                     return `${dateStr}<br/>${this.checkins[index].length}X checkin`;
                 } else {
                     return this.utcToLocal(this.checkins[index].checked_in_at);
+                }
             }
         },
         showBelt(index, beltId) {
