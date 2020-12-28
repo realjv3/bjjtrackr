@@ -91,5 +91,8 @@ export default {
             this.selUser = newUsers[0];
         }
     },
+    mounted() {
+        document.addEventListener('keypress', this.onKeypress);
+    }
 }
 </script>

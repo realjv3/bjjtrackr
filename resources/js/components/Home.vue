@@ -6,23 +6,20 @@
             app
         >
             <v-list>
-                <template v-for="item in items">
+                <template v-if="initializing">
+                    <v-skeleton-loader
+                        v-for="i in Array(10).fill(0)"
+                        type="list-item-avatar"
+                    />
+                </template>
 
-                    <v-row v-if="item.allowed && item.heading" :key="item.heading" align="center">
-                        <v-col cols="6">
-                            <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
-                        </v-col>
-                        <v-col cols="6" class="text-center">
-                            <a href="#!" class="body-2 black--text">EDIT</a>
-                        </v-col>
-                    </v-row>
+                <template v-else v-for="item in items">
 
                     <v-list-group
-                        v-else-if="item.allowed && item.children"
+                        v-if="item.allowed && item.children"
                         :key="item.text"
                         v-model="item.model"
                         :prepend-icon="item.model ? item.icon : item['icon-alt']"
-                        append-icon=""
                     >
                         <template v-slot:activator>
                             <v-list-item>
@@ -105,7 +102,9 @@
         </v-app-bar>
 
         <v-main>
-            <v-container class="fill-height" fluid>
+            <v-skeleton-loader v-if="initializing" type="card" class="ma-16"/>
+
+            <v-container v-else class="fill-height" fluid>
                 <v-row align="center" justify="center">
 
                     <People v-show="( ! isStudentOnly(user)) && show === 'People'" ref="people" @edit-person="onEditPerson" />
@@ -116,7 +115,7 @@
 
                     <Checkins v-show="show === 'Check-ins'" ref="checkins" @edit-checkin="onEditCheckin" />
 
-                    <QRCodes v-show="show === 'QRCodes'" @save-checkin="onEditCheckin" ref="qrcodes" />
+                    <QRCodes v-show="show === 'QRCodes'" @save-checkin="onEditCheckin" />
 
                     <Reports v-show="show === 'Reports'"/>
 
@@ -206,6 +205,7 @@ import Schedule from "components/Schedule";
 import Settings from "components/Settings";
 import Event from 'components/Event';
 import Feedback from "components/Feedback";
+import store from "../store";
 
 export default {
     components: {
@@ -221,6 +221,9 @@ export default {
         speedDial: false,
     }),
     computed: {
+        initializing() {
+            return ! this.items.length;
+        },
         user() {
             return this.$store.state.user;
         },
@@ -281,40 +284,44 @@ export default {
         },
     },
     created() {
-        this.items = [
-            { icon: 'mdi-account-cash', text: 'Clients', allowed: this.isSuperAdmin(this.user) },
-            { icon: 'mdi-contacts', text: 'People', allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user) },
-            { icon: 'mdi-calendar-month-outline', text: 'Schedule', allowed: true },
-            { icon: 'mdi-history', text: 'Check-ins', allowed: true },
-            { icon: 'mdi-qrcode', text: 'QRCodes', allowed: true },
-            { icon: 'mdi-file-chart', text: 'Reports', allowed: true },
-            { icon: 'mdi-settings', text: 'Settings', allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user) },
-            {
-                icon: 'mdi-message',
-                text: 'Send feedback',
-                allowed:  this.isSuperAdmin(this.user) || this.isAdmin(this.user) || this.isInstructor(this.user),
-            },
-            {
-                icon: 'mdi-chevron-up',
-                'icon-alt': 'mdi-chevron-down',
-                text: 'More',
-                allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user),
-                model: false,
-                children: [
-                    { text: 'Import' },
-                    { text: 'Export' },
-                ],
-            },
-            {
-                icon: 'mdi-help-circle',
-                text: 'Help',
-                allowed:  this.isSuperAdmin(this.user) || this.isAdmin(this.user) || this.isInstructor(this.user),
-            },
-        ];
+        Promise.all([
+            store.dispatch('getClients'),
+            store.dispatch('getPeople'),
+            store.dispatch('getUser'),
+        ])
+            .then(() =>
+                this.items = [
+                    { icon: 'mdi-account-cash', text: 'Clients', allowed: this.isSuperAdmin(this.user) },
+                    { icon: 'mdi-contacts', text: 'People', allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user) },
+                    { icon: 'mdi-calendar-month-outline', text: 'Schedule', allowed: true },
+                    { icon: 'mdi-history', text: 'Check-ins', allowed: true },
+                    { icon: 'mdi-qrcode', text: 'QRCodes', allowed: true },
+                    { icon: 'mdi-file-chart', text: 'Reports', allowed: true },
+                    { icon: 'mdi-settings', text: 'Settings', allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user) },
+                    {
+                        icon: 'mdi-message',
+                        text: 'Send feedback',
+                        allowed:  this.isSuperAdmin(this.user) || this.isAdmin(this.user) || this.isInstructor(this.user),
+                    },
+                    {
+                        icon: 'mdi-chevron-up',
+                        'icon-alt': 'mdi-chevron-down',
+                        text: 'More',
+                        allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user),
+                        model: false,
+                        children: [
+                            { text: 'Import' },
+                            { text: 'Export' },
+                        ],
+                    },
+                    {
+                        icon: 'mdi-help-circle',
+                        text: 'Help',
+                        allowed:  this.isSuperAdmin(this.user) || this.isAdmin(this.user) || this.isInstructor(this.user),
+                    },
+                ]
+            );
     },
-    mounted() {
-        document.addEventListener('keypress', this.$refs.qrcodes.onKeypress);
-    }
 }
 </script>
 

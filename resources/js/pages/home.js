@@ -13,16 +13,9 @@ Vue.config.warnHandler = function (msg, vm, trace) {
     }
 }
 
-Promise.all([
-    store.dispatch('getClients'),
-    store.dispatch('getPeople'),
-    store.dispatch('getUser'),
-])
-    .then(() =>
-        new Vue({
-            el: '#body',
-            store,
-            vuetify,
-            ...Home,
-        })
-    );
+new Vue({
+    el: '#body',
+    store,
+    vuetify,
+    ...Home,
+});
