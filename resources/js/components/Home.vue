@@ -10,6 +10,7 @@
                     <v-skeleton-loader
                         v-for="i in Array(10).fill(0)"
                         type="list-item-avatar"
+                        :key="i"
                     />
                 </template>
 
