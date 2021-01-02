@@ -61,7 +61,8 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/event/{id}', 'EventController@update');
     Route::delete('/event/{id}', 'EventController@delete');
 
-    Route::post('/feedback/', 'FeedbackController@create');
+    Route::post('/feedback/', 'MessageController@feedback');
+    Route::get('/eligible/{userId}', 'MessageController@eligibleForPromo');
 
     Route::get('/customer', 'PaymentController@findOrCreateCustomer');
     Route::get('/payment_methods', 'PaymentController@getPaymentMethods');

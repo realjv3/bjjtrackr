@@ -112,8 +112,14 @@
             };
         },
         computed: {
+            classesTilStripe() {
+                return Number(this.settings[this.selUser.rank.belt_id].sessions_til_stripe);
+            },
             clients() {
                 return this.$store.state.clients;
+            },
+            combineSameDayCheckins() {
+                return this.settings[this.selUser.rank.belt_id].combine_same_day_checkins;
             },
             daysEvents() {
                 if (this.date) {
@@ -130,6 +136,12 @@
                 return this.$store.state.people
                     .filter( person => person.client_id === this.checkin.client_id)
                     .map( person => ({text: person.name, value: person.id}));
+            },
+            selUser() {
+                return this.$store.state.people.find(person => person.id === this.checkin.user_id);
+            },
+            settings() {
+                return this.$store.state.settings;
             },
             user() {
                 return this.$store.state.user;
@@ -166,6 +178,7 @@
                             this.error = Object.assign(this.error, json.errors);
                             this.saving = false;
                         } else if (json.id) {
+                            this.notifyIfEligibleForPromo(this.selUser.id);
                             this.close();
                             this.$emit('save-checkin', `Checked in at ${utcDateTimeToLocal(json.checked_in_at)}`);
                         }
@@ -188,6 +201,47 @@
                 this.date = null;
                 this.time = null;
                 this.resetErrors();
+            },
+            notifyIfEligibleForPromo(userId) {
+                const selUsersCheckins = this.$store.state.checkins.filter(checkin =>
+                    checkin.user_id === this.selUser.id && checkin.checked_in_at.slice(0, 10) > this.selUser.rank.last_ranked_up
+                );
+                let
+                    result = [],
+                    aggrUsersCheckins = [];
+
+                if (selUsersCheckins.length && this.combineSameDayCheckins) {
+                    for (let i = 0; i < selUsersCheckins.length; i++) {
+                        if (selUsersCheckins[i]) {
+                            let
+                                j = 1,
+                                combinedCheckins = [selUsersCheckins[i]];
+                            // if there more checkins with same date,
+                            // combine into array at index of first of them & delete the subsequent same-date checkins
+                            const dateStr = this.utcToLocal(selUsersCheckins[i].checked_in_at).slice(0, 10);
+                            while (
+                                selUsersCheckins[i + j]
+                                && this.utcToLocal(selUsersCheckins[i + j].checked_in_at).slice(0, 10) === dateStr
+                                ) {
+                                combinedCheckins.push(selUsersCheckins[i + j]);
+                                j++;
+                            }
+                            if (combinedCheckins.length > 1) {
+                                aggrUsersCheckins.push(combinedCheckins);
+                                i = i + j - 1;
+                            } else {
+                                aggrUsersCheckins.push(selUsersCheckins[i]);
+                            }
+                        }
+                    }
+                }
+                result = aggrUsersCheckins.length ? aggrUsersCheckins : selUsersCheckins;
+                if (result.length === this.classesTilStripe - 2) {
+                    fetch(`/eligible/` + userId, {
+                        headers,
+                        credentials: "same-origin",
+                    });
+                }
             },
             resetErrors() {
                 this.error = {

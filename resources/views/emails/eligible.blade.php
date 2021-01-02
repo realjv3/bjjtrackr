@@ -54,22 +54,19 @@ text-align: center; text-decoration: none; -webkit-text-size-adjust: none;',
                     <td style="{{ $style['email-masthead'] }}">
                         <a style="{{ $fontFamily }} {{ $style['email-masthead_name'] }}" href="{{ url('/') }}" target="_blank">
                             {{--<img src="{{asset("storage/app/public/uploads/$logo")}}" height="150px"/>--}}
-                            {{ config('app.name') }}
+                            <!--{{ config('app.name') }}-->
                         </a>
                     </td>
                 </tr>
                 <!-- Email Body -->
                 <tr>
                     <td style="{{ $style['email-body'] }}" width="100%">
-                        <table
-                            style="{{ $style['body_action'] }}"
-                            align="center"
-                            width="100%"
-                            cellpadding="0"
-                            cellspacing="0"
-                        >
+                        <table style="{{ $style['body_action'] }}" align="center" width="100%" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td>{{$content}}</td>
+                                <td>
+                                    Great news! Upon their next checkin, {{$name}} will be eligible for their {{$rank}},
+                                    according to the set attendance criteria.
+                                </td>
                             </tr>
                         </table>
                     </td>
@@ -77,22 +74,12 @@ text-align: center; text-decoration: none; -webkit-text-size-adjust: none;',
                 <!-- Footer -->
                 <tr>
                     <td>
-                        <table
-                            style="{{ $style['email-footer'] }}"
-                            align="center"
-                            width="570"
-                            cellpadding="0"
-                            cellspacing="0"
-                        >
+                        <table style="{{ $style['email-footer'] }}" align="center" width="570" cellpadding="0" cellspacing="0">
                             <tr>
                                 <td style="{{ $fontFamily }} {{ $style['email-footer_cell'] }}">
                                     <p style="{{ $style['paragraph-sub'] }}">
                                         {{ date('Y') }}
-                                        <a
-                                            style="{{ $style['anchor'] }}"
-                                            href="{{ config('app.url') }}"
-                                            target="_blank"
-                                        >BJJTrackr</a>.
+                                        <a style="{{ $style['anchor'] }}" href="{{ config('app.url') }}" target="_blank">BJJTrackr</a>.
                                         All rights reserved.
                                     </p>
                                 </td>

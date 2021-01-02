@@ -20,7 +20,6 @@
                         v-if="item.allowed && item.children"
                         :key="item.text"
                         v-model="item.model"
-                        :prepend-icon="item.model ? item.icon : item['icon-alt']"
                     >
                         <template v-slot:activator>
                             <v-list-item>
@@ -262,7 +261,6 @@ export default {
             if (this.$refs.checkins) {
                 this.$refs.checkins.refresh();
             }
-            this.$refs.people.refresh();
         },
         onEditCheckin(checkin) {
             if (this.$refs.checkin && (! isStudentOnly(this.user))) {
@@ -305,8 +303,6 @@ export default {
                         allowed:  this.isSuperAdmin(this.user) || this.isAdmin(this.user) || this.isInstructor(this.user),
                     },
                     {
-                        icon: 'mdi-chevron-up',
-                        'icon-alt': 'mdi-chevron-down',
                         text: 'More',
                         allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user),
                         model: false,
