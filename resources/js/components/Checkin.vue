@@ -218,10 +218,10 @@
                                 combinedCheckins = [selUsersCheckins[i]];
                             // if there more checkins with same date,
                             // combine into array at index of first of them & delete the subsequent same-date checkins
-                            const dateStr = this.utcToLocal(selUsersCheckins[i].checked_in_at).slice(0, 10);
+                            const dateStr = utcDateTimeToLocal(selUsersCheckins[i].checked_in_at).slice(0, 10);
                             while (
                                 selUsersCheckins[i + j]
-                                && this.utcToLocal(selUsersCheckins[i + j].checked_in_at).slice(0, 10) === dateStr
+                                && utcDateTimeToLocal(selUsersCheckins[i + j].checked_in_at).slice(0, 10) === dateStr
                                 ) {
                                 combinedCheckins.push(selUsersCheckins[i + j]);
                                 j++;
@@ -251,7 +251,7 @@
             },
             selectClass() {
 		        const event = this.daysEvents.find(event => this.checkin.event_id === event.id);
-		        this.time = event.start.slice(11);
+		        this.time = event.start.slice(9);
             },
             setCheckin(checkin) {
 		        if (checkin) {
