@@ -207,6 +207,7 @@ class PaymentController extends Controller
         $event = Webhook::constructEvent(
             $payload, $sig_header, $endpoint_secret
         );
+        Log::info("Handling Stripe webhook for $event->type");
         $paymentIntent = $event->data->object;
         $subscription = Subscription::where(['cust_id' => $paymentIntent->customer])->get()->first();
         $stripeSub = $stripeClient->subscriptions->retrieve($subscription->subscription_id);

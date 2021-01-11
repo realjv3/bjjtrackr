@@ -24,7 +24,7 @@
                                         type="number"
                                         min="1"
                                         max="255"
-                                        label="Sessions until next stripe"
+                                        label="Sessions until promotion"
                                         style="width: 150px"
                                         :error-messages="errors.sessions_til_stripe[0]"
                                         @change="update"
