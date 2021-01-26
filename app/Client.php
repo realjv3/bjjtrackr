@@ -33,4 +33,8 @@ class Client extends Model
     public function subscription() {
         return $this->hasOne('App\Subscription');
     }
+
+    public function settings() {
+        return $this->hasMany('App\Setting');
+    }
 }

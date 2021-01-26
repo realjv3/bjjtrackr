@@ -10,7 +10,15 @@ class Setting extends Model
         'client_id',
         'belt_id',
         'sessions_til_stripe',
-        'times_absent_til_contact',
+        'weeks_absent_til_contact',
         'combine_same_day_checkins',
     ];
+
+    public function client() {
+        return $this->belongsTo('App\Client');
+    }
+
+    public function belt() {
+        return $this->belongsTo('App\Belt');
+    }
 }

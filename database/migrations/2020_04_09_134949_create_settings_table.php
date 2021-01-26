@@ -18,7 +18,7 @@ class CreateSettingsTable extends Migration
             $table->unsignedBigInteger('client_id');
             $table->unsignedTinyInteger('belt_id');
             $table->unsignedTinyInteger('sessions_til_stripe');
-            $table->unsignedTinyInteger('times_absent_til_contact');
+            $table->unsignedTinyInteger('weeks_absent_til_contact');
             $table->boolean('combine_same_day_checkins');
             $table->timestamps();
         });

@@ -60,7 +60,7 @@ class ClientsController extends Controller
             'client_id' => $client_id,
             'belt_id' => 1,
             'sessions_til_stripe' => 30,
-            'times_absent_til_contact' => 15,
+            'weeks_absent_til_contact' => 3,
             'combine_same_day_checkins' => 1,
         ]);
 
@@ -68,7 +68,7 @@ class ClientsController extends Controller
             'client_id' => $client_id,
             'belt_id' => 2,
             'sessions_til_stripe' => 70,
-            'times_absent_til_contact' => 15,
+            'weeks_absent_til_contact' => 3,
             'combine_same_day_checkins' => 1,
         ]);
 
@@ -76,7 +76,7 @@ class ClientsController extends Controller
             'client_id' => $client_id,
             'belt_id' => 3,
             'sessions_til_stripe' => 80,
-            'times_absent_til_contact' => 15,
+            'weeks_absent_til_contact' => 3,
             'combine_same_day_checkins' => 1,
         ]);
 
@@ -84,7 +84,7 @@ class ClientsController extends Controller
             'client_id' => $client_id,
             'belt_id' => 4,
             'sessions_til_stripe' => 90,
-            'times_absent_til_contact' => 15,
+            'weeks_absent_til_contact' => 3,
             'combine_same_day_checkins' => 1,
         ]);
 
@@ -92,7 +92,7 @@ class ClientsController extends Controller
             'client_id' => $client_id,
             'belt_id' => 5,
             'sessions_til_stripe' => 0,
-            'times_absent_til_contact' => 0,
+            'weeks_absent_til_contact' => 0,
             'combine_same_day_checkins' => 1,
         ]);
     }

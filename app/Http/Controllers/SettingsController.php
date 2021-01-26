@@ -18,7 +18,7 @@ class SettingsController extends Controller
                 'id' => $raw_settings[$i]['id'],
                 'client_id' => $raw_settings[$i]['client_id'],
                 'sessions_til_stripe' => $raw_settings[$i]['sessions_til_stripe'],
-                'times_absent_til_contact' => $raw_settings[$i]['times_absent_til_contact'],
+                'weeks_absent_til_contact' => $raw_settings[$i]['weeks_absent_til_contact'],
                 'combine_same_day_checkins' => $raw_settings[$i]['combine_same_day_checkins'],
             ];
         }
@@ -31,7 +31,7 @@ class SettingsController extends Controller
         if (Gate::allows('isSuperAdmin') || Gate::allows('isAdmin')) {
             $request->validate([
                 'sessions_til_stripe' => 'numeric|min:1|max:255',
-                'times_absent_til_contact' => 'numeric|min:1|max:255',
+                'weeks_absent_til_contact' => 'numeric|min:1|max:255',
                 'combine_same_day_checkins' => 'boolean'
             ]);
             $setting = Setting::find($id);

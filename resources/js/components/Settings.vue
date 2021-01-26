@@ -30,13 +30,13 @@
                                         @change="update"
                                     />
                                     <v-text-field
-                                        v-model="settings[belt].times_absent_til_contact"
+                                        v-model="settings[belt].weeks_absent_til_contact"
                                         type="number"
                                         min="1"
                                         max="255"
-                                        label="Times absent until contact"
+                                        label="Weeks absent until contact"
                                         style="width: 150px"
-                                        :error-messages="errors.times_absent_til_contact[0]"
+                                        :error-messages="errors.weeks_absent_til_contact[0]"
                                         @change="update"
                                     />
                                 </v-col>
@@ -84,7 +84,7 @@ export default {
         ],
         errors: {
             sessions_til_stripe: [],
-            times_absent_til_contact: [],
+            weeks_absent_til_contact: [],
         },
         saving: false,
     }),
@@ -105,7 +105,7 @@ export default {
         update() {
             this.errors = {
                 sessions_til_stripe: [],
-                times_absent_til_contact: [],
+                weeks_absent_til_contact: [],
             };
             fetches.cancelFetches();
             fetch(`/settings/${this.settings[this.belt].id}`, {
@@ -115,7 +115,7 @@ export default {
                 signal: fetches.getSignal(),
                 body: JSON.stringify({
                     sessions_til_stripe: this.settings[this.belt].sessions_til_stripe,
-                    times_absent_til_contact: this.settings[this.belt].times_absent_til_contact,
+                    weeks_absent_til_contact: this.settings[this.belt].weeks_absent_til_contact,
                     combine_same_day_checkins: this.settings[this.belt].combine_same_day_checkins,
                 }),
             })
@@ -125,8 +125,8 @@ export default {
                         if (json.errors.sessions_til_stripe) {
                             this.errors.sessions_til_stripe = json.errors.sessions_til_stripe;
                         }
-                        if (json.errors.times_absent_til_contact) {
-                            this.errors.times_absent_til_contact = json.errors.times_absent_til_contact;
+                        if (json.errors.weeks_absent_til_contact) {
+                            this.errors.weeks_absent_til_contact = json.errors.weeks_absent_til_contact;
                         }
                     } else {
                         this.$store.commit('setSettings', json);

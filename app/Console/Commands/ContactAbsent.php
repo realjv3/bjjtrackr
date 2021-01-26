@@ -1,0 +1,112 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Client;
+use App\User;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+
+class ContactAbsent extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'contact:absent';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Contacts students who\'s absence has exceeded the set threshold in weeks.';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle()
+    {
+        $clients = Client::with([
+            'settings' => function($query) {
+                $query->where('belt_id', '<', 5);
+                },
+            'users' => function($query) {
+                $query->with([
+                    'rank' => function($q) {
+                        $q->where('belt_id', '<', 5);
+                    },
+                    'lastcheckin',
+                ])
+                ->where(['active' => 1]);
+            }])
+            ->get();
+        foreach ($clients as $client) {
+
+            Log::info("Processing absentees for $client->name");
+            $this->info("Processing absentees for $client->name");
+
+            $settings = $client->settings;
+            $absenceThresholds = $settings->mapWithKeys(function ($setting) {
+                return [$setting->belt_id => $setting->weeks_absent_til_contact];
+            });
+
+            $owner = null;
+
+            foreach ($client->users as $user) {
+
+                if ( ! $user->rank || ! $user->lastcheckin) {
+                    continue;
+                }
+
+                $lastCheckin = new \DateTime($user->lastcheckin->checked_in_at);
+                $now = new \DateTime();
+                $timeDiff = $lastCheckin->diff($now);
+                $weeksSinceLastCheckin = floor($timeDiff->days / 7);
+                $weeksThreshold = $absenceThresholds->get($user->rank->belt_id);
+
+                if ($weeksSinceLastCheckin > $weeksThreshold) {
+
+                    try {
+                        Log::info("Emailing $user->name");
+                        $this->info("Emailing $user->name");
+
+                        if (empty($owner)) {
+                            $owner = DB::table('users')
+                                ->join('clients', 'users.client_id', '=', 'clients.id')
+                                ->join('user_role', 'users.id', '=', 'user_role.user_id')
+                                ->select('users.*', 'clients.name as cname')
+                                ->where(['users.client_id' => 1, 'user_role.role_id' => 2, 'active' => true,])
+                                ->first();
+                        }
+                        Mail::to($user)
+                            ->bcc(config('mail.from.address'))
+                            ->send(new \App\Mail\ContactAbsent(
+                                (array) $owner,
+                                $user
+                            ));
+                    } catch (\Exception $e) {
+                        Log::error($e->getMessage());
+                        $this->error($e->getMessage());
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+}

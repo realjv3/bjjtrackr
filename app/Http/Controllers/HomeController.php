@@ -18,7 +18,7 @@ class HomeController extends Controller
                 'id' => $setting->id,
                 'client_id' => $setting->client_id,
                 'sessions_til_stripe' => $setting->sessions_til_stripe,
-                'times_absent_til_contact' => $setting->times_absent_til_contact,
+                'weeks_absent_til_contact' => $setting->weeks_absent_til_contact,
                 'combine_same_day_checkins' => $setting->combine_same_day_checkins,
             ];
         });
@@ -39,7 +39,7 @@ class HomeController extends Controller
                 'id' => $setting->id,
                 'client_id' => $setting->client_id,
                 'sessions_til_stripe' => $setting->sessions_til_stripe,
-                'times_absent_til_contact' => $setting->times_absent_til_contact,
+                'weeks_absent_til_contact' => $setting->weeks_absent_til_contact,
                 'combine_same_day_checkins' => $setting->combine_same_day_checkins,
             ];
         });
