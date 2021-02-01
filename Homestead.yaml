@@ -14,6 +14,8 @@ folders:
     to: /home/vagrant/code/bjjtrackr
   - map: ~/code/bjjlanding
     to: /home/vagrant/code/bjjlanding
+  - map: ~/code/cad
+    to: /home/vagrant/code/cad
 
 sites:
   - map: bjjtrackr.local
