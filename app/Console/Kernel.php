@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
          $schedule->command('report:usage')->daily();
-         $schedule->command('contact:absent')->sundays();
+         $schedule->command('contact:absent')->sundays()->at('3:00');
     }
 
     /**
