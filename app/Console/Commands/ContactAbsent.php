@@ -91,10 +91,11 @@ class ContactAbsent extends Command
                                 ->join('clients', 'users.client_id', '=', 'clients.id')
                                 ->join('user_role', 'users.id', '=', 'user_role.user_id')
                                 ->select('users.*', 'clients.name as cname')
-                                ->where(['users.client_id' => 1, 'user_role.role_id' => 2, 'active' => true,])
+                                ->where(['users.client_id' => $client->id, 'user_role.role_id' => 2, 'active' => true])
                                 ->first();
                         }
-                        Mail::to($user)
+                        $to = config('app.env') == 'development' ? config('mail.from.address') : $user;
+                        Mail::to($to)
                             ->bcc(config('mail.from.address'))
                             ->send(new \App\Mail\ContactAbsent(
                                 (array) $owner,
