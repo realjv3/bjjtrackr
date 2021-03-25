@@ -1,7 +1,13 @@
 <template>
     <v-container fluid>
         <v-row justify="center">
-            <v-card style="width: 70vw">
+            <v-card style="width: 70vw" :class="{
+                white_border: selUser.rank.belt_id === 1,
+                blue_border: selUser.rank.belt_id === 2,
+                purple_border: selUser.rank.belt_id === 3,
+                brown_border: selUser.rank.belt_id === 4,
+                black_border: selUser.rank.belt_id === 5,
+            }">
                 <v-card-title>
                     Reports
                     <v-spacer></v-spacer>
@@ -16,13 +22,7 @@
                 </v-card-title>
                 <v-card-text>
                     <v-container>
-                        <v-row :class="{
-                            white_border: selUser.rank.belt_id === 1,
-                            blue_border: selUser.rank.belt_id === 2,
-                            purple_border: selUser.rank.belt_id === 3,
-                            brown_border: selUser.rank.belt_id === 4,
-                            black_border: selUser.rank.belt_id === 5,
-                        }">
+                        <v-row>
                             <div
                                 class="td"
                                 v-for="(_, index) in checkins"
@@ -224,15 +224,15 @@ export default {
     }
 
     .blue_border {
-        border: 3px solid blue;
+        border: 3px solid rgba(0, 0, 255, .7);
     }
 
     .purple_border {
-        border: 3px solid rebeccapurple;
+        border: 3px solid rgba(102, 51, 153, .7);
     }
 
     .brown_border {
-        border: 3px solid saddlebrown;
+        border: 3px solid rgba(139, 69, 19, .5);
     }
 
     .black_border {
