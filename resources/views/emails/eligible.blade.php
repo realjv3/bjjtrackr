@@ -79,7 +79,7 @@ text-align: center; text-decoration: none; -webkit-text-size-adjust: none;',
                                 <td style="{{ $fontFamily }} {{ $style['email-footer_cell'] }}">
                                     <p style="{{ $style['paragraph-sub'] }}">
                                         {{ date('Y') }}
-                                        <a style="{{ $style['anchor'] }}" href="{{ config('app.url') }}" target="_blank">BJJTrackr</a>.
+                                        <a style="{{ $style['anchor'] }}" href="{{ config('app.url') }}" target="_blank">FlowRolled</a>.
                                         All rights reserved.
                                     </p>
                                 </td>

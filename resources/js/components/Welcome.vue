@@ -7,7 +7,7 @@
                         <v-form>
                             <v-card class="elevation-12">
                                 <v-toolbar color="primary" dark flat>
-                                    <v-toolbar-title>Welcome to BjjTrackr</v-toolbar-title>
+                                    <v-toolbar-title>Welcome to FlowRolled</v-toolbar-title>
                                 </v-toolbar>
                                 <v-card-text>
                                     <v-text-field

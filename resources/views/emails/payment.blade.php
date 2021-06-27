@@ -61,7 +61,7 @@ text-align: center; text-decoration: none; -webkit-text-size-adjust: none;',
                 <!-- Email Body -->
                 <tr>
                     <td style="{{ $style['email-body'] }}" width="100%">
-                        <table style="{{ $style['body_action'] }}" align="center" width="100%" cellpadding="0" cellspacing="0">
+                        <table style="{{ $style['body'] }}" align="center" width="100%" cellpadding="0" cellspacing="0">
                             <tr>
                                 <td align="center">{{$content}}</td>
                             </tr>
@@ -76,7 +76,7 @@ text-align: center; text-decoration: none; -webkit-text-size-adjust: none;',
                                 <td style="{{ $fontFamily }} {{ $style['email-footer_cell'] }}">
                                     <p style="{{ $style['paragraph-sub'] }}">
                                         {{ date('Y') }}
-                                        <a style="{{ $style['anchor'] }}" href="{{ config('app.url') }}" target="_blank">BJJTrackr</a>.
+                                        <a style="{{ $style['anchor'] }}" href="{{ config('app.url') }}" target="_blank">FlowRolled</a>.
                                         All rights reserved.
                                     </p>
                                 </td>

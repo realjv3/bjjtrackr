@@ -17,10 +17,10 @@
                 <v-stepper-items>
                     <v-stepper-content step="1">
                         <v-card class="mb-12">
-                            <v-card-title class="grey darken-2 mb-2">Welcome to BJJTrackr!</v-card-title>
+                            <v-card-title class="grey darken-2 mb-2">Welcome to FlowRolled!</v-card-title>
 
                             <p class="ml-4">As your grappling family and school grows in size, it can become increasingly unwieldy and complex to keep track of all of your students' progress.</p>
-                            <p class="ml-4">BJJTrackr.com's mission is to make tracking time, attendance, and eligibility for promotions easy for operators, instructors, and students of Brazilian Jiu Jitsu academies.</p>
+                            <p class="ml-4">flowrolled.com's mission is to make tracking time, attendance, and eligibility for promotions easy for operators, instructors, and students of Brazilian Jiu Jitsu academies.</p>
 
                             <h4 class="mt-4 ml-4">What BjjTrackr can do for you:</h4>
 

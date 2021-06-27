@@ -178,9 +178,11 @@ class PaymentController extends Controller
             $subscription = $this->stripe->subscriptions->retrieve($sub->subscription_id);
         } else {
             // Create the subscription
+            $isDev = config('env') == 'development';
+            $priceId = $isDev ? 'price_1HmJC7AdSpfz7pjgcTUb2tkl' : 'price_1J6DTtAdSpfz7pjgUAtQmS6R';
             $subscription = $this->stripe->subscriptions->create([
                 'customer' => $request->custId,
-                'items' => [['price' => 'price_1HmJC7AdSpfz7pjgcTUb2tkl']],
+                'items' => [['price' => $priceId]],
                 'expand' => ['latest_invoice.payment_intent'],
             ]);
             $sub->subscription_id = $subscription->id;
@@ -208,8 +210,8 @@ class PaymentController extends Controller
             $payload, $sig_header, $endpoint_secret
         );
         Log::info("Handling Stripe webhook for $event->type");
-        $paymentIntent = $event->data->object;
-        $subscription = Subscription::where(['cust_id' => $paymentIntent->customer])->get()->first();
+        $invoice = $event->data->object;
+        $subscription = Subscription::find($invoice->subscription);
         $stripeSub = $stripeClient->subscriptions->retrieve($subscription->subscription_id);
         $subscription->status = $stripeSub->status;
         $subscription->current_period_end = $stripeSub->current_period_end;
@@ -224,12 +226,12 @@ class PaymentController extends Controller
             case 'invoice.paid':
                 Log::info("Payment succeeded for $client->name");
                 Mail::to($to)->bcc(config('mail.from.address'))
-                    ->send(new ProcessedPayment($subscription, $paymentIntent, $client) );
+                    ->send(new ProcessedPayment($subscription, $invoice, $client) );
                 break;
             case 'invoice.payment_failed':
                 Log::info("Payment failed for $client->name");
                 Mail::to($to)->bcc(config('mail.from.address'))
-                    ->send(new ProcessedPayment($subscription, $paymentIntent, $client) );
+                    ->send(new ProcessedPayment($subscription, $invoice, $client) );
                 break;
             default:
                 // Unhandled event type

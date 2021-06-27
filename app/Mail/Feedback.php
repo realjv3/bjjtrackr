@@ -38,7 +38,7 @@ class Feedback extends Mailable
         $email = Auth::user()->email;
 
         return $this->from($email, $name)
-            ->subject('BJJTrackr Feedback')
+            ->subject('FlowRolled Feedback')
             ->view('emails.feedback')
             ->with('content', $this->content);
     }

@@ -22,7 +22,7 @@ class ProcessedPayment extends Mailable
     /**
      * @var \stdClass
      */
-    protected $paymentIntent;
+    protected $invoice;
 
     /**
      * @var Client
@@ -32,13 +32,13 @@ class ProcessedPayment extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param $paymentIntent
+     * @param $invoice
      * @param $client
      */
-    public function __construct(Subscription $subscription, $paymentIntent, $client)
+    public function __construct(Subscription $subscription, $invoice, $client)
     {
         $this->subscription = $subscription;
-        $this->paymentIntent = $paymentIntent;
+        $this->invoice = $invoice;
         $this->client = $client;
     }
 
@@ -50,17 +50,15 @@ class ProcessedPayment extends Mailable
     public function build(StripeClient $stripeClient)
     {
         $clientName = $this->client->name;
-        $amount = $this->paymentIntent->amount;
-        $status = $this->paymentIntent->status;
-        $charge = $this->paymentIntent->charges->data;
-        $usage = $stripeClient->subscriptionItems->allUsageRecordSummaries($this->subscription->item_id)->data;
+        $amount = $this->invoice->amount_due;
+        $status = $this->invoice->status;
+        $usage = $stripeClient->subscriptionItems->allUsageRecordSummaries($this->subscription->item_id)->data[0]['total_usage'];
 
-        if ($status == 'succeeded') {
+        if ($status == 'paid') {
 
-            $content = "Payment of $amount for total usage of $usage->total_usage succeeded for $clientName.";
+            $content = "Payment of $amount for total usage of $usage succeeded for $clientName.";
         } else {
-            $content = "Payment of $amount for total usage of $usage->total_usage failed for $clientName.
-             $charge->failure_message.";
+            $content = "Payment of $amount for total usage of $usage failed for $clientName.";
         }
 
         return $this->view('emails.payment')->with('content', $content);

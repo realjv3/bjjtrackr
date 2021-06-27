@@ -92,7 +92,7 @@ text-align: center; text-decoration: none; -webkit-text-size-adjust: none;',
                                             style="{{ $style['anchor'] }}"
                                             href="{{ config('app.url') }}"
                                             target="_blank"
-                                        >BJJTrackr</a>.
+                                        >FlowRolled</a>.
                                         All rights reserved.
                                     </p>
                                 </td>

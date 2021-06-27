@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'BjjTrackr'),
+    'name' => env('APP_NAME', 'FlowRolled'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://bjjtrackr.local'),
+    'url' => env('APP_URL', 'http://flowrolled.local'),
 
     'asset_url' => env('ASSET_URL', null),
 

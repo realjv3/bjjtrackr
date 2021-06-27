@@ -1,7 +1,7 @@
 {
     "name": "realjv3/bjjtrackr",
     "type": "project",
-    "description": "BjjTrackr",
+    "description": "Jiu Jitsu academy CRM",
     "license": "Unlicensed",
     "require": {
         "php": "^7.4",
