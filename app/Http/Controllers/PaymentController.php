@@ -211,7 +211,7 @@ class PaymentController extends Controller
         );
         Log::info("Handling Stripe webhook for $event->type");
         $invoice = $event->data->object;
-        $subscription = Subscription::find($invoice->subscription);
+        $subscription = Subscription::where('subscription_id', $invoice->subscription)->first();
         $stripeSub = $stripeClient->subscriptions->retrieve($subscription->subscription_id);
         $subscription->status = $stripeSub->status;
         $subscription->current_period_end = $stripeSub->current_period_end;
