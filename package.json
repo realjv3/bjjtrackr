@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/realjv3/bjjtrackr/issues"
   },
-  "homepage": "https://bjjtrackr.com",
+  "homepage": "https://flowrolled.com",
   "dependencies": {
     "@babel/core": "^7.11.5",
     "@babel/preset-env": "^7.11.5",

@@ -17,12 +17,14 @@
                 <v-stepper-items>
                     <v-stepper-content step="1">
                         <v-card class="mb-12">
-                            <v-card-title class="grey darken-2 mb-2">Welcome to FlowRolled!</v-card-title>
+                            <v-card-title class="grey darken-2 mb-2">
+                                Welcome to FlowRolled - a customer relationship manager for jiu jitsu academies
+                            </v-card-title>
 
                             <p class="ml-4">As your grappling family and school grows in size, it can become increasingly unwieldy and complex to keep track of all of your students' progress.</p>
-                            <p class="ml-4">flowrolled.com's mission is to make tracking time, attendance, and eligibility for promotions easy for operators, instructors, and students of Brazilian Jiu Jitsu academies.</p>
+                            <p class="ml-4">FlowRolled's mission is to make tracking time, attendance, and eligibility for promotions easy for operators, instructors, and students of Brazilian Jiu Jitsu academies.</p>
 
-                            <h4 class="mt-4 ml-4">What BjjTrackr can do for you:</h4>
+                            <h4 class="mt-4 ml-4">What FlowRolled can do for you:</h4>
 
                             <v-carousel height="420" show-arrows-on-hover>
                                 <v-carousel-item key="1">
@@ -59,7 +61,7 @@
                                         <v-icon class="text-h1" color="secondary">mdi-account-heart</v-icon>
                                     </p>
                                     <p class="text-center mt-5 mx-auto px-4">
-                                        Increase student retention and reduce member churn with automated contact reminders when a student has been absent for a while
+                                        Reduce member churn with automated contact reminders when a student has been absent for a while
                                     </p>
                                 </v-carousel-item>
 
@@ -71,6 +73,13 @@
                                 </v-carousel-item>
 
                                 <v-carousel-item key="8">
+                                    <p class="text-center mt-5 mx-auto">
+                                        <v-icon class="text-h1" color="secondary">mdi-account-cash</v-icon>
+                                    </p>
+                                    <p class="text-center mt-5 mx-auto">On the roadmap - Manage memberships and payments</p>
+                                </v-carousel-item>
+
+                                <v-carousel-item key="9">
                                     <p class="text-center mt-5 mx-auto">
                                         <v-icon class="text-h1" color="secondary">mdi-currency-usd</v-icon>
                                     </p>
