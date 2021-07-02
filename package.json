@@ -13,32 +13,32 @@
   },
   "homepage": "https://flowrolled.com",
   "dependencies": {
-    "@babel/core": "^7.11.5",
-    "@babel/preset-env": "^7.11.5",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
     "@stripe/stripe-js": "^1.9.0",
-    "babel-loader": "^8.1.0",
+    "babel-loader": "8.2.2",
     "css-loader": "^3.6.0",
     "deepmerge": "^4.2.2",
-    "dotenv": "^8.2.0",
-    "fibers": "^4.0.3",
-    "sass": "^1.26.10",
-    "sass-loader": "^8.0.2",
-    "vue": "^2.6.12",
-    "vue-loader": "^15.9.3",
-    "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.6.12",
-    "vuetify": "^2.3.10",
-    "vuetify-loader": "^1.6.0",
+    "dotenv": "^8.6.0",
+    "fibers": "^5.0.0",
+    "sass": "^1.35.1",
+    "sass-loader": "^12.1.0",
+    "vue": "^2.6.14",
+    "vue-loader": "^15.9.7",
+    "vue-style-loader": "^4.1.3",
+    "vue-template-compiler": "^2.6.14",
+    "vuetify": "^2.5.6",
+    "vuetify-loader": "^1.7.2",
     "vuex": "^3.5.1",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "webpack": "^5.27.2",
+    "webpack-cli": "^4.5.0"
   },
   "devDependencies": {
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.2"
   },
   "scripts": {
-    "dev": "webpack-dev-server --mode development --https",
-    "test": "webpack --mode development",
-    "prod": "webpack --mode production"
+    "dev": "webpack serve",
+    "build": "webpack",
+    "debug":"ssh -R 9003:localhost:9003 web"
   }
 }
