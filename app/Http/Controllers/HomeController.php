@@ -49,4 +49,11 @@ class HomeController extends Controller
             'settings' => $settings,
         ]);
     }
+
+    public function acceptToS() {
+
+        $user = Auth::user();
+        $user->tos = 1;
+        $user->save();
+    }
 }

@@ -67,6 +67,8 @@ const
         ],
         entry: {
             signup: './resources/js/pages/signup.js',
+            privacy: './resources/js/pages/privacy.js',
+            tos: './resources/js/pages/tos.js',
             payment_method: './resources/js/pages/payment_method.js',
             welcome: './resources/js/pages/welcome.js',
             send_reset: './resources/js/pages/send-reset.js',

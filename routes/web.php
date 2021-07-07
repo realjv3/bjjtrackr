@@ -22,6 +22,7 @@ Route::middleware(['guest'])->group(function() {
         ->name('password.reset');
     Route::post('reset-password', 'Auth\ResetPasswordController@reset');
     Route::view('signup', 'signup')->name('signup');
+    Route::view('privacy', 'privacy')->name('privacy');
     Route::post('payments', 'PaymentController@handle')->name('payments');
 });
 
@@ -31,8 +32,10 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::middleware(['auth:web'])->group(function () {
 
-    Route::get('/', 'HomeController@index')->middleware('payment.method')->name('home');
+    Route::get('/', 'HomeController@index')->middleware(['tos', 'payment.method'])->name('home');
 
+    Route::view('tos', 'tos')->name('ToS');
+    Route::get('acceptToS', 'HomeController@acceptToS')->name('accept_ToS');
     Route::get('paymentmethod', 'HomeController@paymentMethod')->name('payment_method');
 
     Route::get('/clients', 'ClientsController@read');

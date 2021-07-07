@@ -37,6 +37,16 @@ class RegisterController extends Controller
             'person.rank.last_ranked_up' => 'nullable|date',
         ]);
 
+        $this->validate($request, [
+            'person.email' => [
+                function ($attribute, $value, $fail) {
+                    if (User::where('email', $value)->count() > 0) {
+                        $fail($value .' is already in use.');
+                    }
+                }
+            ]
+        ]);
+
         $creating = ! Auth::check();
 
         if ($creating) {
