@@ -178,7 +178,7 @@ class PaymentController extends Controller
             $subscription = $this->stripe->subscriptions->retrieve($sub->subscription_id);
         } else {
             // Create the subscription
-            $isDev = config('env') != 'production';
+            $isDev = config('app.env') != 'production';
             $priceId = $isDev ? 'price_1HmJC7AdSpfz7pjgcTUb2tkl' : 'price_1J6DTtAdSpfz7pjgUAtQmS6R';
             $subscription = $this->stripe->subscriptions->create([
                 'customer' => $request->custId,
