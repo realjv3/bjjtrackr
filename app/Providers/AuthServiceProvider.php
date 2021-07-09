@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Stripe\StripeClient;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,7 +22,7 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(StripeClient $stripe)
     {
         $this->registerPolicies();
 
@@ -72,11 +73,21 @@ class AuthServiceProvider extends ServiceProvider
             return Gate::denies('isSuperAdmin') && Gate::denies('isAdmin') && Gate::denies('isInstructor');
         });
 
-        Gate::define('subscriptionActive', function ($user) {
+        Gate::define('subscriptionActive', function ($user) use ($stripe) {
 
             $client = $user->client;
 
-            return ! empty($client->subscription) && $client->subscription->status == 'active';
+            if (empty($client->subscription) || $client->subscription->status != 'active') {
+                return false;
+            }
+
+            $paymentMethods = $stripe->paymentMethods->all(['customer' => $client->subscription->cust_id, 'type' => 'card']);
+
+            if ($paymentMethods->isEmpty()) {
+                return false;
+            }
+
+            return true;
         });
     }
 }
