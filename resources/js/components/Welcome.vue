@@ -6,8 +6,8 @@
                     <v-col cols="12" sm="8" md="4">
                         <v-form>
                             <v-card class="elevation-12">
-                                <v-toolbar color="primary" dark flat>
-                                    <v-toolbar-title>Welcome to FlowRolled</v-toolbar-title>
+                                <v-toolbar color="primary" dark flat id="login-header">
+                                    <v-toolbar-title>Welcome to</v-toolbar-title>
                                 </v-toolbar>
                                 <v-card-text>
                                     <v-text-field
@@ -99,3 +99,11 @@
         },
     }
 </script>
+
+<style scoped>
+ header#login-header {
+     height: 158px !important;
+     background: center no-repeat url('https://res.cloudinary.com/realjv3/image/upload/v1626287001/flowrolled/flowrolled_banner.jpg');
+     background-size: cover;
+ }
+</style>

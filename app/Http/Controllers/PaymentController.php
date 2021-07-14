@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ProcessedPayment;
+use App\Mail\Welcome;
 use App\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -191,6 +192,7 @@ class PaymentController extends Controller
             $sub->price_id = $subscription->items->data[0]->price->id;
             $sub->status = $subscription->status;
             $sub->save();
+            Mail::to(Auth::user()->email)->send(new Welcome());
         }
 
         return $subscription;

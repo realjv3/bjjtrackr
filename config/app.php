@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://flowrolled.local'),
+    'url' => env('APP_URL', 'https://flowrolled.com'),
 
     'asset_url' => env('ASSET_URL', null),
 
