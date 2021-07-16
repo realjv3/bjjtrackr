@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class TermsOfService
+class IsActive
 {
     /**
      * Handle an incoming request.
@@ -19,20 +19,14 @@ class TermsOfService
     {
         $user = Auth::user();
 
-        if ($user->tos) {
-            return $next($request);
-        } else {
-            return redirect()->route('ToS');
-        }
-    }
+        if (empty($user->active)) {
 
-    /**
-     * The URIs that should be excluded from CSRF verification.
-     *
-     * @var array
-     */
-    protected $except = [
-        '/tos',
-        '/acceptToS',
-    ];
+            Auth::logout();
+            $request->session()->invalidate();
+
+            return redirect()->route('welcome');
+        }
+
+        return $next($request);
+    }
 }

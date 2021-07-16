@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Gate;
 
-class RedirectIfNoPaymentMethod
+class VerifyPaymentMethod
 {
     /**
      * Handle an incoming request.
@@ -23,4 +23,13 @@ class RedirectIfNoPaymentMethod
 
         return $next($request);
     }
+
+    /**
+     * The URIs that should be excluded from CSRF verification.
+     *
+     * @var array
+     */
+    protected $except = [
+        '/paymentmethod',
+    ];
 }

@@ -66,7 +66,7 @@
                         this.error = json.errors.email;
                     }
                 } else {
-                    window.location = '/welcome';
+                    window.location = '/';
                 }
             },
         },

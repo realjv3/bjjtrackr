@@ -37,6 +37,12 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
+        'logged_in' => [
+            \App\Http\Middleware\IsActive::class,
+            \App\Http\Middleware\TermsOfService::class,
+            \App\Http\Middleware\VerifyPaymentMethod::class,
+        ],
+
         'api' => [
             'throttle:60,1',
             'bindings',
@@ -57,7 +63,8 @@ class Kernel extends HttpKernel
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'payment.method' => \App\Http\Middleware\RedirectIfNoPaymentMethod::class,
+        'isactive' => \App\Http\Middleware\IsActive::class,
+        'payment.method' => \App\Http\Middleware\VerifyPaymentMethod::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
@@ -80,5 +87,9 @@ class Kernel extends HttpKernel
         \Illuminate\Session\Middleware\AuthenticateSession::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
         \Illuminate\Auth\Middleware\Authorize::class,
+        \App\Http\Middleware\VerifyCsrfToken::class,
+        \App\Http\Middleware\IsActive::class,
+        \App\Http\Middleware\TermsOfService::class,
+        \App\Http\Middleware\VerifyPaymentMethod::class,
     ];
 }

@@ -13,30 +13,47 @@
 
 use Illuminate\Support\Facades\Route;
 
+/**
+ * outside
+ */
+Route::post('login', 'Auth\LoginController@login')->name('login');
+Route::post('signup', 'Auth\RegisterController@signup');
+Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+Route::view('privacy', 'privacy')->name('privacy');
+// stripe webhook endpoint
+Route::post('payments', 'PaymentController@handle')->name('payments');
+
+/**
+ * outside, redirect if authenticated
+ */
+
 Route::middleware(['guest'])->group(function() {
 
-    Route::view('welcome', 'welcome')->name('welcome');
+    Route::view('/', 'welcome')->name('welcome');
     Route::view('send-reset', 'auth.passwords.send-reset');
     Route::post('forgot-password', 'Auth\ResetPasswordController@forgotPassword');
     Route::get('reset-password/{token}', 'Auth\ResetPasswordController@showResetForm')
         ->name('password.reset');
     Route::post('reset-password', 'Auth\ResetPasswordController@reset');
     Route::view('signup', 'signup')->name('signup');
-    Route::view('privacy', 'privacy')->name('privacy');
-    Route::post('payments', 'PaymentController@handle')->name('payments');
 });
 
-Route::post('login', 'Auth\LoginController@login')->name('login');
-Route::post('signup', 'Auth\RegisterController@signup');
-Route::get('logout', 'Auth\LoginController@logout')->name('logout');
-
+/**
+ * logged in
+ */
 Route::middleware(['auth:web'])->group(function () {
 
-    Route::get('/', 'HomeController@index')->middleware(['tos', 'payment.method'])->name('home');
-
+    /**
+     * Pages
+     */
     Route::view('tos', 'tos')->name('ToS');
-    Route::get('acceptToS', 'HomeController@acceptToS')->name('accept_ToS');
-    Route::get('paymentmethod', 'HomeController@paymentMethod')->name('payment_method');
+    Route::get('paymentmethod', 'HomeController@paymentMethod') ->name('payment_method');
+    Route::get('dashboard', 'HomeController@index')->middleware('logged_in');
+
+    /**
+     * AJAX routes
+     */
+    Route::get('acceptToS', 'HomeController@acceptToS');
 
     Route::get('/clients', 'ClientsController@read');
     Route::post('/clients', 'ClientsController@create');
