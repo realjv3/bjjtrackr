@@ -1,6 +1,7 @@
 <template>
     <v-container fluid>
-        <v-row justify="center">
+
+        <v-row justify="center" class="my-11 mx-7">
             <v-card>
                 <v-card-title>
                     Clients
@@ -29,14 +30,18 @@
             </v-card>
         </v-row>
 
+        <Log />
+
     </v-container>
 </template>
 
 <script>
     import {headers} from '../authorization';
+    import Log from './Log';
 
     export default {
 		name: "Clients",
+        components: {Log},
         data: () => ({
             headers: [
                 { text: 'Name', align: 'left', value: 'name' },

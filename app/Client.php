@@ -37,4 +37,8 @@ class Client extends Model
     public function settings() {
         return $this->hasMany('App\Setting');
     }
+
+    public function log() {
+        return $this->hasMany('App\Log');
+    }
 }

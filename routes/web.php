@@ -12,6 +12,7 @@
 */
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * outside
@@ -89,4 +90,14 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/payment_method', 'PaymentController@setDefaultPaymentMethod');
     Route::delete('payment_method/{id}', 'PaymentController@deletePaymentMethod');
     Route::post('/subscription', 'PaymentController@upsertSubscription');
+
+    Route::get('/log', function () {
+
+        if (Gate::allows('isSuperAdmin')) {
+
+            return \App\Log::all();
+        } else {
+            return response()->json(['error' => 'Unauthorized.'], 401);
+        }
+    });
 });
