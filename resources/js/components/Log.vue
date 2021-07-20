@@ -39,6 +39,7 @@
 
 <script>
 
+import {isSuperAdmin} from "../authorization";
 import {utcDateTimeToLocal} from "../datetime_converters";
 
 export default {
@@ -55,12 +56,20 @@ export default {
         log: [],
         search: '',
     }),
+    computed: {
+        user() {
+            return this.$store.state.user;
+        },
+    },
     methods: {
+        isSuperAdmin,
         async refresh() {
-            this.loading = true;
-            const resp = await fetch('/log');
-            this.log = await resp.json();
-            this.loading = false;
+            if (isSuperAdmin(this.user)) {
+                this.loading = true;
+                const resp = await fetch('/log');
+                this.log = await resp.json();
+                this.loading = false;
+            }
         },
         utcToLocal: utcDateTimeToLocal,
     },

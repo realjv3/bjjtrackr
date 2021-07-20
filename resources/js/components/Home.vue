@@ -109,7 +109,7 @@
 
                     <People v-show="( ! isStudentOnly(user)) && show === 'People'" ref="people" @edit-person="onEditPerson" />
 
-                    <Clients v-show="isSuperAdmin(user) && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
+                    <Clients v-if="isSuperAdmin(user) && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
 
                     <Schedule v-show="show === 'Schedule'" ref="schedule" @edit-event="onEditEvent" />
 
