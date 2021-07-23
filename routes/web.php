@@ -55,6 +55,7 @@ Route::middleware(['auth:web'])->group(function () {
      * AJAX routes
      */
     Route::get('acceptToS', 'HomeController@acceptToS');
+    Route::get('toured', 'UserController@toured');
 
     Route::get('/clients', 'ClientsController@read');
     Route::post('/clients', 'ClientsController@create');

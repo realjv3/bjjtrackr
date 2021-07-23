@@ -158,8 +158,8 @@ export default {
             this.selUser = newUsers[0];
         },
     },
-    created() {
-        this.selUser = this.user;
+    mounted() {
+        this.selUser = this.users[0];
     },
 }
 </script>

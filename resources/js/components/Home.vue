@@ -46,7 +46,7 @@
                         </v-list-item>
                     </v-list-group>
 
-                    <v-list-item v-else-if="item.allowed" :key="item.text" link @click="show = item.text">
+                    <v-list-item :id="item.text.toLowerCase()" v-else-if="item.allowed" :key="item.text" link @click="show = item.text">
                         <v-list-item-action>
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-list-item-action>
@@ -135,9 +135,10 @@
                 <Checkin v-show="! isStudentOnly(user)" ref="checkin" @save-checkin="onSaveCheckin"/>
 
                 <v-speed-dial
+                    id="speed-dial"
                     v-if="! isStudentOnly(user)"
                     v-model="speedDial"
-                    bottom right fixed open-on-hover
+                    bottom right fixed
                 >
 
                     <template v-slot:activator>
@@ -147,7 +148,7 @@
                         </v-btn>
                     </template>
 
-                    <v-tooltip v-if="! isStudentOnly(user)" left>
+                    <v-tooltip ref="addCheckin" v-if="! isStudentOnly(user)" left>
                         <template v-slot:activator="{ on }">
                             <v-btn @click="$refs.checkin.setCheckin(null)" fab dark small color="primary" v-on="on">
                                 <v-icon>mdi-history</v-icon>
@@ -156,22 +157,22 @@
                         <span>Check-in</span>
                     </v-tooltip>
 
-                    <v-tooltip v-if="isAdmin(user) || isSuperAdmin(user)" left>
-                        <template v-slot:activator="{ on }">
-                            <v-btn @click="$refs.person.show = true" fab dark small color="primary" v-on="on">
-                                <v-icon>mdi-contacts</v-icon>
-                            </v-btn>
-                        </template>
-                        <span>Person</span>
-                    </v-tooltip>
-
-                    <v-tooltip v-if="isAdmin(user) || isSuperAdmin(user)" left>
+                    <v-tooltip ref="addClass" v-if="isAdmin(user) || isSuperAdmin(user)" left>
                         <template v-slot:activator="{ on }">
                             <v-btn @click="$refs.event.show.event = true" fab dark small color="primary" v-on="on">
                                 <v-icon>mdi-calendar-month-outline</v-icon>
                             </v-btn>
                         </template>
                         <span>Class</span>
+                    </v-tooltip>
+
+                    <v-tooltip ref="addPerson" v-if="isAdmin(user) || isSuperAdmin(user)" left>
+                        <template v-slot:activator="{ on }">
+                            <v-btn @click="$refs.person.show = true" fab dark small color="primary" v-on="on">
+                                <v-icon>mdi-contacts</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Person</span>
                     </v-tooltip>
 
                     <v-tooltip v-if="isSuperAdmin(user)" left>
@@ -188,6 +189,8 @@
                 <v-snackbar v-model="snackbar.show" :bottom="true" :multi-line="true">{{snackbar.text}}</v-snackbar>
             </v-container>
         </v-main>
+
+        <Tour @step="handleTour"/>
     </v-app>
 </template>
 
@@ -203,13 +206,14 @@ import QRCodes from "components/QRCodes";
 import Reports from "components/Reports";
 import Schedule from "components/Schedule";
 import Settings from "components/Settings";
+import Tour from 'components/Tour';
 import Event from 'components/Event';
 import Feedback from "components/Feedback";
 import store from "../store";
 
 export default {
     components: {
-        Client, Clients, Event, People, Person, Checkins, Checkin, QRCodes, Reports, Schedule, Settings, Feedback},
+        Client, Clients, Event, People, Person, Checkins, Checkin, QRCodes, Reports, Schedule, Settings, Feedback, Tour},
     data: () => ({
         drawer: null,
         items: [],
@@ -229,6 +233,50 @@ export default {
         },
     },
     methods: {
+        handleTour(event) {
+
+            const
+                showSpeedDial = async () => {
+
+                    return await setTimeout(() => this.speedDial = true, 10);
+                },
+                qrNavItem = document.querySelector('#qrcodes'),
+                reportsNavItem = document.querySelector('#reports');
+
+
+            if ((event.step === 0 && event.dir === 'next') || (event.step === 2 && event.dir === 'prev')) {
+                showSpeedDial()
+                    .then(() =>setTimeout(() => this.$refs.addPerson.isActive = true, 10));
+
+            } else if ((event.step === 1 && event.dir === 'next') || (event.step === 3 && event.dir === 'prev')) {
+                showSpeedDial()
+                    .then(() =>setTimeout(() => this.$refs.addClass.isActive = true, 10));
+
+            } else if ((event.step === 2 && event.dir === 'next') || (event.step === 4 && event.dir === 'prev')) {
+                showSpeedDial()
+                    .then(() =>setTimeout(() => {
+                        document.querySelector('.v-step').style.right = '80px';
+                        this.$refs.addCheckin.isActive = true
+                    }, 10));
+            } else if ((event.step === 3 && event.dir === 'next') || (event.step === 5 && event.dir === 'prev')) {
+
+                setTimeout(() => {
+                    this.drawer = true;
+                    reportsNavItem.style.background = '#363636';
+                    qrNavItem.style.background = '#666';
+                    qrNavItem.click();
+                }, 10);
+
+            } else if ((event.step === 4 && event.dir === 'next') || (event.step === 6 && event.dir === 'prev')) {
+
+                setTimeout(() => {
+                    this.drawer = true;
+                    qrNavItem.style.background = '#363636';
+                    reportsNavItem.style.background = '#666';
+                    reportsNavItem.click();
+                }, 10);
+            }
+        },
         isSuperAdmin,
         isAdmin,
         isInstructor,
@@ -288,36 +336,47 @@ export default {
             store.dispatch('getPeople'),
             store.dispatch('getUser'),
         ])
-            .then(() =>
+            .then(() => {
                 this.items = [
-                    { icon: 'mdi-account-cash', text: 'Clients', allowed: this.isSuperAdmin(this.user) },
-                    { icon: 'mdi-contacts', text: 'People', allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user) },
-                    { icon: 'mdi-calendar-month-outline', text: 'Schedule', allowed: true },
-                    { icon: 'mdi-history', text: 'Check-ins', allowed: true },
-                    { icon: 'mdi-qrcode', text: 'QRCodes', allowed: true },
-                    { icon: 'mdi-file-chart', text: 'Reports', allowed: true },
-                    { icon: 'mdi-settings', text: 'Settings', allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user) },
+                    {icon: 'mdi-account-cash', text: 'Clients', allowed: this.isSuperAdmin(this.user)},
+                    {
+                        icon: 'mdi-contacts',
+                        text: 'People',
+                        allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user)
+                    },
+                    {icon: 'mdi-calendar-month-outline', text: 'Schedule', allowed: true},
+                    {icon: 'mdi-history', text: 'Check-ins', allowed: true},
+                    {icon: 'mdi-qrcode', text: 'QRCodes', allowed: true},
+                    {icon: 'mdi-file-chart', text: 'Reports', allowed: true},
+                    {
+                        icon: 'mdi-settings',
+                        text: 'Settings',
+                        allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user)
+                    },
                     {
                         icon: 'mdi-message',
                         text: 'Send feedback',
-                        allowed:  this.isSuperAdmin(this.user) || this.isAdmin(this.user) || this.isInstructor(this.user),
+                        allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user) || this.isInstructor(this.user),
                     },
                     {
                         text: 'More',
                         allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user),
                         model: false,
                         children: [
-                            { text: 'Import' },
-                            { text: 'Export' },
+                            {text: 'Import'},
+                            {text: 'Export'},
                         ],
                     },
                     {
                         icon: 'mdi-help-circle',
                         text: 'Help',
-                        allowed:  this.isSuperAdmin(this.user) || this.isAdmin(this.user) || this.isInstructor(this.user),
+                        allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user) || this.isInstructor(this.user),
                     },
-                ]
-            );
+                ];
+                if (!this.user.toured && isAdmin(this.user)) {
+                    this.$tours.tour.start();
+                }
+            });
     },
 }
 </script>

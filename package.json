@@ -34,11 +34,12 @@
     "webpack-cli": "^4.5.0"
   },
   "devDependencies": {
+    "vue-tour": "^2.0.0",
     "webpack-dev-server": "^3.11.2"
   },
   "scripts": {
     "dev": "webpack serve",
     "build": "webpack",
-    "debug":"ssh -R 9003:localhost:9003 web"
+    "debug": "ssh -R 9003:localhost:9003 web"
   }
 }

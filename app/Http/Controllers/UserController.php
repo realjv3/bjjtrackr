@@ -14,11 +14,6 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function __construct() {
-
-        $this->middleware('auth');
-    }
-
     public function read($client_id = null) {
 
         if (Gate::allows('isSuperAdmin')) {
@@ -171,5 +166,12 @@ class UserController extends Controller
         }
         $type = File::mimeType($fileName);
         return response()->file($fileName, ["Content-Type" => $type]);
+    }
+
+    public function toured() {
+
+        $user = Auth::user();
+        $user->toured = 1;
+        $user->save();
     }
 }
