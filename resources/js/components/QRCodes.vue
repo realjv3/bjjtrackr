@@ -93,6 +93,7 @@ export default {
     },
     mounted() {
         document.addEventListener('keypress', this.onKeypress);
+        this.selUser = this.user;
     }
 }
 </script>
