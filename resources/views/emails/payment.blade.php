@@ -63,7 +63,7 @@ text-align: center; text-decoration: none; -webkit-text-size-adjust: none;',
                     <td style="{{ $style['email-body'] }}" width="100%">
                         <table style="{{ $style['body'] }}" align="center" width="100%" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td align="center">{{$content}}</td>
+                                <td>{{$content}}</td>
                             </tr>
                         </table>
                     </td>
