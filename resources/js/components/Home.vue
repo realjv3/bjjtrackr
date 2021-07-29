@@ -124,6 +124,8 @@
                     <Feedback
                         v-show="(isSuperAdmin(user) || isAdmin(user) || isInstructor(user)) && show === 'Send feedback'"
                     />
+
+                    <Help v-show="(isSuperAdmin(user) || isAdmin(user) || isInstructor(user)) && show === 'Help'" />
                 </v-row>
 
                 <Client v-show="isSuperAdmin(user)" ref="client" @save-client="onSaveClient"/>
@@ -202,6 +204,7 @@ import Clients from "components/Clients";
 import Client from "components/Client";
 import Checkins from "components/Checkins";
 import Checkin from "components/Checkin";
+import Help from "components/Help";
 import QRCodes from "components/QRCodes";
 import Reports from "components/Reports";
 import Schedule from "components/Schedule";
@@ -213,11 +216,11 @@ import store from "../store";
 
 export default {
     components: {
-        Client, Clients, Event, People, Person, Checkins, Checkin, QRCodes, Reports, Schedule, Settings, Feedback, Tour},
+        Client, Clients, Event, Help, People, Person, Checkins, Checkin, QRCodes, Reports, Schedule, Settings, Feedback, Tour},
     data: () => ({
         drawer: null,
         items: [],
-        show: 'Reports',
+        show: 'Help',
         snackbar: {
             show: false,
             text: '',
