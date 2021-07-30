@@ -119,7 +119,7 @@
 
                     <Reports v-show="show === 'Reports'"/>
 
-                    <Settings v-show="(isSuperAdmin(user) || isAdmin(user)) && show === 'Settings'"/>
+                    <Settings v-show="(isSuperAdmin(user) || isAdmin(user)) && show === 'Settings'" @edit-client="onEditClient"/>
 
                     <Feedback
                         v-show="(isSuperAdmin(user) || isAdmin(user) || isInstructor(user)) && show === 'Send feedback'"
@@ -128,7 +128,7 @@
                     <Help v-show="(isSuperAdmin(user) || isAdmin(user) || isInstructor(user)) && show === 'Help'" />
                 </v-row>
 
-                <Client v-show="isSuperAdmin(user)" ref="client" @save-client="onSaveClient"/>
+                <Client v-show="isSuperAdmin(user)" ref="client"/>
 
                 <Person v-show="isSuperAdmin(user) || isAdmin(user)" ref="person" @save-person="onSavePerson"/>
 
@@ -284,13 +284,8 @@ export default {
         isAdmin,
         isInstructor,
         isStudentOnly,
-        onSaveClient() {
-            if (this.$refs.clients) {
-                this.$refs.clients.refresh();
-            }
-        },
         onEditClient(client) {
-            if (this.$refs.client && isSuperAdmin(this.user)) {
+            if (this.$refs.client && (isSuperAdmin(this.user) || (isAdmin(this.user) && client.id === this.user.client_id))) {
                 this.$refs.client.client = Object.assign({}, client);
                 this.$refs.client.show = true;
             }

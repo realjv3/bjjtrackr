@@ -42,6 +42,7 @@ class ClientsController extends Controller
 
         $client = Client::find($id);
         $client->update($request->all());
+        return $client;
     }
 
     public function delete($id) {

@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="show" width="800px" :persistent="true">
         <v-card>
-            <v-card-title class="grey darken-2">Edit a client</v-card-title>
+            <v-card-title class="grey darken-2" v-text="client.settings ? `Edit academy info` : `Edit a client`"/>
             <v-container>
                 <v-row class="mx-2">
                     <v-col cols="6">
@@ -61,8 +61,6 @@
 
     /**
      * Form for client CRUD
-     *
-     * @emits {'save-client'}
      */
     export default {
 		name: "Client",
@@ -79,6 +77,7 @@
                     zip: null,
                     country: null,
                     notes: null,
+                    settings: false,
                 },
                 error: null,
                 loading: false,
@@ -93,18 +92,15 @@
                     credentials: "same-origin",
                     body: JSON.stringify(this.client),
                 })
-                    .then( resp => {
-                        if (resp.status > 210) {
-                            return resp.json();
-                        } else {
-                            this.$emit('save-client');
-                            this.close();
-                        }
-                    })
+                    .then( resp => resp.json())
                     .then( json => {
-                        if (json && json.errors) {
+                        if (json.errors) {
                             this.error = json.errors.name;
                             this.loading = false;
+                        } else {
+                            const clients = this.$store.state.clients.filter(client => client.id !== json.id);
+                            this.$store.commit('setClients', [...clients, json]);
+                            this.close();
                         }
                     });
             },
@@ -121,6 +117,7 @@
                     zip: null,
                     country: null,
                     notes: null,
+                    settings: false,
                 };
                 this.error = null;
             },

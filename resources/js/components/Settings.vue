@@ -6,6 +6,7 @@
                     <v-card-title class="grey darken-2">Settings</v-card-title>
                     <v-card-text>
                         <v-container>
+
                             <v-row class="mx-2">
                                 <v-col>
                                     <h3>Promotion Eligibility</h3>
@@ -41,6 +42,20 @@
                                     />
                                 </v-col>
                             </v-row>
+
+                            <v-row class="mx-2">
+                                <v-col>
+                                    <h3>Academy profile</h3>
+                                </v-col>
+                            </v-row>
+                            <v-row class="mx-2 mb-2" style="border-bottom: 1px solid white">
+                                <v-col>
+                                    <v-btn @click="$emit('edit-client', {...client, settings: true})">
+                                        Edit profile
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+
                             <template v-if="isAdmin(user)">
                                 <v-row class="mx-2 my-5">
                                     <v-col>
@@ -89,6 +104,9 @@ export default {
         saving: false,
     }),
     computed: {
+        client() {
+            return this.$store.state.clients.find(client => client.id === this.$store.state.user.client_id);
+        },
         sessionLabel() {
             return this.settings[this.belt].combine_same_day_checkins ?
                 `1 day's training equals 1 session` : `1 class equals 1 session`;
