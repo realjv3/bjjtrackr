@@ -65,6 +65,31 @@ class PaymentController extends Controller
     }
 
     /**
+     * Finds or creates a Stripe customer
+     *
+     * @param Request $request
+     * @return \Stripe\Customer|string
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    public function updateCustomer(Request $request) {
+
+        if (Gate::denies('isAdmin')) {
+            http_response_code(401);
+            return 'Unauthorized';
+        }
+
+        $user = Auth::user();
+        $subscription = Subscription::where(['client_id' => $user->client->id])->first();
+
+        if ( ! empty($subscription) && ! empty($subscription->cust_id)) {
+
+            $customer = $this->stripe->customers->update($subscription->cust_id, ['email']);
+        }
+
+        return $customer;
+    }
+
+    /**
      * Gets all of the Stripe customer's payment methods
      *
      * @return array|string

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
 use App\Rank;
+use App\Subscription;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +13,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Stripe\StripeClient;
 
 class UserController extends Controller
 {
@@ -89,7 +92,7 @@ class UserController extends Controller
         }
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id, StripeClient $stripe) {
 
         $request->validate([
             'name' => 'required',
@@ -109,6 +112,15 @@ class UserController extends Controller
         if ($request->email != $user->email) {
 
             $request->validate(['email' => 'unique:users']);
+
+            // if changing email for client's first admin, also change it on stripe
+            $client = Client::find($user->client_id);
+            $firstAdmin = $client->getFirstAdmin();
+            if ($firstAdmin->id == $user->id) {
+
+                $subscription = Subscription::where('client_id', $user->client_id)->first();
+                $stripe->customers->update($subscription->cust_id, ['email' => $request->email]);
+            }
         }
 
         if ( ! empty($request->client_id)) {
@@ -123,7 +135,7 @@ class UserController extends Controller
                 Gate::forUser($user)->allows('isSuperAdmin')
                 && Gate::denies('isSuperAdmin')
             ) {
-                // non super-admins not allowed to change super-admins passwords
+            // non super-admins not allowed to change super-admins passwords
             } else {
                 $user->password = Hash::make($request->password);
                 $user->save();

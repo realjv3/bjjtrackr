@@ -41,4 +41,11 @@ class Client extends Model
     public function log() {
         return $this->hasMany('App\Log');
     }
+
+    public function getFirstAdmin() {
+
+        return $this->users()->whereHas('roles', function ($q) {
+            $q->where('role_id', 2);
+        })->first();
+    }
 }
