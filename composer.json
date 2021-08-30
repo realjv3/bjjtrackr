@@ -4,7 +4,7 @@
     "description": "Jiu Jitsu academy CRM",
     "license": "Unlicensed",
     "require": {
-        "php": "^7.4",
+        "php": "^8.0",
         "bacon/bacon-qr-code": "^2.0.0",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^7.2",
@@ -18,7 +18,7 @@
     "require-dev": {
         "facade/ignition": "^2.5.2",
         "fzaninotto/faker": "^1.9.1",
-        "laravel/homestead": "^10.0",
+        "laravel/homestead": "^v11.4.0",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.1.0",
         "phpunit/phpunit": "^9.4.3"
