@@ -80,7 +80,7 @@
 
 <script>
     import {headers} from '../authorization';
-    import {dateTimeToYMD, dateTimeTo24Time, timeToLocale, utcDateTimeToLocal} from '../datetime_converters';
+    import {utcDateTimeToLocalYMD, utcDateTimeToLocal24Time, timeToLocale, utcDateTimeToLocal} from '../datetime_converters';
 
     export default {
 		name: "Checkin",
@@ -151,8 +151,8 @@
 		    'checkin.checked_in_at': function(newDt, oldDt) {
 
 		        if (newDt && (newDt !== oldDt)) {
-                    this.date = dateTimeToYMD(this.checkin.checked_in_at);
-                    this.time = dateTimeTo24Time(this.checkin.checked_in_at);
+                    this.date = utcDateTimeToLocalYMD(this.checkin.checked_in_at);
+                    this.time = utcDateTimeToLocal24Time(this.checkin.checked_in_at);
                 }
             },
         },
@@ -251,23 +251,21 @@
             },
             selectClass() {
 		        const event = this.daysEvents.find(event => this.checkin.event_id === event.id);
-		        this.time = event.start.slice(9);
+		        this.time = event.start.slice(11);
             },
             setCheckin(checkin) {
 		        if (checkin) {
                     this.checkin = Object.assign({}, checkin);
                 } else {
-		            const datetime = new Date();
+		            const
+                        now = new Date(),
+                        ISONow = now.toISOString();
 		            this.checkin = {
 		                id: null,
 		                client_id: this.user.client_id,
 		                user_id: null,
 		                event_id: null,
-		                checked_in_at:
-                            datetime.toISOString().substr(0, 10)
-                            + 'T'
-                            + datetime.toISOString().substr(11, 8)
-                            +'.000000Z',
+		                checked_in_at: ISONow.substr(0, 10) + ' ' + ISONow.substr(11, 8),
                     };
                 }
                 this.show.checkin = true;

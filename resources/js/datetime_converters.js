@@ -1,16 +1,16 @@
 /**
  * Convert passed MySQL datetime string to 'YYYY-MM-DD'
  *
- * @param {string} dateTime
+ * @param {string} utcDateTime
  * @return {string}
  */
-export function dateTimeToYMD(dateTime) {
+export function utcDateTimeToLocalYMD(utcDateTime) {
 
-    if ( ! dateTime.match(new RegExp(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.000000Z/))) {
+    if ( ! utcDateTime.match(new RegExp(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/))) {
         return 'Invalid dateTime';
     }
     let
-        d = new Date(dateTime),
+        d = new Date(utcDateTime + ' UTC'),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
@@ -28,15 +28,15 @@ export function dateTimeToYMD(dateTime) {
 /**
  * Convert passed MySQL datetime string to 'HH-MM-SS'
  *
- * @param {string} dateTime
+ * @param {string} utcDateTime
  * @return {string}
  */
-export function dateTimeTo24Time(dateTime) {
+export function utcDateTimeToLocal24Time(utcDateTime) {
 
-    if ( ! dateTime.match(new RegExp(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.000000Z/))) {
+    if ( ! utcDateTime.match(new RegExp(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/))) {
         return 'Invalid dateTime';
     }
-    const d = new Date(dateTime);
+    const d = new Date(utcDateTime + ' UTC');
     return d.toLocaleTimeString(['De'], {hour12: false});
 }
 
