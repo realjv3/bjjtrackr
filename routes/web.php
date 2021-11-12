@@ -23,6 +23,8 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::view('privacy', 'privacy')->name('privacy');
 // stripe webhook endpoint
 Route::post('payments', 'PaymentController@handle')->name('payments');
+// esignatures.io webhook endpoint
+Route::post('document/signatures', 'DocumentController@handle');
 
 /**
  * outside, redirect if authenticated
@@ -101,4 +103,10 @@ Route::middleware(['auth:web'])->group(function () {
             return response()->json(['error' => 'Unauthorized.'], 401);
         }
     });
+
+    Route::get('document/{clientId}', 'DocumentController@read');
+    Route::get('document/download/{clientId}/{id}', 'DocumentController@downloadTemplate');
+    Route::post('document', 'DocumentController@create');
+    Route::put('document/{documentId}/{userId}', 'DocumentController@send');
+    Route::delete('document/{clientId}/{documentId}', 'DocumentController@delete');
 });

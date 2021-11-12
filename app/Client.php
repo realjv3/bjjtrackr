@@ -48,4 +48,8 @@ class Client extends Model
             $q->where('role_id', 2);
         })->first();
     }
+
+    public function documents() {
+        return $this->hasMany('App\Documents');
+    }
 }

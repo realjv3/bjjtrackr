@@ -49,10 +49,14 @@ export function utcDateTimeToLocal24Time(utcDateTime) {
 export function utcDateTimeToLocal(utcDateTime) {
 
     if (utcDateTime) {
-        if ( ! utcDateTime.match(new RegExp(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/))) {
+        if ( ! utcDateTime.match(new RegExp(/\d{4}-\d{2}-\d{2}\s?|T?\d{2}:\d{2}:\d{2}(\.\d{6}Z)?/g))) {
             return 'Invalid dateTime';
         }
-        return new Date(utcDateTime + '.000000Z').toLocaleString();
+        let tz = '';
+        if ( ! utcDateTime.match(new RegExp(/\.\d{6}Z/))) {
+            tz = '.000000Z';
+        }
+        return new Date(utcDateTime + tz).toLocaleString();
     }
 }
 

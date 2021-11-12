@@ -15,7 +15,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password', 'notes', 'start_date', 'cust_id', 'api_token', 'active'];
+    protected $fillable = ['name', 'email', 'phone', 'password', 'notes', 'start_date', 'cust_id', 'api_token', 'active'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -50,5 +50,9 @@ class User extends Authenticatable
 
     public function log() {
         return $this->hasMany('App\Log');
+    }
+
+    public function documents() {
+        return $this->hasMany('App\Documents');
     }
 }

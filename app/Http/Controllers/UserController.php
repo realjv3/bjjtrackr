@@ -53,6 +53,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|unique:users|email',
+            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
             'password' => 'required|confirmed',
             'roles' => 'required|array',
             'rank.belt_id' => 'required|numeric',
@@ -97,6 +98,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email',
+            'phone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
             'password' => 'confirmed',
             'roles' => 'required|array',
             'rank.belt_id' => 'required|numeric',

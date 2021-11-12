@@ -9,6 +9,7 @@ const store = new Vuex.Store({
         checkins: [],
         clients: [],
         days,
+        documents: [],
         events: [],
         people: [],
         settings: initSettings,
@@ -20,6 +21,9 @@ const store = new Vuex.Store({
         },
         setClients(state, clients) {
             state.clients = clients;
+        },
+        setDocuments(state, documents) {
+            state.documents = documents;
         },
         setEvents(state, events) {
             state.events = events;
@@ -42,6 +46,15 @@ const store = new Vuex.Store({
             });
             if (resp.ok) {
                 commit('setClients', await resp.json());
+            }
+        },
+        async getDocuments({commit, state}) {
+            const resp = await fetch(`/document/${state.user.client_id}`, {
+                headers,
+                credentials: "same-origin",
+            });
+            if (resp.ok) {
+                commit('setDocuments', await resp.json());
             }
         },
         async getPeople({commit}) {

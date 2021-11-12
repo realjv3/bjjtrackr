@@ -5,7 +5,7 @@
                 <v-card-title class="grey darken-2">Edit a person</v-card-title>
                 <v-container>
                     <v-row class="mx-2">
-                        <v-col cols="6">
+                        <v-col cols="4">
                             <v-text-field
                                 v-model="person.name"
                                 :error-messages="error.name"
@@ -14,13 +14,23 @@
                             />
                         </v-col>
 
-                        <v-col>
+                        <v-col cols="4">
                             <v-text-field
                                 v-model="person.email"
                                 :error-messages="error.email"
                                 type="email"
                                 placeholder="required"
                                 label="Email"
+                            />
+                        </v-col>
+
+                        <v-col>
+                            <v-text-field
+                                v-model="person.phone"
+                                :error-messages="error.phone"
+                                type="tel"
+                                placeholder="required"
+                                label="Phone"
                             />
                         </v-col>
                     </v-row>
@@ -158,6 +168,7 @@
                 person: {
                     name: null,
                     email: null,
+                    phone: null,
                     rank: {
                         belt_id: 1,
                         stripes: 0,

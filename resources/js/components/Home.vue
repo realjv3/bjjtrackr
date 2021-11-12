@@ -119,6 +119,8 @@
 
                     <Reports v-show="show === 'Reports'"/>
 
+                    <Documents v-show="show === 'Documents'"/>
+
                     <Settings v-show="(isSuperAdmin(user) || isAdmin(user)) && show === 'Settings'" @edit-client="onEditClient"/>
 
                     <Feedback
@@ -213,10 +215,13 @@ import Tour from 'components/Tour';
 import Event from 'components/Event';
 import Feedback from "components/Feedback";
 import store from "../store";
+import Documents from "./Documents";
 
 export default {
     components: {
-        Client, Clients, Event, Help, People, Person, Checkins, Checkin, QRCodes, Reports, Schedule, Settings, Feedback, Tour},
+        Documents, Client, Clients, Event, Help, People, Person, Checkins, Checkin, QRCodes, Reports, Schedule,
+        Settings, Feedback, Tour
+    },
     data: () => ({
         drawer: null,
         items: [],
@@ -346,6 +351,7 @@ export default {
                     {icon: 'mdi-history', text: 'Check-ins', allowed: true},
                     {icon: 'mdi-qrcode', text: 'QRCodes', allowed: true},
                     {icon: 'mdi-file-chart', text: 'Reports', allowed: true},
+                    {icon: 'mdi-file-document-edit-outline', text: 'Documents', allowed: true},
                     {
                         icon: 'mdi-settings',
                         text: 'Settings',
