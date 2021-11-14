@@ -24,74 +24,83 @@
 
                 <v-stepper-items>
                     <v-stepper-content step="1">
-                        <v-card class="mb-12">
+                        <v-card id="carousel">
                             <v-card-title class="grey darken-2 mb-2">
                                 Welcome to FlowRolled - a customer relationship manager for jiu jitsu academies
                             </v-card-title>
 
-                            <p class="ml-4">As your grappling family and school grows in size, it can become increasingly unwieldy and complex to keep track of all of your students' progress.</p>
-                            <p class="ml-4">FlowRolled's mission is to make tracking time, attendance, and eligibility for promotions easy for operators, instructors, and students of Brazilian Jiu Jitsu academies.</p>
+                            <p class="ma-12">FlowRolled provides operators and instructors of Brazilian Jiu Jitsu academies a central, convenient place to manage students, schedules, documents, attendance, and belt promotions.</p>
 
-                            <h4 class="mt-4 ml-4">What FlowRolled can do for you:</h4>
+                            <h4 class="ma-12">What FlowRolled can do for you:</h4>
 
                             <v-carousel height="420" show-arrows-on-hover>
                                 <v-carousel-item key="1">
                                     <v-img class="mt-6 mx-auto" src="/storage/img/BjjTrackr-Reports.png" width="520" />
-                                    <p class="text-center mt-5 mx-auto">See all of your members' time and attendance reports organized in one place</p>
+                                    <p class="text-center ma-8">See all of your members' time and attendance reports organized in one place.</p>
                                 </v-carousel-item>
 
                                 <v-carousel-item key="2">
-                                    <v-img class="mt-6 mx-auto" src="/storage/img/BjjTrackr-Settings.png" width="255"/>
-                                    <p class="text-center mt-5 mx-auto">Set custom promotion eligiblity criteria by belt rank, e.g. set how many training days or classes to be considered for the next stripe or belt</p>
+                                    <v-row>
+                                        <v-col class="pa-10" cols="6">
+                                            Set custom promotion eligibility criteria by belt rank, e.g. set how many training days or classes it takes to be considered for the next stripe or belt.
+                                        </v-col>
+                                        <v-col class="">
+                                            <v-img src="/storage/img/BjjTrackr-Settings.png" width="375"/>
+                                        </v-col>
+                                    </v-row>
                                 </v-carousel-item>
 
                                 <v-carousel-item key="3">
-                                    <v-img class="mt-6 mx-auto" src="/storage/img/BjjTrackr-QR.png" width="520"/>
-                                    <p class="text-center mt-5 mx-auto">Efficent QR code scans or keyboard input for class checkins</p>
+                                    <v-row>
+                                        <v-col class="pl-16" cols="4">
+                                            <v-img class="mt-6 mx-auto" src="/storage/img/phone-doc.jpeg" width="164"/>
+                                        </v-col>
+                                        <v-col class="text-center pa-16">
+                                            Digitally send, sign, and store waivers or any other documents. You send docs to their email or phone, they sign, it's that simple. Documents are stored securely and can be downloaded anytime.
+                                        </v-col>
+                                    </v-row>
                                 </v-carousel-item>
 
                                 <v-carousel-item key="4">
-                                    <v-img class="mt-6 mx-auto" src="/storage/img/BjjTrackr-Schedule.png" width="520"/>
-                                    <p class="text-center mt-5 mx-auto">Set and publish your class schedule</p>
+                                    <v-img class="mt-6 mx-auto" src="/storage/img/BjjTrackr-QR.png" width="520"/>
+                                    <p class="text-center ma-8">Efficient QR code scans or keyboard input for class checkins.</p>
                                 </v-carousel-item>
 
                                 <v-carousel-item key="5">
-                                    <p class="text-center mt-5 mx-auto">
-                                        <v-icon class="text-h1" color="secondary">mdi-party-popper</v-icon>
-                                    </p>
-                                    <p class="text-center mt-5 mx-auto">
-                                        Increase student retention and motivation with regular promotions
-                                    </p>
+                                    <v-img class="mt-6 mx-auto" src="/storage/img/BjjTrackr-Schedule.png" width="520"/>
+                                    <p class="text-center ma-8">Set and publish your class schedule.</p>
                                 </v-carousel-item>
 
                                 <v-carousel-item key="6">
-                                    <p class="text-center mt-5 mx-auto">
-                                        <v-icon class="text-h1" color="secondary">mdi-account-heart</v-icon>
+                                    <p class="text-center ma-8">
+                                        <v-icon class="text-h1" color="secondary">mdi-party-popper</v-icon>
                                     </p>
-                                    <p class="text-center mt-5 mx-auto px-4">
-                                        Reduce member churn with automated contact reminders when a student has been absent for a while
+                                    <p class="text-center ma-16">
+                                        Increase student retention and motivation with regular stripe and belt promotions, enabled by detailed attendance tracking reports.
                                     </p>
                                 </v-carousel-item>
 
                                 <v-carousel-item key="7">
-                                    <p class="text-center mt-5 mx-auto">
-                                        <v-icon class="text-h1" color="secondary">mdi-file-document-edit</v-icon>
+                                    <p class="text-center ma-8">
+                                        <v-icon class="text-h1" color="secondary">mdi-account-heart</v-icon>
                                     </p>
-                                    <p class="text-center mt-5 mx-auto">Coming Soon - Digitally sign and store waivers</p>
+                                    <p class="text-center ma-16">
+                                        Reduce member churn with automated contact reminders when a student has been absent for a while.
+                                    </p>
                                 </v-carousel-item>
 
                                 <v-carousel-item key="8">
                                     <p class="text-center mt-5 mx-auto">
                                         <v-icon class="text-h1" color="secondary">mdi-account-cash</v-icon>
                                     </p>
-                                    <p class="text-center mt-5 mx-auto">On the roadmap - Manage memberships and payments</p>
+                                    <p class="text-center ma-8">On the roadmap - Manage memberships and payments</p>
                                 </v-carousel-item>
 
                                 <v-carousel-item key="9">
                                     <p class="text-center mt-5 mx-auto">
                                         <v-icon class="text-h1" color="secondary">mdi-currency-usd</v-icon>
                                     </p>
-                                    <p class="text-center mt-5 mx-auto">Pay only for what you use. The price is $3 per active student per month. Cancel anytime.</p>
+                                    <p class="text-center ma-16">Pay only for what you use. The price is $3 per active student per month. Cancel anytime.</p>
                                 </v-carousel-item>
                             </v-carousel>
 
@@ -401,3 +410,11 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+#carousel {
+    width: 75%;
+    margin: 50px auto;
+    padding: 100px;
+}
+</style>

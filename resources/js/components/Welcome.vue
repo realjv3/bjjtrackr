@@ -9,7 +9,7 @@
                                 <v-toolbar color="primary" dark flat id="login-header">
                                     <v-toolbar-title>Welcome to</v-toolbar-title>
                                 </v-toolbar>
-                                <v-card-text>
+                                <v-card-text id="login-form">
                                     <v-text-field
                                         label="Email"
                                         name="email"
@@ -105,5 +105,9 @@
      height: 158px !important;
      background: center no-repeat url('https://res.cloudinary.com/realjv3/image/upload/v1626287001/flowrolled/flowrolled_banner.jpg');
      background-size: cover;
+ }
+
+ #login-form {
+     padding: 0 85px !important;
  }
 </style>
