@@ -126,7 +126,7 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <v-card class="mb-12" >
+                        <v-card class="ma-16" >
                             <v-card-title class="grey darken-2 mb-2">Personal & Academy Info</v-card-title>
                             <div class="text-subtitle-1 ma-4">
                                 Please tell us a little bit about yourself and your academy.
@@ -287,7 +287,7 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="5">
-                        <v-card class="mb-12" height="74vh">
+                        <v-card class="ma-16" height="74vh">
                             <v-card-title class="grey darken-2 mb-2">Payment Method</v-card-title>
                             <v-row class="ma-6">
                                 <div class="text-body-1">

@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-main>
-            <v-card class="mb-12">
+            <v-card class="ma-16">
                 <v-card-title class="gray mb-2">Privacy Policy</v-card-title>
                 <v-card-text class="mb-12 pa-12">
                     <div class="text-body-2">
