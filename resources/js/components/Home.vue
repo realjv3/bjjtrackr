@@ -249,6 +249,7 @@ export default {
                     return await setTimeout(() => this.speedDial = true, 10);
                 },
                 qrNavItem = document.querySelector('#qrcodes'),
+                documentsNavItem = document.querySelector('#documents'),
                 reportsNavItem = document.querySelector('#reports');
 
 
@@ -280,6 +281,14 @@ export default {
                 setTimeout(() => {
                     this.drawer = true;
                     qrNavItem.style.background = '#363636';
+                    documentsNavItem.style.background = '#666';
+                    documentsNavItem.click();
+                }, 10);
+            } else if ((event.step === 5 && event.dir === 'next') || (event.step === 7 && event.dir === 'prev')) {
+
+                setTimeout(() => {
+                    this.drawer = true;
+                    documentsNavItem.style.background = '#363636';
                     reportsNavItem.style.background = '#666';
                     reportsNavItem.click();
                 }, 10);

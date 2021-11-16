@@ -18,54 +18,41 @@ export default {
             steps: [
                 {
                     target: '.v-app-bar',
-                    header: {
-                        title: 'Oss!',
-                    },
+                    header: {title: 'Oss!'},
                     content: `Welcome to <strong>FlowRolled</strong>`,
                 },
                 {
                     target: '#speed-dial',
-                    header: {
-                        title: 'Get Started',
-                    },
+                    header: {title: 'Get Started'},
                     content: `First, input your students and staff.`,
-                    params: {
-                        placement: 'left-start',
-                    },
+                    params: {placement: 'left-start'},
                 },
                 {
                     target: '#speed-dial',
-                    header: {
-                        title: 'Get Started',
-                    },
+                    header: {title: 'Get Started'},
                     content: `Then, try setting up the class schedule.`,
-                    params: {
-                        placement: 'left-start',
-                    },
+                    params: {placement: 'left-start'},
                 },
                 {
                     target: '#speed-dial',
-                    header: {
-                        title: 'Get Started',
-                    },
+                    header: {title: 'Check-ins'},
                     content: `Students can checkin here.`,
-                    params: {
-                        placement: 'left-start',
-                    },
+                    params: {placement: 'left-start'},
                 },
                 {
                     target: '#qrcodes',
-                    header: {
-                        title: 'Get Started',
-                    },
+                    header: {title: 'Check-ins'},
                     content: `Or students can checkin via a QR code scan.`,
                 },
                 {
+                    target: '#documents',
+                    header: {title: 'Sign Waivers'},
+                    content: `Upload waivers and other documents and send them to students for signature.`,
+                },
+                {
                     target: '#reports',
-                    header: {
-                        title: 'Get Started',
-                    },
-                    content: `Monitor progress and attendance on Reports page.`,
+                    header: {title: 'Reports'},
+                    content: `Here you can monitor students' progress and attendance.`,
                 },
             ]
         }
