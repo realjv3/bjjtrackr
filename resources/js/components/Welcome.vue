@@ -103,7 +103,7 @@
 <style scoped>
  header#login-header {
      height: 158px !important;
-     background: center no-repeat url('https://res.cloudinary.com/realjv3/image/upload/v1626287001/flowrolled/flowrolled_banner.jpg');
+     background: center no-repeat url('https://flowrolled.nyc3.digitaloceanspaces.com/public/flowrolled_banner.jpg');
      background-size: cover;
  }
 

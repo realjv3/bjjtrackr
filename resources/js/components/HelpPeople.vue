@@ -5,7 +5,7 @@
                 <v-img
                     class="white--text align-start"
                     height="726px"
-                    src="https://res.cloudinary.com/realjv3/image/upload/v1627334598/flowrolled/kidsClass.jpg"
+                    src="https://flowrolled.nyc3.digitaloceanspaces.com/public/kidsClass.jpg"
                 >
                     <v-card-title>How to manage student, administrator, and instructor records</v-card-title>
                 </v-img>
@@ -36,7 +36,7 @@
                                 height="167px"
                                 width="107px"
                                 class="ma-2"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627337371/flowrolled/speedDialPerson.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/speedDialPerson.png"
                                 alt="Person"
                             />
                         </v-timeline-item>
@@ -47,7 +47,7 @@
                                 height="380px"
                                 width="382px"
                                 class="ma-2"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627338093/flowrolled/ModalNewPerson.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/ModalNewPerson.png"
                                 alt="Person"
                             />
                         </v-timeline-item>
@@ -71,7 +71,7 @@
                             <v-img
                                 class="d-inline-block mx-2"
                                 width="160px"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627387398/flowrolled/menuItemPeople.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/menuItemPeople.png"
                                 alt="People"
                             />
                             menu item in the left side navigation menu to see your people.
@@ -82,7 +82,7 @@
                             <v-img
                                 class="d-inline-block mx-2"
                                 width="66px"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627388099/flowrolled/actionButtons.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/actionButtons.png"
                                 alt="pencil"
                             />
                             on the person's record that you want to edit, or hit the trash can icon to delete.

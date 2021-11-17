@@ -35,7 +35,7 @@
 
                             <v-carousel height="420" show-arrows-on-hover>
                                 <v-carousel-item key="1">
-                                    <v-img class="mt-6 mx-auto" src="/storage/img/BjjTrackr-Reports.png" width="520" />
+                                    <v-img class="mt-6 mx-auto" src="https://flowrolled.nyc3.digitaloceanspaces.com/public/BjjTrackr-Reports.png" width="520" />
                                     <p class="text-center ma-8">See all of your members' time and attendance reports organized in one place.</p>
                                 </v-carousel-item>
 
@@ -45,7 +45,7 @@
                                             Set custom promotion eligibility criteria by belt rank, e.g. set how many training days or classes it takes to be considered for the next stripe or belt.
                                         </v-col>
                                         <v-col class="">
-                                            <v-img src="/storage/img/BjjTrackr-Settings.png" width="375"/>
+                                            <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/BjjTrackr-Settings.png" width="375"/>
                                         </v-col>
                                     </v-row>
                                 </v-carousel-item>
@@ -53,7 +53,7 @@
                                 <v-carousel-item key="3">
                                     <v-row>
                                         <v-col class="pl-16" cols="4">
-                                            <v-img class="mt-6 mx-auto" src="/storage/img/phone-doc.jpeg" width="164"/>
+                                            <v-img class="mt-6 mx-auto" src="https://flowrolled.nyc3.digitaloceanspaces.com/public/phone-doc.jpeg" width="164"/>
                                         </v-col>
                                         <v-col class="text-center pa-16">
                                             Digitally send, sign, and store waivers or any other documents. You send docs to their email or phone, they sign, it's that simple. Documents are stored securely and can be downloaded anytime.
@@ -62,12 +62,12 @@
                                 </v-carousel-item>
 
                                 <v-carousel-item key="4">
-                                    <v-img class="mt-6 mx-auto" src="/storage/img/BjjTrackr-QR.png" width="520"/>
+                                    <v-img class="mt-6 mx-auto" src="https://flowrolled.nyc3.digitaloceanspaces.com/public/BjjTrackr-QR.png" width="520"/>
                                     <p class="text-center ma-8">Efficient QR code scans or keyboard input for class checkins.</p>
                                 </v-carousel-item>
 
                                 <v-carousel-item key="5">
-                                    <v-img class="mt-6 mx-auto" src="/storage/img/BjjTrackr-Schedule.png" width="520"/>
+                                    <v-img class="mt-6 mx-auto" src="https://flowrolled.nyc3.digitaloceanspaces.com/public/BjjTrackr-Schedule.png" width="520"/>
                                     <p class="text-center ma-8">Set and publish your class schedule.</p>
                                 </v-carousel-item>
 

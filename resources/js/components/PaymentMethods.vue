@@ -188,22 +188,22 @@ export default {
             let url = '';
             switch (brand) {
                 case 'amex':
-                    url = '/storage/img/Amex.png';
+                    url = 'https://flowrolled.nyc3.digitaloceanspaces.com/public/Amex.png';
                     break;
                 case 'diners':
-                    url = '/storage/img/DinersClub.jpg';
+                    url = 'https://flowrolled.nyc3.digitaloceanspaces.com/public/DinersClub.jpg';
                     break;
                 case 'discover':
-                    url = '/storage/img/Discover.jpg';
+                    url = 'https://flowrolled.nyc3.digitaloceanspaces.com/public/Discover.jpg';
                     break;
                 case 'mastercard':
-                    url = '/storage/img/mastercard.png';
+                    url = 'https://flowrolled.nyc3.digitaloceanspaces.com/public/mastercard.png';
                     break;
                 case 'visa':
-                    url = '/storage/img/visa.png';
+                    url = 'https://flowrolled.nyc3.digitaloceanspaces.com/public/visa.png';
                     break;
                 default:
-                    url = '/storage/img/CreditCard.png';
+                    url = 'https://flowrolled.nyc3.digitaloceanspaces.com/public/CreditCard.png';
             }
             return url;
         },

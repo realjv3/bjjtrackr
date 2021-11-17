@@ -5,7 +5,7 @@
                 <v-img
                     class="white--text align-start"
                     height="726px"
-                    src="https://res.cloudinary.com/realjv3/image/upload/v1627394234/flowrolled/wallCalendar.jpg"
+                    src="https://flowrolled.nyc3.digitaloceanspaces.com/public/wallCalendar.jpg"
                 >
                     <v-card-title>How to manage the class schedule</v-card-title>
                 </v-img>
@@ -34,7 +34,7 @@
                                 height="167px"
                                 width="107px"
                                 class="ma-2"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627337371/flowrolled/speedDialClass.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/speedDialClass.png"
                                 alt="Class"
                             />
                         </v-timeline-item>
@@ -43,7 +43,7 @@
                             Fill out the form and hit save.
                             <v-img
                                 class="ma-2"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627396154/flowrolled/modalClassNew.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/modalClassNew.png"
                                 alt="Class"
                             />
                         </v-timeline-item>
@@ -67,7 +67,7 @@
                             <v-img
                                 class="d-inline-block mx-2"
                                 width="160px"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627387398/flowrolled/menuItemSchedule.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/menuItemSchedule.png"
                                 alt="Schedule"
                             />
                             menu item in the left side navigation menu to see your schedule.
@@ -78,7 +78,7 @@
                             <v-img
                                 class="d-inline-block mx-2"
                                 width="113px"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627398786/flowrolled/class.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/class.png"
                                 alt="class"
                             />
                             that you want to edit to open it.
@@ -88,7 +88,7 @@
                             Press delete to remove class the class, otherwise edit the form and hit save.
                             <v-img
                                 class="ma-2"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627396154/flowrolled/modalClassEdit.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/modalClassEdit.png"
                                 alt="Class"
                             />
                         </v-timeline-item>

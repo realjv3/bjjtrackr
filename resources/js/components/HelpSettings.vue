@@ -5,7 +5,7 @@
                 <v-img
                     class="white--text align-start"
                     height="726px"
-                    src="https://res.cloudinary.com/realjv3/image/upload/v1627475311/flowrolled/gears.jpg"
+                    src="https://flowrolled.nyc3.digitaloceanspaces.com/public/gears.jpg"
                 >
                     <v-card-title>How to use the settings</v-card-title>
                 </v-img>
@@ -32,7 +32,7 @@
                             <v-img
                                 class="d-inline-block mx-2"
                                 width="160px"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627396549/flowrolled/menuItemSettings.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/menuItemSettings.png"
                                 alt="Schedule"
                             />
                             menu item in the left side navigation menu.
@@ -46,14 +46,14 @@
                             <v-img
                                 class="ma-4"
                                 width="361px"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627398786/flowrolled/settingAccrual2.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/settingAccrual2.png"
                                 alt="class"
                             />
                             or whether <i>one class</i> a student checks into counts as one <i>session</i> towards promotion
                             <v-img
                                 class="ma-4"
                                 width="302px"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627398786/flowrolled/settingAccrual1.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/settingAccrual1.png"
                                 alt="class"
                             />.
                         </v-timeline-item>

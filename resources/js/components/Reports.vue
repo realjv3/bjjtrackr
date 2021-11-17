@@ -187,36 +187,36 @@ export default {
     }
 
     .stripe1::after {
-        background-image: url("/storage/ranks/stripe1.png");
+        background-image: url("https://flowrolled.nyc3.digitaloceanspaces.com/public/stripe1.png");
     }
 
     .stripe2::after {
-        background-image: url("/storage/ranks/stripe2.png");
+        background-image: url("https://flowrolled.nyc3.digitaloceanspaces.com/public/stripe2.png");
     }
 
     .stripe3::after {
-        background-image: url("/storage/ranks/stripe3.png");
+        background-image: url("https://flowrolled.nyc3.digitaloceanspaces.com/public/stripe3.png");
     }
 
     .stripe4::after {
         display: block;
-        background-image: url("/storage/ranks/stripe4.png");
+        background-image: url("https://flowrolled.nyc3.digitaloceanspaces.com/public/stripe4.png");
     }
 
     .bluebelt::after {
-        background-image: url("/storage/ranks/blue.png");
+        background-image: url("https://flowrolled.nyc3.digitaloceanspaces.com/public/blue.png");
     }
 
     .purplebelt::after {
-        background-image: url("/storage/ranks/purple.png");
+        background-image: url("https://flowrolled.nyc3.digitaloceanspaces.com/public/purple.png");
     }
 
     .brownbelt::after {
-        background-image: url("/storage/ranks/brown.png");
+        background-image: url("https://flowrolled.nyc3.digitaloceanspaces.com/public/brown.png");
     }
 
     .blackbelt::after {
-        background-image: url("/storage/ranks/black.png");
+        background-image: url("https://flowrolled.nyc3.digitaloceanspaces.com/public/black.png");
     }
 
     .white_border {

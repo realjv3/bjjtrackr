@@ -5,7 +5,7 @@
                 <v-img
                     class="white--text align-start"
                     height="726px"
-                    src="https://res.cloudinary.com/realjv3/image/upload/v1627334598/flowrolled/wornBlueBelt.jpg"
+                    src="https://flowrolled.nyc3.digitaloceanspaces.com/public/wornBlueBelt.jpg"
                 >
                     <v-card-title>How to track attendance</v-card-title>
                 </v-img>
@@ -32,7 +32,7 @@
                             <v-img
                                 width="107px"
                                 class="ma-2"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627337371/flowrolled/speedDialCheckin.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/speedDialCheckin.png"
                                 alt="Checkin"
                             />
                         </v-timeline-item>
@@ -41,7 +41,7 @@
                             Fill out the form and hit save.
                             <v-img
                                 class="ma-2"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627338093/flowrolled/ModalCheckinNew.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/modalCheckinNew.png"
                                 alt="Checkin"
                             />
                         </v-timeline-item>
@@ -51,7 +51,7 @@
                             <v-img
                                 width="164px"
                                 class="ma-2"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627396549/flowrolled/menuItemQR.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/menuItemQR.png"
                                 alt="QR Codes"
                             />
                         </v-timeline-item>
@@ -75,7 +75,7 @@
                             <v-img
                                 class="d-inline-block mx-2"
                                 width="160px"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627387398/flowrolled/menuItemCheckins.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/menuItemCheckins.png"
                                 alt="Checkins"
                             />
                             menu item in the left side navigation menu to see student checkins.
@@ -86,7 +86,7 @@
                             <v-img
                                 class="d-inline-block mx-2"
                                 width="66px"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627388099/flowrolled/actionButtons.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/actionButtons.png"
                                 alt="pencil"
                             />
                             on the checkin that you want to edit, or hit the trash can icon to delete.
@@ -96,7 +96,7 @@
                             Edit the form and hit save.
                             <v-img
                                 class="ma-2"
-                                src="https://res.cloudinary.com/realjv3/image/upload/v1627396154/flowrolled/ModalCheckinNew.png"
+                                src="https://flowrolled.nyc3.digitaloceanspaces.com/public/modalCheckinNew.png"
                                 alt="Class"
                             />
                         </v-timeline-item>

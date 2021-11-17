@@ -79,7 +79,7 @@
                             <table class="es-content-body" style="background-color: #333333;" width="600" cellspacing="0" cellpadding="0" bgcolor="#333333" align="center">
                                 <tbody>
                                 <tr>
-                                    <td class="esd-structure esd-checked es-p40t es-p40b es-p40r es-p40l" style="background-image: url('https://res.cloudinary.com/realjv3/image/upload/v1626287001/flowrolled/flowrolled_banner.jpg'); background-repeat: no-repeat;" align="left">
+                                    <td class="esd-structure esd-checked es-p40t es-p40b es-p40r es-p40l" style="background-image: url('https://flowrolled.nyc3.digitaloceanspaces.com/public/flowrolled_banner.jpg'); background-repeat: no-repeat;" align="left">
                                         <table width="100%" cellspacing="0" cellpadding="0">
                                             <tbody>
                                             <tr>
@@ -177,7 +177,7 @@
                                                         <tr>
                                                             <td class="esd-block-image" align="left" style="font-size:0">
                                                                 <a target="_blank">
-                                                                    <img src="https://res.cloudinary.com/realjv3/image/upload/v1626290569/headShot.jpg" alt style="display: block;" width="40">
+                                                                    <img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/headShot.jpg" alt style="display: block;" width="40">
                                                                 </a>
                                                             </td>
                                                         </tr>
@@ -264,48 +264,6 @@
                     </tr>
                     </tbody>
                 </table>
-{{--                <table class="es-content" cellspacing="0" cellpadding="0" align="center">--}}
-{{--                    <tbody>--}}
-{{--                    <tr>--}}
-{{--                        <td class="esd-stripe" esd-custom-block-id="7393" align="center">--}}
-{{--                            <table class="es-content-body" style="background-color: #292828;" width="600" cellspacing="0" cellpadding="0" bgcolor="#292828" align="center">--}}
-{{--                                <tbody>--}}
-{{--                                <tr>--}}
-{{--                                    <td class="esd-structure es-p30t es-p30b es-p40r es-p40l" align="left">--}}
-{{--                                        <table width="100%" cellspacing="0" cellpadding="0">--}}
-{{--                                            <tbody>--}}
-{{--                                            <tr>--}}
-{{--                                                <td class="esd-container-frame" width="520" valign="top" align="center">--}}
-{{--                                                    <table width="100%" cellspacing="0" cellpadding="0">--}}
-{{--                                                        <tbody>--}}
-{{--                                                        <tr>--}}
-{{--                                                            <td class="esd-block-social" align="center" style="font-size:0">--}}
-{{--                                                                <table class="es-table-not-adapt es-social" cellspacing="0" cellpadding="0">--}}
-{{--                                                                    <tbody>--}}
-{{--                                                                    <tr>--}}
-{{--                                                                        <td class="es-p10r" valign="top" align="center"><a target="_blank" href><img title="Facebook" src="https://tlr.stripocdn.email/content/assets/img/social-icons/circle-white/facebook-circle-white.png" alt="Fb" width="24" height="24"></a></td>--}}
-{{--                                                                        <td class="es-p10r" valign="top" align="center"><a target="_blank" href><img title="Twitter" src="https://tlr.stripocdn.email/content/assets/img/social-icons/circle-white/twitter-circle-white.png" alt="Tw" width="24" height="24"></a></td>--}}
-{{--                                                                        <td class="es-p10r" valign="top" align="center"><a target="_blank" href><img title="Instagram" src="https://tlr.stripocdn.email/content/assets/img/social-icons/circle-white/instagram-circle-white.png" alt="Inst" width="24" height="24"></a></td>--}}
-{{--                                                                        <td valign="top" align="center"><a target="_blank" href><img title="Linkedin" src="https://tlr.stripocdn.email/content/assets/img/social-icons/circle-white/linkedin-circle-white.png" alt="In" width="24" height="24"></a></td>--}}
-{{--                                                                    </tr>--}}
-{{--                                                                    </tbody>--}}
-{{--                                                                </table>--}}
-{{--                                                            </td>--}}
-{{--                                                        </tr>--}}
-{{--                                                        </tbody>--}}
-{{--                                                    </table>--}}
-{{--                                                </td>--}}
-{{--                                            </tr>--}}
-{{--                                            </tbody>--}}
-{{--                                        </table>--}}
-{{--                                    </td>--}}
-{{--                                </tr>--}}
-{{--                                </tbody>--}}
-{{--                            </table>--}}
-{{--                        </td>--}}
-{{--                    </tr>--}}
-{{--                    </tbody>--}}
-{{--                </table>--}}
                 <table cellpadding="0" cellspacing="0" class="es-footer" align="center">
                     <tbody>
                     <tr>
