@@ -159,7 +159,7 @@ export default {
         },
     },
     mounted() {
-        this.selUser = this.users[0];
+        this.selUser = this.users.length ? this.users[0] : this.selUser;
     },
 }
 </script>
