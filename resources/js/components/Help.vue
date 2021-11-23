@@ -19,6 +19,8 @@
 
         <HelpCheckins v-show="selected.id === 'checkins'"/>
 
+        <HelpDocuments v-show="selected.id === 'documents'"/>
+
         <HelpSettings v-show="selected.id === 'settings'"/>
 
     </v-container>
@@ -26,18 +28,20 @@
 
 <script>
 import HelpCheckins from "./HelpCheckins";
+import HelpDocuments from "./HelpDocuments";
 import HelpPeople from "./HelpPeople";
 import HelpSchedule from "./HelpSchedule";
 import HelpSettings from "./HelpSettings";
 
 export default {
     name: "Help",
-    components: {HelpCheckins, HelpSchedule, HelpPeople, HelpSettings},
+    components: {HelpCheckins, HelpDocuments, HelpSchedule, HelpPeople, HelpSettings},
     data() {
         const topics = [
             {id: 'people', name: 'People'},
             {id: 'schedule', name: 'Schedule'},
             {id: 'checkins', name: 'Attendance'},
+            {id: 'documents', name: 'Documents'},
             {id: 'settings', name: 'Settings'},
         ];
 
