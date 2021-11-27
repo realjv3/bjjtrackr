@@ -105,6 +105,10 @@ export default {
     created() {
         this.refresh();
         this.clientId =  this.$store.state.user.client_id;
+
+        if (isStudentOnly(this.user)) {
+            this.headers = this.headers.slice(0, 3);
+        }
     }
 }
 </script>

@@ -140,7 +140,6 @@
 
                 <v-speed-dial
                     id="speed-dial"
-                    v-if="! isStudentOnly(user)"
                     v-model="speedDial"
                     bottom right fixed
                 >
@@ -152,7 +151,7 @@
                         </v-btn>
                     </template>
 
-                    <v-tooltip ref="addCheckin" v-if="! isStudentOnly(user)" left>
+                    <v-tooltip ref="addCheckin" left>
                         <template v-slot:activator="{ on }">
                             <v-btn @click="$refs.checkin.setCheckin(null)" fab dark small color="primary" v-on="on">
                                 <v-icon>mdi-history</v-icon>
@@ -388,6 +387,10 @@ export default {
                 ];
                 if (!this.user.toured && isAdmin(this.user)) {
                     this.$tours.tour.start();
+                }
+
+                if (isStudentOnly(this.user)) {
+                    this.show = 'Reports';
                 }
             });
     },

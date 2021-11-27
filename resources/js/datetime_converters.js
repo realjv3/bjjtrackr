@@ -79,3 +79,15 @@ export function timeToLocale(time) {
         return date.toLocaleTimeString();
     }
 }
+
+/**
+ * Adds minutes to date, timezone agnostic
+ * @param date {Date}
+ * @param minutes {Number}
+ *
+ * @return {Date}
+ */
+export function addMinutes(date, minutes) {
+
+    return new Date(date.getTime() + minutes * 60000)
+}

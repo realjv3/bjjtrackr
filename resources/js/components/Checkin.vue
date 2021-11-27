@@ -69,18 +69,24 @@
             </v-card>
         </v-dialog>
         <v-dialog v-model="show.datepicker" class="mx-auto" width="290px">
-            <v-date-picker v-model="date" />
+            <v-date-picker v-model="date" :allowed-dates="allowedDates"/>
         </v-dialog>
         <v-dialog v-model="show.timepicker" class="mx-auto" width="290px">
-            <v-time-picker v-model="time" ampm-in-title />
+            <v-time-picker v-model="time" :allowed-hours="allowedHours" :allowed-minutes="allowedMinutes" ampm-in-title />
         </v-dialog>
         <v-snackbar v-model="snackbar.show" :bottom="true" :multi-line="true">{{snackbar.text}}</v-snackbar>
     </div>
 </template>
 
 <script>
-    import {headers} from '../authorization';
-    import {utcDateTimeToLocalYMD, utcDateTimeToLocal24Time, timeToLocale, utcDateTimeToLocal} from '../datetime_converters';
+    import {headers, isStudentOnly} from '../authorization';
+    import {
+        addMinutes,
+        utcDateTimeToLocalYMD,
+        utcDateTimeToLocal24Time,
+        timeToLocale,
+        utcDateTimeToLocal
+    } from '../datetime_converters';
 
     export default {
 		name: "Checkin",
@@ -133,6 +139,11 @@
                 }
             },
             people() {
+                if (isStudentOnly(this.user)) {
+                    return this.$store.state.people
+                        .filter(person => person.id === this.user.id)
+                        .map( person => ({text: person.name, value: person.id}));
+                }
                 return this.$store.state.people
                     .filter( person => person.client_id === this.checkin.client_id)
                     .map( person => ({text: person.name, value: person.id}));
@@ -157,6 +168,63 @@
             },
         },
         methods: {
+            /**
+             * Students can only checkin today
+             *
+             * @param date {string}
+             * @return {boolean}
+             */
+            allowedDates(date) {
+                if (isStudentOnly(this.user)) {
+                    const
+                        today = new Date(),
+                        dt = Number(date.slice(-2)),
+                        month = Number(date.slice(5, 7)),
+                        year = Number(date.slice(0, 4));
+                    return dt === today.getDate()
+                        && month === today.getMonth() + 1
+                        && year === today.getFullYear();
+                }
+                return true;
+            },
+            /**
+             * Students can only check 45m from their last checkin
+             *
+             * @param hour {string}
+             * @return {boolean}
+             */
+            allowedHours(hour) {
+
+                if (isStudentOnly(this.user) && this.selUser) {
+                    const
+                        lastCheckin = new Date(this.selUser.last_checkin + ' UTC'),
+                        lastCheckinPlus45m = addMinutes(lastCheckin, 45);
+
+                    return hour >= lastCheckinPlus45m.getHours();
+                }
+                return true;
+            },
+            /**
+             * Students can only check 45m from their last checkin
+             *
+             * @param minute {string}
+             * @return {boolean}
+             */
+            allowedMinutes(minute) {
+
+                if (isStudentOnly(this.user) && this.selUser) {
+                    const
+                        lastCheckin = new Date(this.selUser.last_checkin + ' UTC'),
+                        lastCheckinPlus45m = addMinutes(lastCheckin, 45),
+                        selHour = Number(this.time.slice(0, 2));
+
+                    if (selHour === lastCheckinPlus45m.getHours()) {
+                        return minute >= lastCheckinPlus45m.getMinutes();
+                    }
+                    return true;
+                }
+                return true;
+            },
 		    clickSave() {
                 this.saving = true;
                 this.resetErrors();
