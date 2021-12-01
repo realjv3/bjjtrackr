@@ -26,7 +26,7 @@
                     <v-stepper-content step="1">
                         <v-card id="carousel">
                             <v-card-title class="grey darken-2 mb-2">
-                                Welcome to FlowRolled - a customer relationship manager for jiu jitsu academies
+                                Welcome to FlowRolled - jiu jitsu academy management software-as-a-service
                             </v-card-title>
 
                             <p class="ma-12">FlowRolled provides operators and instructors of Brazilian Jiu Jitsu academies a central, convenient place to manage students, schedules, documents, attendance, and belt promotions.</p>

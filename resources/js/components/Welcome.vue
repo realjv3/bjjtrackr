@@ -7,7 +7,7 @@
                         <v-form>
                             <v-card class="elevation-12">
                                 <v-toolbar color="primary" dark flat id="login-header">
-                                    <v-toolbar-title>Welcome to</v-toolbar-title>
+                                    <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/Logo%20-%20No%20Background.png" />
                                 </v-toolbar>
                                 <v-card-text id="login-form">
                                     <v-text-field
@@ -103,7 +103,7 @@
 <style scoped>
  header#login-header {
      height: 158px !important;
-     background: center no-repeat url('https://flowrolled.nyc3.digitaloceanspaces.com/public/flowrolled_banner.jpg');
+     background: center no-repeat url('https://flowrolled.nyc3.digitaloceanspaces.com/public/scarfHold.jpeg');
      background-size: cover;
  }
 

@@ -72,7 +72,7 @@
                 style="width: 300px"
                 class="ml-0 pl-4"
             >
-                <span class="hidden-sm-and-down">FlowRolled</span>
+                <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/Logo%20-%20No%20Background.png"/>
             </v-toolbar-title>
 
             <v-spacer />

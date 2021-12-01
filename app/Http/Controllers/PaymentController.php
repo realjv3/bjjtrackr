@@ -232,17 +232,18 @@ class PaymentController extends Controller
         $endpoint_secret = config('services.stripe.webhook_secret');
 
         $payload = @file_get_contents('php://input');
-        $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
-        $event = Webhook::constructEvent(
-            $payload, $sig_header, $endpoint_secret
-        );
+        $event = Webhook::constructEvent($payload, $_SERVER['HTTP_STRIPE_SIGNATURE'], $endpoint_secret); // Stripe Event object, see https://stripe.com/docs/api/events
+
         Log::info("Handling Stripe webhook for $event->type");
+
         $invoice = $event->data->object;
+
         $subscription = Subscription::where('subscription_id', $invoice->subscription)->first();
         $stripeSub = $stripeClient->subscriptions->retrieve($subscription->subscription_id);
         $subscription->status = $stripeSub->status;
         $subscription->current_period_end = $stripeSub->current_period_end;
         $subscription->save();
+
         $client = $subscription->client;
         $to = DB::table('users')
             ->join('user_role', 'users.id', '=', 'user_role.user_id')
@@ -253,12 +254,12 @@ class PaymentController extends Controller
             case 'invoice.paid':
                 Log::info("Payment succeeded for $client->name");
                 Mail::to($to)->bcc(config('mail.from.address'))
-                    ->send(new ProcessedPayment($subscription, $invoice, $client) );
+                    ->send(new ProcessedPayment($invoice, $client) );
                 break;
             case 'invoice.payment_failed':
                 Log::info("Payment failed for $client->name");
                 Mail::to($to)->bcc(config('mail.from.address'))
-                    ->send(new ProcessedPayment($subscription, $invoice, $client) );
+                    ->send(new ProcessedPayment($invoice, $client) );
                 break;
             default:
                 // Unhandled event type
