@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ProcessedPayment;
-use App\Mail\Welcome;
 use App\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Stripe\Exception\SignatureVerificationException;
 use Stripe\StripeClient;
 use Stripe\Webhook;
 
@@ -217,7 +215,11 @@ class PaymentController extends Controller
             $sub->price_id = $subscription->items->data[0]->price->id;
             $sub->status = $subscription->status;
             $sub->save();
-            Mail::to(Auth::user())->send(new Welcome());
+            Mail::send('emails.welcome', [], function($message) {
+                $message->to(Auth::user()->email);
+                $message->bcc(config('mail.from.address'));
+                $message->subject('Welcome to FlowRolled');
+            });
         }
 
         return $subscription;
@@ -257,9 +259,12 @@ class PaymentController extends Controller
                     ->send(new ProcessedPayment($invoice, $client) );
                 break;
             case 'invoice.payment_failed':
-                Log::info("Payment failed for $client->name");
-                Mail::to($to)->bcc(config('mail.from.address'))
-                    ->send(new ProcessedPayment($invoice, $client) );
+                Log::error("Payment failed for $client->name");
+                Mail::send('emails.payment_failed', [], function($message) use ($to, $client) {
+                    $message->to($to->email);
+                    $message->bcc(config('mail.from.address'));
+                    $message->subject('Payment failed for ' . $client->name);
+                });
                 break;
             default:
                 // Unhandled event type
