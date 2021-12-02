@@ -3,7 +3,6 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>{{$name}} is eligible for a promotion!</title>
     <style type="text/css">
         /* -------------------------------------
             GLOBAL
