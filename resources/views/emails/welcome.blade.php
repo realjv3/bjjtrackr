@@ -38,39 +38,32 @@
         <tbody>
         <tr>
             <td class="esd-email-paddings" valign="top">
-                <table cellpadding="0" cellspacing="0" class="es-content esd-header-popover" align="center">
-                    <tbody>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="em_full_wrap" align="center"  bgcolor="#efefef">
                     <tr>
-                        <td class="esd-stripe" esd-custom-block-id="7958" align="center">
-                            <table class="es-content-body" style="background-color: transparent;" width="600" cellspacing="0" cellpadding="0" align="center">
-                                <tbody>
-                                    <tr>
-                                        <td class="esd-structure es-p15t es-p15b es-p10r es-p10l" align="left">
-                                            <!--[if mso]><table width="580" cellpadding="0" cellspacing="0"><tr><td width="282" valign="top"><![endif]-->
-                                            <table class="es-left" cellspacing="0" cellpadding="0" align="left">
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="esd-container-frame" width="282" align="left">
-                                                            <table width="100%" cellspacing="0" cellpadding="0">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="es-infoblock esd-block-text es-m-txt-c" align="left">
-                                                                            <p style="font-family: 'Roboto Thin'">flowrolled.com<br></p>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                        <td align="center" valign="top">
+                            <table align="center" width="650" border="0" cellspacing="0" cellpadding="0" class="em_main_table" style="width:650px; table-layout:fixed;">
+                                <tr>
+                                    <td align="center" valign="top" style="padding:0 25px;" class="em_aside10">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+                                            <tr>
+                                                <td height="26" style="height:26px;" class="em_h20">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center" valign="top">
+                                                    <a href="https://flowrolled.com" target="_blank" style="text-decoration:none;">
+                                                        <img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/High%20Resolution%20Logo.png" alt="flowrolled" border="0" style="display:block; font-family:Arial, sans-serif; font-size:18px; line-height:25px; text-align:center; color:#1d4685; font-weight:bold; max-width:608px;" class="em_w150" />
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="28" style="height:28px;" class="em_h20">&nbsp;</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
                             </table>
                         </td>
                     </tr>
-                    </tbody>
                 </table>
                 <table class="es-content" cellspacing="0" cellpadding="0" align="center">
                     <tbody>
@@ -88,12 +81,12 @@
                                                         <tbody>
                                                         <tr>
                                                             <td align="center" class="esd-block-text es-p40t es-p10b">
-                                                                <h1 style="color: #ffffff;">Thanks for trying out flowrolled.com</h1>
+                                                                <h1 style="color: #ffffff;">Thanks for trying out Flowrolled</h1>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td esdev-links-color="#757575" class="esd-block-text es-p10t es-p20b es-p30r es-p30l" align="center">
-                                                                <p style="color: #e5e3e3;">Track attendance, retain students, grow your grappling family.</p>
+                                                                <p style="color: #e5e3e3;">Manage your academy, retain students, grow your grappling family.</p>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -137,16 +130,6 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="esd-block-text es-p10b" align="left">
-                                                                <p><strong>To begin tracking student attendance, go ahead and input your people by hitting plus button on bottom right. Afterwards, also set some classes in the same manner.</strong></p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="esd-block-text es-p10t es-p10b" align="left">
-                                                                <p>Students can check in to class via QR code scans or manual checkins.</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
                                                             <td class="esd-block-text es-p10t es-p10b" align="left">
                                                                 <p>Please check out the help section for frequently asked questions.</p>
                                                             </td>
@@ -177,7 +160,7 @@
                                                         <tr>
                                                             <td class="esd-block-image" align="left" style="font-size:0">
                                                                 <a target="_blank">
-                                                                    <img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/headShot.jpg" alt style="display: block;" width="40">
+                                                                    <img src=https://flowrolled.nyc3.digitaloceanspaces.com/public/Icon%20Only.png style="display: block;" width="90" height="120">
                                                                 </a>
                                                             </td>
                                                         </tr>

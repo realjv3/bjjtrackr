@@ -217,7 +217,7 @@ class PaymentController extends Controller
             $sub->price_id = $subscription->items->data[0]->price->id;
             $sub->status = $subscription->status;
             $sub->save();
-            Mail::to(Auth::user()->email)->send(new Welcome());
+            Mail::to(Auth::user())->send(new Welcome());
         }
 
         return $subscription;
