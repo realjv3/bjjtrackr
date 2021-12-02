@@ -140,6 +140,7 @@
 
                 <v-speed-dial
                     id="speed-dial"
+                    v-if="! isStudentOnly(user)"
                     v-model="speedDial"
                     bottom right fixed
                 >
