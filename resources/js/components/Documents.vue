@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-row v-if="isAdmin(user) || isSuperAdmin(user)" justify="center">
 
-            <v-card class="ma-12" style="width: 50%">
+            <v-card class="ma-12" style="width: 50%" min-width="400">
 
                 <v-card-title>Upload Document Templates</v-card-title>
 
@@ -37,7 +37,6 @@
                             />
                         </v-col>
                     </v-row>
-
 
                     <v-data-table
                         :headers="templateHeaders"
@@ -102,8 +101,7 @@
         </v-row>
 
         <v-row justify="center">
-            <v-card>
-
+            <v-card min-width="500">
                 <v-card-title>
                     Documents
                     <v-spacer></v-spacer>
@@ -131,7 +129,6 @@
 
                     </v-data-table>
                 </v-card-text>
-
             </v-card>
         </v-row>
     </v-container>

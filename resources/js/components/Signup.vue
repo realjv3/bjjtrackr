@@ -24,10 +24,11 @@
 
                 <v-stepper-items>
                     <v-stepper-content step="1">
-                        <v-card id="carousel">
+                        <v-card id="carousel" min-width="500">
                             <v-card-title class="grey darken-2 mb-2">
-                                Welcome to FlowRolled - jiu jitsu academy management software-as-a-service
+                                <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/High%20Resolution%20Logo.png"/>
                             </v-card-title>
+                            <v-card-subtitle>Welcome to FlowRolled - jiu jitsu academy management software-as-a-service</v-card-subtitle>
 
                             <p class="ma-12">FlowRolled provides operators and instructors of Brazilian Jiu Jitsu academies a central, convenient place to manage students, schedules, documents, attendance, and belt promotions.</p>
 
