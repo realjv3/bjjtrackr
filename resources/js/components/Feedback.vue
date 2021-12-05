@@ -1,11 +1,11 @@
 <template>
     <v-container fluid>
         <v-row justify="center">
-            <v-card>
+            <v-card class="col-lg-6">
                 <v-card-title>Feedback</v-card-title>
                 <v-card-text>
-                    <v-container style="width: 50vw">
-                        <v-row class="mx-2">
+                    <v-container fluid>
+                        <v-row class="mx-lg-2">
                             <v-textarea
                                 :full-width="true"
                                 v-model="message"

@@ -2,64 +2,67 @@
     <v-container fluid>
         <v-row v-if="isAdmin(user) || isSuperAdmin(user)" justify="center">
 
-            <v-card class="ma-12" style="width: 50%" min-width="400">
+            <v-col class="col-lg-7">
+                <v-card class="ma-lg-12">
 
-                <v-card-title>Upload Document Templates</v-card-title>
 
-                <v-card-text>
-                    Upload a new document template. This can be an agreement, disclosure or anything else you would
-                    like to have your students sign.
+                    <v-card-title>Upload Document Templates</v-card-title>
 
-                    <v-row class="my-10" justify="space-between" align="baseline">
-                        <v-col cols="5">
-                            <v-file-input
-                                name="template"
-                                v-model="file"
-                                label="Select file"
-                                :disabled="loading"
-                                accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf"
-                                :error="error"
-                                :error-messages="error"
-                            />
-                        </v-col>
-                        <v-col>
-                            <v-btn title="Upload" fab small color="secondary" @click="upload" :disabled="uploading">
-                                <v-icon>mdi-cloud-upload-outline</v-icon>
-                            </v-btn>
-                        </v-col>
-                        <v-col cols="5">
-                            <v-text-field
-                                v-model="templateSearch"
-                                append-icon="search"
-                                label="Search"
-                                single-line
-                                hide-details
-                            />
-                        </v-col>
-                    </v-row>
+                    <v-card-text>
+                        Upload a new document template. This can be an agreement, disclosure or anything else you would
+                        like to have your students sign.
 
-                    <v-data-table
-                        :headers="templateHeaders"
-                        :items="templates"
-                        class="elevation-1"
-                        :loading="loading"
-                        :search="templateSearch"
-                    >
-                        <template v-slot:item.original_name="{ item }">
-                            <a @click="downloadTemplate(item.id)">{{item.original_name}}</a>
-                        </template>
+                        <v-row class="my-10" justify="space-between" align="baseline">
+                            <v-col cols="5">
+                                <v-file-input
+                                    name="template"
+                                    v-model="file"
+                                    label="Select file"
+                                    :disabled="loading"
+                                    accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf"
+                                    :error="error"
+                                    :error-messages="error"
+                                />
+                            </v-col>
+                            <v-col>
+                                <v-btn title="Upload" fab small color="secondary" @click="upload" :disabled="uploading">
+                                    <v-icon>mdi-cloud-upload-outline</v-icon>
+                                </v-btn>
+                            </v-col>
+                            <v-col cols="5">
+                                <v-text-field
+                                    v-model="templateSearch"
+                                    append-icon="search"
+                                    label="Search"
+                                    single-line
+                                    hide-details
+                                />
+                            </v-col>
+                        </v-row>
 
-                        <template v-slot:item.action="{ item }">
-                            <v-icon small class="mr-2" @click="selectTemplate(item.template_id)" title="Send contract">
-                                email
-                            </v-icon>
-                            <v-icon small @click="delDocument(item)" title="Delete">delete</v-icon>
-                        </template>
+                        <v-data-table
+                            :headers="templateHeaders"
+                            :items="templates"
+                            class="elevation-1"
+                            :loading="loading"
+                            :search="templateSearch"
+                        >
+                            <template v-slot:item.original_name="{ item }">
+                                <a @click="downloadTemplate(item.id)">{{item.original_name}}</a>
+                            </template>
 
-                    </v-data-table>
-                </v-card-text>
+                            <template v-slot:item.action="{ item }">
+                                <v-icon small class="mr-2" @click="selectTemplate(item.template_id)" title="Send contract">
+                                    email
+                                </v-icon>
+                                <v-icon small @click="delDocument(item)" title="Delete">delete</v-icon>
+                            </template>
 
-            </v-card>
+                        </v-data-table>
+                    </v-card-text>
+
+                </v-card>
+            </v-col>
 
             <v-dialog
                 v-model="showSendDialog"
@@ -101,7 +104,7 @@
         </v-row>
 
         <v-row justify="center">
-            <v-card min-width="500">
+            <v-card>
                 <v-card-title>
                     Documents
                     <v-spacer></v-spacer>

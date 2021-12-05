@@ -1,77 +1,75 @@
 <template>
     <v-container fluid>
         <v-row justify="center">
-            <v-col cols="7">
-                <v-card>
-                    <v-card-title class="grey darken-2">Settings</v-card-title>
-                    <v-card-text>
-                        <v-container>
+            <v-card>
+                <v-card-title class="grey darken-2">Settings</v-card-title>
+                <v-card-text>
+                    <v-container fluid class="mx-lg-2">
 
-                            <v-row class="mx-2">
-                                <v-col>
-                                    <h3>Promotion Eligibility</h3>
-                                </v-col>
-                            </v-row>
-                            <v-row class="mx-2" style="border-bottom: 1px solid white">
-                                <v-col>
-                                    <v-select v-model="belt" :items="belts" label="Belt" style="width: 100px"></v-select>
-                                    <v-switch
-                                        v-model="settings[belt].combine_same_day_checkins"
-                                        :label="sessionLabel"
-                                        @change="update"
-                                    ></v-switch>
-                                    <v-text-field
-                                        v-model="settings[belt].sessions_til_stripe"
-                                        type="number"
-                                        min="1"
-                                        max="255"
-                                        label="Sessions until promotion"
-                                        style="width: 150px"
-                                        :error-messages="errors.sessions_til_stripe[0]"
-                                        @change="update"
-                                    />
-                                    <v-text-field
-                                        v-model="settings[belt].weeks_absent_til_contact"
-                                        type="number"
-                                        min="1"
-                                        max="255"
-                                        label="Weeks absent until contact"
-                                        style="width: 150px"
-                                        :error-messages="errors.weeks_absent_til_contact[0]"
-                                        @change="update"
-                                    />
-                                </v-col>
-                            </v-row>
+                        <v-row>
+                            <v-col>
+                                <h3>Promotion Eligibility</h3>
+                            </v-col>
+                        </v-row>
+                        <v-row style="border-bottom: 1px solid white">
+                            <v-col>
+                                <v-select v-model="belt" :items="belts" label="Belt" style="width: 100px"></v-select>
+                                <v-switch
+                                    v-model="settings[belt].combine_same_day_checkins"
+                                    :label="sessionLabel"
+                                    @change="update"
+                                ></v-switch>
+                                <v-text-field
+                                    v-model="settings[belt].sessions_til_stripe"
+                                    type="number"
+                                    min="1"
+                                    max="255"
+                                    label="Sessions until promotion"
+                                    style="width: 150px"
+                                    :error-messages="errors.sessions_til_stripe[0]"
+                                    @change="update"
+                                />
+                                <v-text-field
+                                    v-model="settings[belt].weeks_absent_til_contact"
+                                    type="number"
+                                    min="1"
+                                    max="255"
+                                    label="Weeks absent until contact"
+                                    style="width: 150px"
+                                    :error-messages="errors.weeks_absent_til_contact[0]"
+                                    @change="update"
+                                />
+                            </v-col>
+                        </v-row>
 
-                            <v-row class="mx-2">
-                                <v-col>
-                                    <h3>Academy profile</h3>
-                                </v-col>
-                            </v-row>
-                            <v-row class="mx-2 mb-2" style="border-bottom: 1px solid white">
-                                <v-col>
-                                    <v-btn @click="$emit('edit-client', {...client, settings: true})">
-                                        Edit profile
-                                    </v-btn>
-                                </v-col>
-                            </v-row>
+                        <v-row>
+                            <v-col>
+                                <h3>Academy profile</h3>
+                            </v-col>
+                        </v-row>
+                        <v-row justify="center" style="border-bottom: 1px solid white">
+                            <v-col cols="4">
+                                <v-btn @click="$emit('edit-client', {...client, settings: true})">
+                                    Edit profile
+                                </v-btn>
+                            </v-col>
+                        </v-row>
 
-                            <template v-if="isAdmin(user)">
-                                <v-row class="mx-2 my-5">
-                                    <v-col>
-                                        <h3>Payment Info</h3>
-                                    </v-col>
-                                </v-row>
-                                <v-row class="mx-2">
-                                    <v-col cols="9">
-                                        <PaymentMethods />
-                                    </v-col>
-                                </v-row>
-                            </template>
-                        </v-container>
-                    </v-card-text>
-                </v-card>
-            </v-col>
+                        <template v-if="isAdmin(user)">
+                            <v-row class="my-5">
+                                <v-col>
+                                    <h3>Payment Info</h3>
+                                </v-col>
+                            </v-row>
+                            <v-row justify="center">
+                                <v-col cols="9">
+                                    <PaymentMethods />
+                                </v-col>
+                            </v-row>
+                        </template>
+                    </v-container>
+                </v-card-text>
+            </v-card>
         </v-row>
 
     </v-container>

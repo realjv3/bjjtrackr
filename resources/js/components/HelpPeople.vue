@@ -1,6 +1,6 @@
 <template>
     <v-lazy>
-        <v-row justify="center" class="ma-16">
+        <v-row justify="center" class="ma-lg-16">
             <v-card id="people-how-to">
                 <v-img
                     class="white--text align-start"

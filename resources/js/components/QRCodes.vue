@@ -17,7 +17,7 @@
                     ></v-select>
                 </v-card-title>
                 <v-card-text>
-                    <img :src="imgSrc" />
+                    <img id="qr-code" :src="imgSrc" />
                 </v-card-text>
             </v-card>
         </v-row>
@@ -97,3 +97,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+@media screen and (max-width: 400px) {
+    #qr-code {
+        width: 300px;
+    }
+}
+</style>

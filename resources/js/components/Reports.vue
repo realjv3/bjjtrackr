@@ -1,7 +1,9 @@
 <template>
     <v-container fluid>
         <v-row justify="center">
-            <v-card style="width: 70vw" :class="{
+            <v-card
+                class="col-lg-10"
+                :class="{
                 white_border: selUser.rank.belt_id === 1,
                 blue_border: selUser.rank.belt_id === 2,
                 purple_border: selUser.rank.belt_id === 3,

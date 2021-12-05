@@ -1,27 +1,32 @@
 <template>
     <v-container fluid>
+        <v-row justify="center">
+            <v-col class="col-lg-4">
+                <v-select
+                    label="Documentation for"
+                    v-model="selected"
+                    :items="topics"
+                    item-value="id"
+                    item-text="name"
+                    :return-object="true"
+                    class="d-inline-block my-8"
+                    id="person-select"
+                    @change="change"
+                />
+            </v-col>
+        </v-row>
+        <v-row justify="center">
 
-        Documentation for
-        <v-select
-            v-model="selected"
-            :items="topics"
-            item-value="id"
-            item-text="name"
-            :return-object="true"
-            class="d-inline-block ms-1"
-            id="person-select"
-            @change="change"
-        ></v-select>
+            <HelpPeople class="col-sm-12" v-show="selected.id === 'people'"/>
 
-        <HelpPeople v-show="selected.id === 'people'"/>
+            <HelpSchedule class="col-sm-12" v-show="selected.id === 'schedule'"/>
 
-        <HelpSchedule v-show="selected.id === 'schedule'"/>
+            <HelpCheckins class="col-sm-12" v-show="selected.id === 'checkins'"/>
 
-        <HelpCheckins v-show="selected.id === 'checkins'"/>
+            <HelpDocuments class="col-sm-12" v-show="selected.id === 'documents'"/>
 
-        <HelpDocuments v-show="selected.id === 'documents'"/>
-
-        <HelpSettings v-show="selected.id === 'settings'"/>
+            <HelpSettings class="col-sm-12" v-show="selected.id === 'settings'"/>
+        </v-row>
 
     </v-container>
 </template>
