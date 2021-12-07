@@ -63,7 +63,7 @@ class PaymentController extends Controller
     }
 
     /**
-     * Finds or creates a Stripe customer
+     * Updates a Stripe customer
      *
      * @param Request $request
      * @return \Stripe\Customer|string
@@ -88,7 +88,7 @@ class PaymentController extends Controller
     }
 
     /**
-     * Gets all of the Stripe customer's payment methods
+     * Gets all the Stripe customer's payment methods
      *
      * @return array|string
      * @throws \Stripe\Exception\ApiErrorException

@@ -24,101 +24,107 @@
 
                 <v-stepper-items>
                     <v-stepper-content step="1">
-                        <v-card id="carousel" min-width="500">
-                            <v-card-title class="grey darken-2 mb-2">
-                                <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/High%20Resolution%20Logo.png"/>
-                            </v-card-title>
-                            <v-card-subtitle>Welcome to FlowRolled - jiu jitsu academy management software-as-a-service</v-card-subtitle>
+                        <v-row class="ma-lg-16 pa-lg-16">
+                            <v-card class="ma-lg-16 pa-lg-16">
+                                <v-card-title class="grey darken-2 mb-4">
+                                    <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/High%20Resolution%20Logo.png"/>
+                                </v-card-title>
 
-                            <p class="ma-12">FlowRolled provides operators and instructors of Brazilian Jiu Jitsu academies a central, convenient place to manage students, schedules, documents, attendance, and belt promotions.</p>
+                                <v-card-subtitle class="text-h5">
+                                    Welcome to FlowRolled - jiu jitsu academy management software-as-a-service
+                                </v-card-subtitle>
 
-                            <h4 class="ma-12">What FlowRolled can do for you:</h4>
+                                <v-card-text>
+                                    <p class="mb-lg-12">FlowRolled provides operators and instructors of Brazilian Jiu Jitsu academies a central, convenient place to manage students, schedules, documents, attendance, and belt promotions.</p>
 
-                            <v-carousel height="420" show-arrows-on-hover>
-                                <v-carousel-item key="1">
-                                    <v-img class="mt-6 mx-auto" src="https://flowrolled.nyc3.digitaloceanspaces.com/public/BjjTrackr-Reports.png" width="520" />
-                                    <p class="text-center ma-8">See all of your members' time and attendance reports organized in one place.</p>
-                                </v-carousel-item>
+                                    <h4 class="mb-lg-12">What FlowRolled can do for you:</h4>
 
-                                <v-carousel-item key="2">
-                                    <v-row>
-                                        <v-col class="pa-10" cols="6">
-                                            Set custom promotion eligibility criteria by belt rank, e.g. set how many training days or classes it takes to be considered for the next stripe or belt.
-                                        </v-col>
-                                        <v-col class="">
-                                            <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/BjjTrackr-Settings.png" width="375"/>
-                                        </v-col>
+                                    <v-carousel height="" show-arrows-on-hover hide-delimiters>
+                                        <v-carousel-item key="1">
+                                            <v-img class="mt-6 mx-lg-auto" src="https://flowrolled.nyc3.digitaloceanspaces.com/public/BjjTrackr-Reports.png" width="520" />
+                                            <p class="text-center ma-8">See all of your members' time and attendance reports organized in one place.</p>
+                                        </v-carousel-item>
+
+                                        <v-carousel-item key="2">
+                                            <v-row>
+                                                <v-col class="pa-lg-10 col-lg-6">
+                                                    Set custom promotion eligibility criteria by belt rank, e.g. set how many training days or classes it takes to be considered for the next stripe or belt.
+                                                </v-col>
+                                                <v-col class="">
+                                                    <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/BjjTrackr-Settings.png" width="375"/>
+                                                </v-col>
+                                            </v-row>
+                                        </v-carousel-item>
+
+                                        <v-carousel-item key="3">
+                                            <v-row>
+                                                <v-col class="pl-lg-16" cols="4">
+                                                    <v-img class="mt-6 mx-lg-auto" src="https://flowrolled.nyc3.digitaloceanspaces.com/public/phone-doc.jpeg" width="164"/>
+                                                </v-col>
+                                                <v-col class="text-center pa-lg-16">
+                                                    Digitally send, sign, and store waivers or any other documents. You send docs to their email or phone, they sign, it's that simple. Documents are stored securely and can be downloaded anytime.
+                                                </v-col>
+                                            </v-row>
+                                        </v-carousel-item>
+
+                                        <v-carousel-item key="4">
+                                            <v-img class="mt-6 mx-auto" src="https://flowrolled.nyc3.digitaloceanspaces.com/public/BjjTrackr-QR.png" width="520"/>
+                                            <p class="text-center ma-8">Efficient QR code scans or keyboard input for class checkins.</p>
+                                        </v-carousel-item>
+
+                                        <v-carousel-item key="5">
+                                            <v-img class="mt-6 mx-auto" src="https://flowrolled.nyc3.digitaloceanspaces.com/public/BjjTrackr-Schedule.png" width="520"/>
+                                            <p class="text-center ma-8">Set and publish your class schedule.</p>
+                                        </v-carousel-item>
+
+                                        <v-carousel-item key="6">
+                                            <p class="text-center ma-8">
+                                                <v-icon class="text-h1" color="secondary">mdi-party-popper</v-icon>
+                                            </p>
+                                            <p class="text-center ma-16">
+                                                Increase student retention and motivation with regular stripe and belt promotions, enabled by detailed attendance tracking reports.
+                                            </p>
+                                        </v-carousel-item>
+
+                                        <v-carousel-item key="7">
+                                            <p class="text-center ma-8">
+                                                <v-icon class="text-h1" color="secondary">mdi-account-heart</v-icon>
+                                            </p>
+                                            <p class="text-center ma-16">
+                                                Reduce member churn with automated contact reminders when a student has been absent for a while.
+                                            </p>
+                                        </v-carousel-item>
+
+                                        <v-carousel-item key="8">
+                                            <p class="text-center mt-5 mx-auto">
+                                                <v-icon class="text-h1" color="secondary">mdi-account-cash</v-icon>
+                                            </p>
+                                            <p class="text-center ma-8">On the roadmap - Manage memberships and payments</p>
+                                        </v-carousel-item>
+
+                                        <v-carousel-item key="9">
+                                            <p class="text-center mt-5 mx-auto">
+                                                <v-icon class="text-h1" color="secondary">mdi-currency-usd</v-icon>
+                                            </p>
+                                            <p class="text-center ma-16">Pay only for what you use. The price is $3 per active student per month. Cancel anytime.</p>
+                                        </v-carousel-item>
+                                    </v-carousel>
+
+                                    <v-row justify="end" class="mx-2">
+                                        <v-card-actions>
+                                            <v-btn text href="/">Back</v-btn>
+                                            <v-btn color="primary" @click="step = 2">Continue</v-btn>
+                                        </v-card-actions>
                                     </v-row>
-                                </v-carousel-item>
+                                </v-card-text>
 
-                                <v-carousel-item key="3">
-                                    <v-row>
-                                        <v-col class="pl-16" cols="4">
-                                            <v-img class="mt-6 mx-auto" src="https://flowrolled.nyc3.digitaloceanspaces.com/public/phone-doc.jpeg" width="164"/>
-                                        </v-col>
-                                        <v-col class="text-center pa-16">
-                                            Digitally send, sign, and store waivers or any other documents. You send docs to their email or phone, they sign, it's that simple. Documents are stored securely and can be downloaded anytime.
-                                        </v-col>
-                                    </v-row>
-                                </v-carousel-item>
-
-                                <v-carousel-item key="4">
-                                    <v-img class="mt-6 mx-auto" src="https://flowrolled.nyc3.digitaloceanspaces.com/public/BjjTrackr-QR.png" width="520"/>
-                                    <p class="text-center ma-8">Efficient QR code scans or keyboard input for class checkins.</p>
-                                </v-carousel-item>
-
-                                <v-carousel-item key="5">
-                                    <v-img class="mt-6 mx-auto" src="https://flowrolled.nyc3.digitaloceanspaces.com/public/BjjTrackr-Schedule.png" width="520"/>
-                                    <p class="text-center ma-8">Set and publish your class schedule.</p>
-                                </v-carousel-item>
-
-                                <v-carousel-item key="6">
-                                    <p class="text-center ma-8">
-                                        <v-icon class="text-h1" color="secondary">mdi-party-popper</v-icon>
-                                    </p>
-                                    <p class="text-center ma-16">
-                                        Increase student retention and motivation with regular stripe and belt promotions, enabled by detailed attendance tracking reports.
-                                    </p>
-                                </v-carousel-item>
-
-                                <v-carousel-item key="7">
-                                    <p class="text-center ma-8">
-                                        <v-icon class="text-h1" color="secondary">mdi-account-heart</v-icon>
-                                    </p>
-                                    <p class="text-center ma-16">
-                                        Reduce member churn with automated contact reminders when a student has been absent for a while.
-                                    </p>
-                                </v-carousel-item>
-
-                                <v-carousel-item key="8">
-                                    <p class="text-center mt-5 mx-auto">
-                                        <v-icon class="text-h1" color="secondary">mdi-account-cash</v-icon>
-                                    </p>
-                                    <p class="text-center ma-8">On the roadmap - Manage memberships and payments</p>
-                                </v-carousel-item>
-
-                                <v-carousel-item key="9">
-                                    <p class="text-center mt-5 mx-auto">
-                                        <v-icon class="text-h1" color="secondary">mdi-currency-usd</v-icon>
-                                    </p>
-                                    <p class="text-center ma-16">Pay only for what you use. The price is $3 per active student per month. Cancel anytime.</p>
-                                </v-carousel-item>
-                            </v-carousel>
-
-                            <v-row justify="end" class="mx-2">
-                                <v-card-actions>
-                                    <v-btn text href="/">Back</v-btn>
-                                    <v-btn color="primary" @click="step = 2">Continue</v-btn>
-                                </v-card-actions>
-                            </v-row>
-
-                        </v-card>
-
+                            </v-card>
+                        </v-row>
                     </v-stepper-content>
 
                     <v-stepper-content step="2">
                         <PrivacyPolicy />
-                        <v-row justify="end" class="mx-2">
+                        <v-row justify="end" class="mx-lg-2">
                             <v-card-actions>
                                 <v-btn text @click="step = 1">Back</v-btn>
                                 <v-btn color="primary" @click="step = 3">Continue</v-btn>
@@ -127,12 +133,13 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <v-card class="ma-16" >
+                        <v-card class="ma-lg-16" >
                             <v-card-title class="grey darken-2 mb-2">Personal & Academy Info</v-card-title>
                             <div class="text-subtitle-1 ma-4">
                                 Please tell us a little bit about yourself and your academy.
                             </div>
-                            <v-row class="mx-2">
+
+                            <v-row class="mx-lg-2">
                                 <v-col cols="6">
                                     <v-text-field
                                         v-model="person.name"
@@ -154,7 +161,8 @@
                                     />
                                 </v-col>
                             </v-row>
-                            <v-row class="mx-2">
+
+                            <v-row class="mx-lg-2">
                                 <v-col cols="6">
                                     <v-text-field
                                         v-model="person.password"
@@ -176,8 +184,9 @@
                                     />
                                 </v-col>
                             </v-row>
-                            <v-row class="mx-2">
-                                <v-col cols="4">
+
+                            <v-row class="mx-lg-2">
+                                <v-col class="col-lg-1">
                                     <v-select
                                         v-model="person.rank.belt_id"
                                         :items="[
@@ -193,7 +202,8 @@
                                         :disabled="saving"
                                     />
                                 </v-col>
-                                <v-col cols="2">
+
+                                <v-col class="col-lg-1">
                                     <v-select
                                         v-model="person.rank.stripes"
                                         :items="[0, 1, 2, 3, 4]"
@@ -203,7 +213,8 @@
                                         :disabled="saving"
                                     />
                                 </v-col>
-                                <v-col cols="4">
+
+                                <v-col class="col-lg-2">
                                     <v-text-field
                                         label="Last ranked up"
                                         :value="person.rank.last_ranked_up"
@@ -219,8 +230,8 @@
                                 </v-dialog>
                             </v-row>
 
-                            <v-row class="mx-2">
-                                <v-col cols="5">
+                            <v-row class="mx-lg-2">
+                                <v-col class="col-lg-5">
                                     <v-text-field
                                         v-model="client.name"
                                         :error-messages="errors['client.name']"
@@ -229,7 +240,17 @@
                                     />
                                 </v-col>
 
-                                <v-col cols="2">
+                                <v-col class="col-lg-5">
+                                    <v-text-field
+                                        v-model="client.affiliation"
+                                        placeholder="Affiliation"
+                                        :disabled="saving"
+                                    />
+                                </v-col>
+                            </v-row>
+
+                            <v-row class="mx-lg-2">
+                                <v-col class="col-lg-2 col-sm-4">
                                     <v-text-field
                                         label="Member since"
                                         :value="person.start_date"
@@ -240,39 +261,37 @@
                                     />
                                 </v-col>
 
-                                <v-dialog v-model="show.pickStartDate" class="mx-auto" width="290px">
+                                <v-dialog v-model="show.pickStartDate" class="mx-lg-auto">
                                     <v-date-picker v-model="person.start_date" :disabled="saving"/>
                                 </v-dialog>
+                            </v-row>
 
-                                <v-col cols="5">
-                                    <v-text-field
-                                        v-model="client.affiliation"
-                                        placeholder="Affiliation"
-                                        :disabled="saving"
-                                    />
-                                </v-col>
-
-                                <v-col cols="12">
+                            <v-row class="mx-lg-2">
+                                <v-col class="col-lg-6">
                                     <v-text-field v-model="client.address1" placeholder="Address 1" :disabled="saving"/>
                                 </v-col>
 
-                                <v-col cols="12">
+                                <v-col class="col-lg-6">
                                     <v-text-field v-model="client.address2" placeholder="Address 2" :disabled="saving"/>
                                 </v-col>
+                            </v-row>
 
-                                <v-col cols="6">
+                            <v-row class="mx-lg-2">
+                                <v-col class="col-lg-6">
                                     <v-text-field v-model="client.city" placeholder="City" :disabled="saving" />
                                 </v-col>
 
-                                <v-col cols="4">
+                                <v-col class="col-lg-4">
                                     <v-text-field v-model="client.state" placeholder="State/Province" :disabled="saving"/>
                                 </v-col>
+                            </v-row>
 
-                                <v-col cols="2">
+                            <v-row class="mx-lg-2">
+                                <v-col class="col-sm-4 col-lg-2">
                                     <v-text-field v-model="client.zip" placeholder="Postal code" :disabled="saving"/>
                                 </v-col>
 
-                                <v-col cols="6">
+                                <v-col class="col-lg-5">
                                     <v-text-field v-model="client.country" placeholder="Country" :disabled="saving"/>
                                 </v-col>
                             </v-row>
@@ -288,7 +307,7 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="5">
-                        <v-card class="ma-16" height="74vh">
+                        <v-card class="ma-lg-16" height="74vh">
                             <v-card-title class="grey darken-2 mb-2">Payment Method</v-card-title>
                             <v-row class="ma-6">
                                 <div class="text-body-1">
@@ -411,11 +430,3 @@ export default {
     },
 }
 </script>
-
-<style scoped>
-#carousel {
-    width: 75%;
-    margin: 50px auto;
-    padding: 100px;
-}
-</style>

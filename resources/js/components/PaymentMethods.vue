@@ -1,32 +1,34 @@
 <template>
-    <v-container>
+    <v-container fluid>
         <v-row align="center">
-            <template v-if="!show.cardInputs">
-                <v-col>
-                    <v-btn
-                        v-model="show.cardInputs"
-                        :disabled="loading"
-                        :loading="loading"
-                        color="pink"
-                        dark
-                        fab
-                        small
-                        @click="showCardInputs"
-                    >
-                        <v-icon>mdi-credit-card-plus</v-icon>
-                    </v-btn>
-                    <span class="text-body-1 pl-2">Add card</span>
-                </v-col>
-            </template>
-            <template v-else-if="show.cardInputs">
-                <v-col>
-                    <div id="card"></div>
-                    <div id="card-errors" role="alert">{{errors.card}}</div>
-                </v-col>
-            </template>
+            <v-col style="min-width: 255px">
+                <template v-if="!show.cardInputs">
+                    <v-col>
+                        <v-btn
+                            v-model="show.cardInputs"
+                            :disabled="loading"
+                            :loading="loading"
+                            color="pink"
+                            dark
+                            fab
+                            small
+                            @click="showCardInputs"
+                        >
+                            <v-icon>mdi-credit-card-plus</v-icon>
+                        </v-btn>
+                        <span class="text-body-1 pl-2">Add card</span>
+                    </v-col>
+                </template>
+                <template v-else-if="show.cardInputs">
+                    <v-col>
+                        <div id="card"></div>
+                        <div id="card-errors" role="alert">{{errors.card}}</div>
+                    </v-col>
+                </template>
+            </v-col>
         </v-row>
         <v-lazy v-model="show.cards">
-            <v-list dense>
+            <v-list dense min-width="300">
                 <v-list-item class="px-0" v-for="(card, i) in cards" :key="i">
                     <v-skeleton-loader type="list-item-avatar" v-if="loading" style="right: 17px; width: 300px"/>
                     <v-list-item-icon v-if="!loading">

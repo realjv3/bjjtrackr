@@ -1,9 +1,9 @@
 <template>
     <v-app>
         <v-main>
-            <v-card class="ma-16">
+            <v-card class="ma-lg-16">
                 <v-card-title class="gray mb-2">Privacy Policy</v-card-title>
-                <v-card-text class="mb-12 pa-12">
+                <v-card-text class="mb-lg-12 pa-lg-12">
                     <div class="text-body-2">
                         Your privacy is important to us. It is Flowrolled's policy to respect your privacy and comply with any applicable law and regulation regarding any personal information we may collect about you, including across our website, https://flowrolled.com, and other sites we own and operate.
                         <br/>
