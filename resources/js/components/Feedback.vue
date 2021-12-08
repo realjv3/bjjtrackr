@@ -3,6 +3,9 @@
         <v-row justify="center">
             <v-card class="col-lg-6">
                 <v-card-title>Feedback</v-card-title>
+
+                <v-card-subtitle>Drop us a line and we'll respond as soon as possbile.</v-card-subtitle>
+
                 <v-card-text>
                     <v-container fluid>
                         <v-row class="mx-lg-2">
@@ -20,6 +23,38 @@
                             <v-card-actions>
                                 <v-btn text @click="clickSubmit" :loading="submitting">Submit</v-btn>
                             </v-card-actions>
+                        </v-row>
+
+                        <v-spacer/>
+
+                        <v-row justify="center">
+                            <v-btn
+                                icon
+                                width="30"
+                                class="my-6 mx-2"
+                                href="https://www.facebook.com/flowrolled"
+                                target="_blank"
+                            >
+                                <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/fb.png" />
+                            </v-btn>
+                            <v-btn
+                                icon
+                                width="30"
+                                class="my-6 mx-2"
+                                href="https://www.instagram.com/flowr0lled/"
+                                target="_blank"
+                            >
+                                <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/insta.png" />
+                            </v-btn>
+                            <v-btn
+                                icon
+                                width="30"
+                                class="my-6 mx-2"
+                                href="https://twitter.com/flowrolled"
+                                target="_blank"
+                            >
+                                <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/tw.png" />
+                            </v-btn>
                         </v-row>
                     </v-container>
                 </v-card-text>

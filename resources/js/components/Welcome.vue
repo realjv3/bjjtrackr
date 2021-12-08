@@ -47,6 +47,39 @@
                                         type="submit"
                                     >Login</v-btn>
                                 </v-card-actions>
+
+                                <v-spacer/>
+
+                                <v-row justify="center">
+                                    <v-btn
+                                        icon
+                                        width="30"
+                                        class="my-6 mx-2"
+                                        href="https://www.facebook.com/flowrolled"
+                                        target="_blank"
+                                    >
+                                        <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/fb.png" />
+                                    </v-btn>
+                                    <v-btn
+                                        icon
+                                        width="30"
+                                        class="my-6 mx-2"
+                                        href="https://www.instagram.com/flowr0lled/"
+                                        target="_blank"
+                                    >
+                                        <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/insta.png" />
+                                    </v-btn>
+                                    <v-btn
+                                        icon
+                                        width="30"
+                                        class="my-6 mx-2"
+                                        href="https://twitter.com/flowrolled"
+                                        target="_blank"
+                                    >
+                                        <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/tw.png" />
+                                    </v-btn>
+                                </v-row>
+
                             </v-card>
                         </v-form>
                     </v-col>
