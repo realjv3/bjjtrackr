@@ -31,6 +31,7 @@ class RegisterController extends Controller
             'person.id' => Rule::requiredIf(! empty($request->client['id'])),
             'person.name' => 'required',
             'person.email' => 'required|email',
+            'person.phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
             'person.rank.belt_id' => 'required|numeric',
             'person.rank.stripes' => 'required|numeric',
             'person.start_date' => 'nullable|date',

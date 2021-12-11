@@ -77,7 +77,7 @@ class AuthServiceProvider extends ServiceProvider
 
             $client = $user->client;
 
-            if (empty($client->subscription) || $client->subscription->status != 'active') {
+            if (empty($client->subscription) || ! in_array($client->subscription->status, ['active', 'trialing'])) {
                 return false;
             }
 

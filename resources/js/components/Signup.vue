@@ -25,7 +25,7 @@
                 <v-stepper-items>
                     <v-stepper-content step="1">
                         <v-row class="ma-lg-16 pa-lg-16">
-                            <v-card class="ma-lg-16 pa-lg-16">
+                            <v-card>
                                 <v-card-title class="grey darken-2 mb-4">
                                     <v-img src="https://flowrolled.nyc3.digitaloceanspaces.com/public/High%20Resolution%20Logo.png"/>
                                 </v-card-title>
@@ -106,7 +106,7 @@
                                             <p class="text-center mt-5 mx-auto">
                                                 <v-icon class="text-h1" color="secondary">mdi-currency-usd</v-icon>
                                             </p>
-                                            <p class="text-center ma-16">Pay only for what you use. The price is $3 per active student per month. Cancel anytime.</p>
+                                            <p class="text-center ma-16">Pay only for what you use. The price is $1.50 per active student per month. Free 30 day trial, no contracts, cancel anytime.</p>
                                         </v-carousel-item>
                                     </v-carousel>
 
@@ -140,24 +140,36 @@
                             </div>
 
                             <v-row class="mx-lg-2">
-                                <v-col cols="6">
+                                <v-col cols="4">
                                     <v-text-field
                                         v-model="person.name"
                                         :error-messages="errors['person.name']"
-                                        placeholder="required"
                                         label="Name"
                                         :disabled="saving"
+                                        required
+                                    />
+                                </v-col>
+
+                                <v-col cols="4">
+                                    <v-text-field
+                                        v-model="person.email"
+                                        :error-messages="errors['person.email']"
+                                        :rules="emailRules"
+                                        type="email"
+                                        label="Email"
+                                        :disabled="saving"
+                                        required
                                     />
                                 </v-col>
 
                                 <v-col>
                                     <v-text-field
-                                        v-model="person.email"
-                                        :error-messages="errors['person.email']"
-                                        type="email"
-                                        placeholder="required"
-                                        label="Email"
-                                        :disabled="saving"
+                                        v-model="person.phone"
+                                        :error-messages="errors['person.phone']"
+                                        type="tel"
+                                        label="Phone"
+                                        :rules="phoneRules"
+                                        required
                                     />
                                 </v-col>
                             </v-row>
@@ -168,9 +180,9 @@
                                         v-model="person.password"
                                         :error-messages="errors['person.password']"
                                         type="password"
-                                        :placeholder="editing ? '••••••••' : 'required'"
                                         label="Password"
                                         :disabled="saving"
+                                        required
                                     />
                                 </v-col>
                                 <v-col cols="6">
@@ -178,9 +190,9 @@
                                         v-model="person.password_confirmation"
                                         :error-messages="errors['person.password_confirmation']"
                                         type="password"
-                                        :placeholder="editing ? '••••••••' : 'required'"
                                         label="Confirm Password"
                                         :disabled="saving"
+                                        required
                                     />
                                 </v-col>
                             </v-row>
@@ -235,15 +247,16 @@
                                     <v-text-field
                                         v-model="client.name"
                                         :error-messages="errors['client.name']"
-                                        placeholder="Academy name (required)"
+                                        label="Academy name"
                                         :disabled="saving"
+                                        required
                                     />
                                 </v-col>
 
                                 <v-col class="col-lg-5">
                                     <v-text-field
                                         v-model="client.affiliation"
-                                        placeholder="Affiliation"
+                                        label="Affiliation"
                                         :disabled="saving"
                                     />
                                 </v-col>
@@ -261,45 +274,47 @@
                                     />
                                 </v-col>
 
-                                <v-dialog v-model="show.pickStartDate" class="mx-lg-auto">
+                                <v-dialog v-model="show.pickStartDate" class="ma-lg-auto" width="300">
                                     <v-date-picker v-model="person.start_date" :disabled="saving"/>
                                 </v-dialog>
                             </v-row>
 
                             <v-row class="mx-lg-2">
                                 <v-col class="col-lg-6">
-                                    <v-text-field v-model="client.address1" placeholder="Address 1" :disabled="saving"/>
+                                    <v-text-field v-model="client.address1" label="Address 1" :disabled="saving"/>
                                 </v-col>
 
                                 <v-col class="col-lg-6">
-                                    <v-text-field v-model="client.address2" placeholder="Address 2" :disabled="saving"/>
+                                    <v-text-field v-model="client.address2" label="Address 2" :disabled="saving"/>
                                 </v-col>
                             </v-row>
 
                             <v-row class="mx-lg-2">
                                 <v-col class="col-lg-6">
-                                    <v-text-field v-model="client.city" placeholder="City" :disabled="saving" />
+                                    <v-text-field v-model="client.city" label="City" :disabled="saving" />
                                 </v-col>
 
                                 <v-col class="col-lg-4">
-                                    <v-text-field v-model="client.state" placeholder="State/Province" :disabled="saving"/>
+                                    <v-text-field v-model="client.state" label="State/Province" :disabled="saving"/>
                                 </v-col>
                             </v-row>
 
                             <v-row class="mx-lg-2">
                                 <v-col class="col-sm-4 col-lg-2">
-                                    <v-text-field v-model="client.zip" placeholder="Postal code" :disabled="saving"/>
+                                    <v-text-field v-model="client.zip" label="Postal code" :disabled="saving"/>
                                 </v-col>
 
                                 <v-col class="col-lg-5">
-                                    <v-text-field v-model="client.country" placeholder="Country" :disabled="saving"/>
+                                    <v-text-field v-model="client.country" label="Country" :disabled="saving"/>
                                 </v-col>
                             </v-row>
 
                             <v-row justify="end" class="mx-2">
                                 <v-card-actions>
                                     <v-btn text @click="step = 2" :loading="saving">Back</v-btn>
-                                    <v-btn color="primary" @click="savePersonClient" :loading="saving">Continue</v-btn>
+                                    <v-btn color="primary" @click="savePersonClient" :loading="saving" :disabled="saving">
+                                        Continue
+                                    </v-btn>
                                 </v-card-actions>
                             </v-row>
                         </v-card>
@@ -312,7 +327,7 @@
                             <v-row class="ma-6">
                                 <div class="text-body-1">
                                     Please input your card info.<br/>
-                                    After a 30 day free trial, the monthly subscription fee will be charged to the card. The price will be calculated as $3 per active student. Cancel anytime.
+                                    After a 30 day free trial, the monthly subscription fee will be charged to the card. The price will be calculated as $1.50 per active student. Cancel anytime.
                                 </div>
                             </v-row>
                             <v-row class="ma-6">
@@ -353,11 +368,13 @@ export default {
                 country: null,
             },
             card: null,
+            emailRules: [v => /.+@.+/.test(v) || 'E-mail must be valid'],
             errors: {},
             person: {
                 id: null,
                 name: null,
                 email: null,
+                phone: null,
                 rank: {
                     belt_id: 1,
                     stripes: 0,
@@ -367,6 +384,7 @@ export default {
                 password_confirmation: null,
                 start_date: null,
             },
+            phoneRules: [v => /^([0-9\s\-\+\(\)]*)$/.test(v) || 'Phone number must be valid'],
             saving: false,
             show: {
                 pickRankedDate: false,

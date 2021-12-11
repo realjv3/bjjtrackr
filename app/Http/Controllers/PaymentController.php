@@ -202,12 +202,12 @@ class PaymentController extends Controller
             $subscription = $this->stripe->subscriptions->retrieve($sub->subscription_id);
         } else {
             // Create the subscription
-            $isDev = config('app.env') != 'production';
-            $priceId = $isDev ? 'price_1HmJC7AdSpfz7pjgcTUb2tkl' : 'price_1J6DTtAdSpfz7pjgUAtQmS6R';
+            $priceId = config('services.stripe.price_id');
             $subscription = $this->stripe->subscriptions->create([
                 'customer' => $request->custId,
                 'items' => [['price' => $priceId]],
                 'expand' => ['latest_invoice.payment_intent'],
+                'trial_period_days' => 30,
             ]);
             $sub->subscription_id = $subscription->id;
             $sub->item_id = $subscription->items->data[0]->id;
@@ -215,8 +215,11 @@ class PaymentController extends Controller
             $sub->price_id = $subscription->items->data[0]->price->id;
             $sub->status = $subscription->status;
             $sub->save();
-            Mail::send('emails.welcome', [], function($message) {
-                $message->to(Auth::user()->email);
+
+            $isDev = config('app.env') != 'production';
+            $to = $isDev ? config('mail.from.address') : Auth::user()->email;
+            Mail::send('emails.welcome', [], function($message) use ($to) {
+                $message->to($to);
                 $message->bcc(config('mail.from.address'));
                 $message->subject('Welcome to FlowRolled');
             });

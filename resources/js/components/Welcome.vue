@@ -32,13 +32,14 @@
                                     />
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-col cols="3">
-                                        <a href="/signup">Sign up</a>
+                                    <v-col cols="4">
+                                        <a href="/signup">Start free trial</a>
                                     </v-col>
+
                                     <v-col>
                                         <a href="/send-reset">Forgot Password</a>
                                     </v-col>
-                                    <v-spacer />
+
                                     <v-btn
                                         :loading="loading"
                                         :disabled="loading"

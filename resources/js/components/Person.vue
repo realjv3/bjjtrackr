@@ -9,18 +9,19 @@
                             <v-text-field
                                 v-model="person.name"
                                 :error-messages="error.name"
-                                placeholder="required"
                                 label="Name"
+                                required
                             />
                         </v-col>
 
                         <v-col cols="4">
                             <v-text-field
                                 v-model="person.email"
+                                :rules="emailRules"
                                 :error-messages="error.email"
                                 type="email"
-                                placeholder="required"
                                 label="Email"
+                                required
                             />
                         </v-col>
 
@@ -29,8 +30,9 @@
                                 v-model="person.phone"
                                 :error-messages="error.phone"
                                 type="tel"
-                                placeholder="required"
                                 label="Phone"
+                                :rules="phoneRules"
+                                required
                             />
                         </v-col>
                     </v-row>
@@ -70,6 +72,7 @@
                                 label="Belt"
                                 value="White"
                                 :error-messages="error.belt_id"
+                                required
                             />
                         </v-col>
                         <v-col cols="2">
@@ -79,6 +82,7 @@
                                 label="Stripes"
                                 value="0"
                                 :error-messages="error.stripes"
+                                required
                             />
                         </v-col>
                         <v-col cols="4">
@@ -110,6 +114,7 @@
                                 label="Roles"
                                 :error-messages="error.roles"
                                 multiple
+                                required
                             />
                         </v-col>
                     </v-row>
@@ -124,7 +129,7 @@
                             />
                         </v-col>
                         <v-col>
-                            <v-checkbox v-model="person.active" label="Active" />
+                            <v-checkbox v-model="person.active" label="Active" required />
                         </v-col>
                     </v-row>
                     <v-row class="mx-2">
@@ -181,6 +186,7 @@
                     start_date: null,
                     active: true,
                 },
+                emailRules: [v => /.+@.+/.test(v) || 'E-mail must be valid'],
                 error: {
                     name: null,
                     email: null,
@@ -198,6 +204,7 @@
                 show: false,
                 pickRankedDate: false,
                 pickStartDate: false,
+                phoneRules: [v => /^([0-9\s\-\+\(\)]*)$/.test(v) || 'Phone number must be valid'],
             };
         },
         computed: {
@@ -258,6 +265,7 @@
                 this.error = {
                     name: null,
                     email: null,
+                    phone: null,
                     password: null,
                     password_confirmation: null,
                     roles: null,
