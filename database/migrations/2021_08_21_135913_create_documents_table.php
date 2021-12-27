@@ -22,7 +22,6 @@ class CreateDocumentsTable extends Migration
             $table->string('template_id')->nullable();
             $table->string('status')->default('processing');
             $table->string('contract_id')->nullable();
-            $table->text('contract_pdf_url')->nullable();
             $table->timestamps();
         });
 

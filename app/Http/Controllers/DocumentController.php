@@ -21,17 +21,29 @@ class DocumentController extends Controller
         if (Gate::allows('isAdmin') || Gate::allows('isSuperAdmin')) {
 
             // get all for client
-            return Document::with(['user'])->where('client_id', $clientId)->get();
+            $documents = Document::with(['user'])->where('client_id', $clientId)->get();
 
         } else {
             // get all for user
 
             $user = Auth::user();
 
-            return Document::with(['user'])
+            $documents =  Document::with(['user'])
                 ->where(['client_id' => $clientId, 'user_id' => $user->id])
                 ->get();
         }
+
+        foreach($documents as $document) {
+            if ($document->status == 'signed') {
+                $response = Http::withBasicAuth(config('services.esignatures.token'), '')
+                    ->get("https://@esignatures.io/api/contracts/" . $document->contract_id, );
+                $json = $response->json();
+
+                $document->contract_pdf_url =  $json['data']['contract_pdf_url'];
+            }
+        }
+
+        return $documents;
     }
 
     public function downloadTemplate(Request $request,  int $clientId, int $documentId) {
@@ -47,7 +59,6 @@ class DocumentController extends Controller
         } else {
             return response()->json(['error' => 'Unauthorized.'], 401);
         }
-
     }
 
     public function create(Request $request) {
@@ -197,7 +208,6 @@ class DocumentController extends Controller
 
                 case 'contract-signed':
                     $contract->status = 'signed';
-                    $contract->contract_pdf_url = str_replace('\u0026', '&', $request->input('data.contract_pdf_url'));
                     break;
 
                 case 'signer-declined':
