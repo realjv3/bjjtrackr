@@ -109,4 +109,5 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('document', 'DocumentController@create');
     Route::put('document/{documentId}/{userId}', 'DocumentController@send');
     Route::delete('document/{clientId}/{documentId}', 'DocumentController@delete');
+    Route::get('document/contracturl/{contractId}', 'DocumentController@getDownloadUrl');
 });

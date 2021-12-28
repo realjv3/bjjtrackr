@@ -126,8 +126,8 @@
                         :search="docSearch"
                     >
                         <template v-slot:item.original_name="{ item }">
-                            <span v-if=" ! item.contract_pdf_url">{{item.original_name}}</span>
-                            <a v-else :href="item.contract_pdf_url" target="_blank">{{item.original_name}}</a>
+                            <span v-if="item.status !== 'signed'">{{item.original_name}}</span>
+                            <a v-else @click="getPdfUrl(item.contract_id)">{{item.original_name}}</a>
                         </template>
 
                     </v-data-table>
@@ -225,6 +225,11 @@ export default {
                     link.href = URL.createObjectURL(blob);
                     window.open(link,'_blank');
                 });
+        },
+        getPdfUrl(contractId) {
+            fetch(`document/contracturl/${contractId}`, {headers, credentials: "same-origin"})
+                .then(resp => resp.json())
+                .then(json => json.url && window.open(json.url,'_blank'));
         },
         async refresh() {
             this.loading = true;
