@@ -48,18 +48,6 @@ class Client extends Model
         return $this->hasMany('App\Models\Document');
     }
 
-    public function subscription() {
-        return $this->hasOne('App\Subscription');
-    }
-
-    public function settings() {
-        return $this->hasMany('App\Setting');
-    }
-
-    public function log() {
-        return $this->hasMany('App\Log');
-    }
-
     public function getFirstAdmin() {
 
         return $this->users()->whereHas('roles', function ($q) {
