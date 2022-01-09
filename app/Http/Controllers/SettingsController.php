@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Setting;
-use Illuminate\Support\Facades\Gate;
+use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SettingsController extends Controller
 {

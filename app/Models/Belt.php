@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,16 +10,16 @@ class Belt extends Model
 
     public function users() {
 
-        return $this->hasMany('App\User');
+        return $this->hasMany('App\Models\User');
     }
 
     public function settings() {
 
-        return $this->hasMany('App\Setting');
+        return $this->hasMany('App\Models\Setting');
     }
 
     public function ranks() {
 
-        return $this->hasMany('App\Rank');
+        return $this->hasMany('App\Models\Rank');
     }
 }

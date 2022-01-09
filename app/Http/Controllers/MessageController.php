@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Mail\EligibleForPromo;
 use App\Mail\Feedback;
-use App\Rank;
-use App\User;
+use App\Models\Rank;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;

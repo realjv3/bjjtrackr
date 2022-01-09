@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Client;
-use App\Rank;
-use App\Subscription;
-use App\User;
+use App\Models\Client;
+use App\Models\Rank;
+use App\Models\Subscription;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;

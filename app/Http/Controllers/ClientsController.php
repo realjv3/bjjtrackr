@@ -2,16 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Client;
-use App\Rank;
-use App\Setting;
-use App\User;
+use App\Models\Client;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class ClientsController extends Controller
 {

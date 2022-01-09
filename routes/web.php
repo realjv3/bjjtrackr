@@ -11,8 +11,9 @@
 |
 */
 
-use Illuminate\Support\Facades\Route;
+use App\Models\Log;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 
 /**
  * outside
@@ -98,7 +99,7 @@ Route::middleware(['auth:web'])->group(function () {
 
         if (Gate::allows('isSuperAdmin')) {
 
-            return \App\Log::all();
+            return Log::all();
         } else {
             return response()->json(['error' => 'Unauthorized.'], 401);
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,10 +18,10 @@ class Log extends Model
     protected $fillable = ['client_id', 'user_id', 'type', 'action'];
 
     public function clients() {
-        return $this->belongsTo('App\Client');
+        return $this->belongsTo('App\Models\Client');
     }
 
     public function users() {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 }

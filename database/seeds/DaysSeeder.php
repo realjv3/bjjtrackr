@@ -1,6 +1,6 @@
 <?php
 
-use App\Day;
+use App\Models\Day;
 use Illuminate\Database\Seeder;
 
 class DaysSeeder extends Seeder

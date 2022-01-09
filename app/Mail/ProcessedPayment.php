@@ -2,38 +2,24 @@
 
 namespace App\Mail;
 
-use App\Client;
+use App\Models\Client;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Stripe\Invoice;
-use Stripe\StripeClient;
 
 class ProcessedPayment extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
-     * @var \stdClass
-     */
-    protected $invoice;
-
-    /**
-     * @var Client
-     */
-    protected $client;
-
-    /**
      * Create a new message instance.
      *
-     * @param $invoice
-     * @param $client
+     * @param Invoice $invoice
+     * @param Client $client
      */
-    public function __construct(Invoice $invoice, Client $client)
+    public function __construct(protected Invoice $invoice, protected Client $client)
     {
-        $this->invoice = $invoice;
-        $this->client = $client;
     }
 
     /**
@@ -41,7 +27,7 @@ class ProcessedPayment extends Mailable
      *
      * @return $this
      */
-    public function build(StripeClient $stripeClient)
+    public function build()
     {
         $status = $this->invoice->status;
 

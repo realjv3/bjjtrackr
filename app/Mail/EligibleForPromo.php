@@ -2,10 +2,9 @@
 
 namespace App\Mail;
 
-use App\Belt;
-use App\Rank;
+use App\Models\Belt;
+use App\Models\Rank;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 

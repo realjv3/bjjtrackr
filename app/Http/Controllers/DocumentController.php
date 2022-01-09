@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Client;
-use App\Document;
 use App\Mail\TemplateUploaded;
-use App\User;
+use App\Models\Client;
+use App\Models\Document;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;

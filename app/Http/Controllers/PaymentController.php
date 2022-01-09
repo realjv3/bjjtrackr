@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ProcessedPayment;
-use App\Subscription;
+use App\Models\Client;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -57,31 +58,6 @@ class PaymentController extends Controller
             ]);
             $subscription = new Subscription(['client_id' => $user->client->id, 'cust_id' => $customer->id]);
             $subscription->save();
-        }
-
-        return $customer;
-    }
-
-    /**
-     * Updates a Stripe customer
-     *
-     * @param Request $request
-     * @return \Stripe\Customer|string
-     * @throws \Stripe\Exception\ApiErrorException
-     */
-    public function updateCustomer(Request $request) {
-
-        if (Gate::denies('isAdmin')) {
-            http_response_code(401);
-            return 'Unauthorized';
-        }
-
-        $user = Auth::user();
-        $subscription = Subscription::where(['client_id' => $user->client->id])->first();
-
-        if ( ! empty($subscription) && ! empty($subscription->cust_id)) {
-
-            $customer = $this->stripe->customers->update($subscription->cust_id, ['email']);
         }
 
         return $customer;
@@ -232,6 +208,7 @@ class PaymentController extends Controller
      * Stripe webhook handler
      *
      * @param Request $request
+     * @param StripeClient $stripeClient
      */
     public function handle(Request $request, StripeClient $stripeClient) {
         $endpoint_secret = config('services.stripe.webhook_secret');

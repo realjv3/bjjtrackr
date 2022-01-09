@@ -1,6 +1,6 @@
 <?php
 
-use App\Belt;
+use App\Models\Belt;
 use Illuminate\Database\Seeder;
 
 class BeltsTableSeeder extends Seeder

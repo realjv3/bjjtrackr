@@ -2,7 +2,7 @@
 
 namespace App\Logger;
 
-use App\Log;
+use App\Models\Log;
 use Illuminate\Support\Facades\Auth;
 
 class Logger

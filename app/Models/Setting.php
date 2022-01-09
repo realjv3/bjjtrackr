@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,10 +15,10 @@ class Setting extends Model
     ];
 
     public function client() {
-        return $this->belongsTo('App\Client');
+        return $this->belongsTo('App\Models\Client');
     }
 
     public function belt() {
-        return $this->belongsTo('App\Belt');
+        return $this->belongsTo('App\Models\Belt');
     }
 }

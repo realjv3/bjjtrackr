@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Day;
-use App\Setting;
+use App\Models\Day;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Client;
 use App\Http\Controllers\Controller;
+use App\Models\Client;
+use App\Models\Rank;
+use App\Models\Setting;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
-use App\Rank;
-use App\Setting;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
