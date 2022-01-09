@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\Client;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -65,7 +64,7 @@ class ContactAbsent extends Command
                 return [$setting->belt_id => $setting->weeks_absent_til_contact];
             });
 
-            $owner = null;
+            $owner = $client->firstAdmin;
 
             foreach ($client->users as $user) {
 
@@ -84,15 +83,6 @@ class ContactAbsent extends Command
                     try {
                         Log::info("Emailing $user->name");
                         $this->info("Emailing $user->name");
-
-                        if (empty($owner)) {
-                            $owner = DB::table('users')
-                                ->join('clients', 'users.client_id', '=', 'clients.id')
-                                ->join('user_role', 'users.id', '=', 'user_role.user_id')
-                                ->select('users.*', 'clients.name as cname')
-                                ->where(['users.client_id' => $client->id, 'user_role.role_id' => 2, 'active' => true])
-                                ->first();
-                        }
                         $to = config('app.env') == 'development' ? config('mail.from.address') : $user;
                         Mail::to($to)
                             ->bcc(config('mail.from.address'))
