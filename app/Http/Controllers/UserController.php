@@ -117,7 +117,7 @@ class UserController extends Controller
 
             // if changing email for client's first admin, also change it on stripe
             $client = Client::find($user->client_id);
-            $firstAdmin = $client->getFirstAdmin();
+            $firstAdmin = $client->firstAdmin;
             if ($firstAdmin->id == $user->id) {
 
                 $subscription = Subscription::where('client_id', $user->client_id)->first();

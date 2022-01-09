@@ -48,10 +48,8 @@ class Client extends Model
         return $this->hasMany('App\Models\Document');
     }
 
-    public function getFirstAdmin() {
+    public function getFirstAdminAttribute() {
 
-        return $this->users()->whereHas('roles', function ($q) {
-            $q->where('role_id', 2);
-        })->first();
+        return $this->users()->whereHas('roles', fn($q) => $q->where('role_id', 2))->first();
     }
 }
