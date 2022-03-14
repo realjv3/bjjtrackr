@@ -55,7 +55,6 @@ class PricePeriodCount implements Rule, DataAwareRule
                 PricePeriod::DAY->value => $value <= 365,
                 PricePeriod::WEEK->value => $value <= 52,
                 PricePeriod::MONTH->value => $value <= 12,
-                PricePeriod::YEAR->value => $value === 1,
                 default => false,
             };
         }

@@ -98,7 +98,7 @@
                                                     label="Amount"
                                                     required
                                                     :rules="rules.price"
-                                                    :disabled="editing"
+                                                    :disabled="price.id && editing"
                                                 />
                                             </v-col>
 
@@ -115,20 +115,7 @@
                                             <v-col cols="3" class="pt-8">Bill every</v-col>
                                             <v-col cols="4">
                                                 <v-text-field
-                                                    v-if="price.period === 'year'"
-                                                    v-model="price.period_count"
-                                                    label="Interval"
-                                                    type="number"
-                                                    min="1"
-                                                    max="1"
-                                                    required
-                                                    :rules="rules.year"
-                                                    :error="errors[`prices.0.period_count`]"
-                                                    :error-messages="errors[`prices.0.period_count`]"
-                                                    :disabled="editing"
-                                                />
-                                                <v-text-field
-                                                    v-else-if="price.period === 'month'"
+                                                    v-if="price.period === 'month'"
                                                     v-model="price.period_count"
                                                     label="Interval"
                                                     type="number"
@@ -138,7 +125,7 @@
                                                     :rules="rules.month"
                                                     :error="errors[`prices.0.period_count`]"
                                                     :error-messages="errors[`prices.0.period_count`]"
-                                                    :disabled="editing"
+                                                    :disabled="price.id && editing"
                                                 />
                                                 <v-text-field
                                                     v-else-if="price.period === 'week'"
@@ -151,7 +138,7 @@
                                                     :rules="rules.week"
                                                     :error="errors[`prices.0.period_count`]"
                                                     :error-messages="errors[`prices.0.period_count`]"
-                                                    :disabled="editing"
+                                                    :disabled="price.id && editing"
                                                 />
                                                 <v-text-field
                                                     v-else-if="price.period === 'day'"
@@ -164,7 +151,7 @@
                                                     :rules="rules.day"
                                                     :error="errors[`prices.0.period_count`]"
                                                     :error-messages="errors[`prices.0.period_count`]"
-                                                    :disabled="editing"
+                                                    :disabled="price.id && editing"
                                                 />
                                             </v-col>
                                             <v-col cols="4">
@@ -175,7 +162,7 @@
                                                     required
                                                     :rules="rules.required"
                                                     @change="onBillingPeriodSelect"
-                                                    :disabled="editing"
+                                                    :disabled="price.id && editing"
                                                 />
                                             </v-col>
                                         </v-row>
@@ -192,7 +179,7 @@
                                             label="Amount"
                                             required
                                             :rules="rules.price"
-                                            :disabled="editing"
+                                            :disabled="price.id && editing"
                                         />
                                     </v-col>
 
@@ -209,20 +196,7 @@
                                     <v-col cols="3" class="pt-8">Bill every</v-col>
                                     <v-col cols="4">
                                         <v-text-field
-                                            v-if="price.period === 'year'"
-                                            v-model="price.period_count"
-                                            label="Interval"
-                                            type="number"
-                                            min="1"
-                                            max="1"
-                                            required
-                                            :rules="rules.year"
-                                            :error="errors[`prices.${i}.period_count`]"
-                                            :error-messages="errors[`prices.${i}.period_count`]"
-                                            :disabled="editing"
-                                        />
-                                        <v-text-field
-                                            v-else-if="price.period === 'month'"
+                                            v-if="price.period === 'month'"
                                             v-model="price.period_count"
                                             label="Interval"
                                             type="number"
@@ -232,7 +206,7 @@
                                             :rules="rules.month"
                                             :error="errors[`prices.${i}.period_count`]"
                                             :error-messages="errors[`prices.${i}.period_count`]"
-                                            :disabled="editing"
+                                            :disabled="price.id && editing"
                                         />
                                         <v-text-field
                                             v-else-if="price.period === 'week'"
@@ -245,7 +219,7 @@
                                             :rules="rules.week"
                                             :error="errors[`prices.${i}.period_count`]"
                                             :error-messages="errors[`prices.${i}.period_count`]"
-                                            :disabled="editing"
+                                            :disabled="price.id && editing"
                                         />
                                         <v-text-field
                                             v-else-if="price.period === 'day'"
@@ -258,7 +232,7 @@
                                             :rules="rules.day"
                                             :error="errors[`prices.${i}.period_count`]"
                                             :error-messages="errors[`prices.${i}.period_count`]"
-                                            :disabled="editing"
+                                            :disabled="price.id && editing"
                                         />
                                     </v-col>
                                     <v-col cols="4">
@@ -269,7 +243,7 @@
                                             required
                                             :rules="rules.required"
                                             @change="onBillingPeriodSelect"
-                                            :disabled="editing"
+                                            :disabled="price.id && editing"
                                         />
                                     </v-col>
                                 </v-row>
@@ -590,11 +564,9 @@ export default {
             {text: 'Days', value: 'day'},
             {text: 'Weeks', value: 'week'},
             {text: 'Months', value: 'month'},
-            {text: 'Year', value: 'year'},
         ],
         rules: {
             required: [v => !!v || 'Field is required'],
-            year: [v => v === 1 || 'Can not exceed a year.'],
             month: [v => v > 0 && v <= 12 || 'Can not exceed a year.'],
             week: [v => v > 0 && v <= 52 || 'Can not exceed a year.'],
             day: [v => v > 0 && v <= 365 || 'Can not exceed a year.'],
@@ -636,6 +608,9 @@ export default {
         students() {
             return this.$store.state.people.map(person => ({text: person.name, value: person.id}));
         },
+    },
+    created() {
+        this.refresh();
     },
     methods: {
         addMember() {
@@ -802,6 +777,7 @@ export default {
             ]).then(() => this.loading = false);
         },
         reset() {
+            this.refresh();
             this.show = {
                 memberModal: false,
                 membershipModal: false,
@@ -878,9 +854,6 @@ export default {
         },
         utcToLocal: utcDateTimeToLocal,
         utcToYMD: utcDateTimeToLocalYMD,
-    },
-    created() {
-        this.refresh();
     },
 }
 </script>

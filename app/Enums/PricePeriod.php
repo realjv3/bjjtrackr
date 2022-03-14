@@ -4,7 +4,6 @@ namespace App\Enums;
 
 enum PricePeriod: string
 {
-    case YEAR = 'year';
     case MONTH = 'month';
     case WEEK = 'week';
     case DAY = 'day';
