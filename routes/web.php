@@ -24,6 +24,7 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::view('privacy', 'privacy')->name('privacy');
 // stripe webhook endpoint
 Route::post('payments', 'PaymentController@handle')->name('payments');
+Route::post('members/payments', 'MemberController@handle')->name('payments.member');
 // esignatures.io webhook endpoint
 Route::post('document/signatures', 'DocumentController@handle');
 
@@ -111,4 +112,21 @@ Route::middleware(['auth:web'])->group(function () {
     Route::put('document/{documentId}/{userId}', 'DocumentController@send');
     Route::delete('document/{clientId}/{documentId}', 'DocumentController@delete');
     Route::get('document/contracturl/{contractId}', 'DocumentController@getDownloadUrl');
+
+    Route::post('stripeconnect/{client}', 'PaymentController@stripeConnect');
+    Route::get('stripeconnect/{client}/account', 'PaymentController@stripeConnectAccount');
+
+    Route::get('product/{client}', 'ProductController@read');
+    Route::post('product/{client}', 'ProductController@create');
+    Route::patch('product/{client}/{product}', 'ProductController@update');
+
+    Route::get('member/{client}', 'MemberController@read');
+    Route::get('member/payment_methods/{client}/{user}', 'MemberController@getPaymentMethods');
+    Route::post('member/customer/{client}/{user}', 'MemberController@findOrCreateCustomer');
+    Route::post('member/payment_method/{client}/{user}', 'MemberController@setDefaultPaymentMethod');
+    Route::post('member/{client}/{user}/{product}/{price}', 'MemberController@create');
+    Route::patch('member/{member}/{product}/{price}', 'MemberController@update');
+    Route::patch('member/{member}/product/{product}/pause', 'MemberController@pause');
+    Route::patch('member/{member}/product/{product}/resume', 'MemberController@resume');
+    Route::patch('member/{member}/product/{product}/cancel', 'MemberController@cancel');
 });

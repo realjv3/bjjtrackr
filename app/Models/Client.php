@@ -48,6 +48,18 @@ class Client extends Model
         return $this->hasMany('App\Models\Document');
     }
 
+    public function prices(): HasMany {
+        return $this->hasMany('App\Models\Price');
+    }
+
+    public function products(): HasMany {
+        return $this->hasMany('App\Models\Product');
+    }
+
+    public function members(): HasMany {
+        return $this->hasMany('App\Models\Member');
+    }
+
     public function getFirstAdminAttribute() {
 
         return $this->users()->whereHas('roles', fn($q) => $q->where('role_id', 2))->first();

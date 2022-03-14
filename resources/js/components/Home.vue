@@ -107,9 +107,11 @@
             <v-container v-else class="fill-height" fluid>
                 <v-row align="center" justify="center">
 
+                    <Clients v-if="isSuperAdmin(user) && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
+
                     <People v-show="( ! isStudentOnly(user)) && show === 'People'" ref="people" @edit-person="onEditPerson" />
 
-                    <Clients v-if="isSuperAdmin(user) && show === 'Clients'" ref="clients" @edit-client="onEditClient"/>
+                    <MembershipsPage v-show="(isSuperAdmin(user) || isAdmin(user)) && show === 'Memberships'" />
 
                     <Schedule v-show="show === 'Schedule'" ref="schedule" @edit-event="onEditEvent" />
 
@@ -216,11 +218,12 @@ import Event from 'components/Event';
 import Feedback from "components/Feedback";
 import store from "../store";
 import Documents from "./Documents";
+import MembershipsPage from "./MembershipsPage";
 
 export default {
     components: {
-        Documents, Client, Clients, Event, Help, People, Person, Checkins, Checkin, QRCodes, Reports, Schedule,
-        Settings, Feedback, Tour
+        Checkins, Client, Clients, Documents, Event, Help, MembershipsPage, People, Person, Checkin, QRCodes, Reports,
+        Schedule, Settings, Feedback, Tour
     },
     data: () => ({
         drawer: null,
@@ -354,6 +357,11 @@ export default {
                     {
                         icon: 'mdi-contacts',
                         text: 'People',
+                        allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user)
+                    },
+                    {
+                        icon: 'mdi-currency-usd',
+                        text: 'Memberships',
                         allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user)
                     },
                     {icon: 'mdi-calendar-month-outline', text: 'Schedule', allowed: true},

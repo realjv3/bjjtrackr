@@ -24,6 +24,8 @@ class CreateClientsTable extends Migration
             $table->string('zip')->nullable();
             $table->string('country')->nullable();
             $table->text('notes')->nullable();
+            $table->boolean('charges_enabled')->default(false);
+            $table->string('stripe_account', 25)->nullable()->comment('Connected Stripe product id');
             $table->timestamps();
         });
     }

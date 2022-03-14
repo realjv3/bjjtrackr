@@ -7,10 +7,10 @@ use App\Models\Client;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Stripe\Account;
 use Stripe\StripeClient;
 use Stripe\Webhook;
 
@@ -227,21 +227,17 @@ class PaymentController extends Controller
         $subscription->save();
 
         $client = $subscription->client;
-        $to = DB::table('users')
-            ->join('user_role', 'users.id', '=', 'user_role.user_id')
-            ->where(['users.client_id' => $subscription->client_id, 'user_role.role_id' => 2, 'active' => true])
-            ->first();
 
         switch ($event->type) {
             case 'invoice.paid':
                 Log::info("Payment succeeded for $client->name");
-                Mail::to($to)->bcc(config('mail.from.address'))
+                Mail::to($client->first_admin)->bcc(config('mail.from.address'))
                     ->send(new ProcessedPayment($invoice, $client) );
                 break;
             case 'invoice.payment_failed':
                 Log::error("Payment failed for $client->name");
-                Mail::send('emails.payment_failed', [], function($message) use ($to, $client) {
-                    $message->to($to->email);
+                Mail::send('emails.payment_failed', [], function($message) use ($client) {
+                    $message->to($client->first_admin);
                     $message->bcc(config('mail.from.address'));
                     $message->subject('Payment failed for ' . $client->name);
                 });
@@ -250,5 +246,77 @@ class PaymentController extends Controller
                 // Unhandled event type
                 Log::info('Stripe Webhook ' . $request->type . $event->all()->toJSON());
         }
+    }
+
+    /**
+     * Stripe Connect onboarding for client
+     *
+     * @param Request $request
+     * @param Client $client
+     * @param StripeClient $stripeClient
+     */
+    public function stripeConnect(Request $request, Client $client, StripeClient $stripeClient) {
+
+        if (Gate::denies('isAdmin') && Gate::denies('isSuperAdmin') ) {
+
+            return response()->json(['error' => 'Unauthorized.'], 401);
+        }
+
+        if (empty($client->stripe_account)) {
+
+            $account = $stripeClient->accounts->create([
+                'type' => 'standard',
+                'email' => $request->input('email'),
+            ]);
+
+            $client->stripe_account = $account->id;
+            $client->save();
+        }
+
+        $link = $stripeClient->accountLinks->create([
+            'account' => $client->stripe_account,
+            'refresh_url' => config('app.url') . 'stripeconnect/' . $client->id,
+            'return_url' => config('app.url'),
+            'type' => 'account_onboarding',
+        ]);
+
+
+        return ['url' => $link->url];
+    }
+
+    /**
+     * Gets connected Stripe account of a client
+     *
+     * @param Request $request
+     * @param Client $client
+     * @param StripeClient $stripeClient
+     */
+    public function stripeConnectAccount(Request $request, Client $client, StripeClient $stripeClient) {
+
+        if (Gate::denies('isAdmin') && Gate::denies('isSuperAdmin') ) {
+
+            return response()->json(['error' => 'Unauthorized.'], 401);
+        }
+
+        if (empty($client->stripe_account)) {
+
+            return response()->json(['error' => 'Stripe account not found.'], 404);
+        }
+
+        $stripeAccount = $stripeClient->accounts->retrieve($client->stripe_account, []);
+        $this->updateChargesEnabled($client, $stripeAccount);
+
+        return ['stripe_account' => $stripeAccount];
+    }
+
+    /**
+     * Sets Client->membership field
+     *
+     * @param Client $client
+     */
+    private function updateChargesEnabled(Client $client, Account $stripeAccount) {
+
+        $client->charges_enabled = $stripeAccount->charges_enabled;
+        $client->save();
     }
 }
