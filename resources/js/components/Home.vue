@@ -252,6 +252,7 @@ export default {
                     return await setTimeout(() => this.speedDial = true, 10);
                 },
                 qrNavItem = document.querySelector('#qrcodes'),
+                membershipsNavItem = document.querySelector('#memberships'),
                 documentsNavItem = document.querySelector('#documents'),
                 reportsNavItem = document.querySelector('#reports');
 
@@ -272,29 +273,41 @@ export default {
                     }, 10));
             } else if ((event.step === 3 && event.dir === 'next') || (event.step === 5 && event.dir === 'prev')) {
 
-                setTimeout(() => {
-                    this.drawer = true;
-                    reportsNavItem.style.background = '#363636';
-                    qrNavItem.style.background = '#666';
-                    qrNavItem.click();
-                }, 10);
+                this.drawer = true;
+                if (event.dir === 'prev') {
+                    membershipsNavItem.style.background = '#363636';
+                }
+                qrNavItem.style.background = '#666';
+                qrNavItem.click();
 
             } else if ((event.step === 4 && event.dir === 'next') || (event.step === 6 && event.dir === 'prev')) {
 
-                setTimeout(() => {
-                    this.drawer = true;
+                this.drawer = true;
+                if (event.dir === 'next') {
                     qrNavItem.style.background = '#363636';
-                    documentsNavItem.style.background = '#666';
-                    documentsNavItem.click();
-                }, 10);
+                } else {
+                    documentsNavItem.style.background = '#363636';
+                }
+                membershipsNavItem.style.background = '#666';
+                membershipsNavItem.click();
+
             } else if ((event.step === 5 && event.dir === 'next') || (event.step === 7 && event.dir === 'prev')) {
 
-                setTimeout(() => {
-                    this.drawer = true;
-                    documentsNavItem.style.background = '#363636';
-                    reportsNavItem.style.background = '#666';
-                    reportsNavItem.click();
-                }, 10);
+                this.drawer = true;
+                if (event.dir === 'next') {
+                    membershipsNavItem.style.background = '#363636';
+                } else {
+                    reportsNavItem.style.background = '#363636';
+                }
+                documentsNavItem.style.background = '#666';
+                documentsNavItem.click();
+
+            } else if ((event.step === 6 && event.dir === 'next') || (event.step === 8 && event.dir === 'prev')) {
+
+                this.drawer = true;
+                documentsNavItem.style.background = '#363636';
+                reportsNavItem.style.background = '#666';
+                reportsNavItem.click();
             }
         },
         isSuperAdmin,

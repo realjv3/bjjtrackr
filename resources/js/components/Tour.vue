@@ -45,6 +45,11 @@ export default {
                     content: `Or students can checkin via a QR code scan.`,
                 },
                 {
+                    target: '#memberships',
+                    header: {title: 'Membership Subscriptions'},
+                    content: `Create membership plans and subscribe your students to them.`,
+                },
+                {
                     target: '#documents',
                     header: {title: 'Sign Waivers'},
                     content: `Upload waivers and other documents and send them to students for signature.`,

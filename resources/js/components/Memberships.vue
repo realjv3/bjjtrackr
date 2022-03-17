@@ -318,7 +318,7 @@
                             small
                             class="mr-2"
                             @click="handlePauseMember(item)"
-                            :disabled="item.status === 'canceled'"
+                            :disabled="item.status === 'canceled' || ! item.subscription_id"
                         >
                             pause
                         </v-icon>
@@ -332,7 +332,7 @@
                             mdi-play
                         </v-icon>
 
-                        <v-icon v-else small @click="handleCancelMember(item)" :disabled="item.status === 'canceled'">
+                        <v-icon v-else small @click="handleCancelMember(item)" :disabled="item.status === 'canceled' || ! item.subscription_id">
                             stop
                         </v-icon>
                     </template>
