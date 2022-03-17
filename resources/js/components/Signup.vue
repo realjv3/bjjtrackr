@@ -39,7 +39,7 @@
 
                                     <h4 class="mb-lg-12">What FlowRolled can do for you:</h4>
 
-                                    <v-carousel show-arrows hide-delimiters>
+                                    <v-carousel height="" show-arrows hide-delimiters>
                                         <v-carousel-item key="1">
                                             <v-img class="mt-6 mx-lg-auto" src="https://flowrolled.nyc3.digitaloceanspaces.com/public/Page-Reports.png" width="1025" />
                                             <p class="text-center ma-8">See all of your members' time and attendance reports organized in one place.</p>
