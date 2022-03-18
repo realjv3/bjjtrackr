@@ -293,49 +293,52 @@ class MemberController extends Controller
 
         Log::info("Handling Stripe Connect webhook for $event->type");
 
-        $invoice = $event->data->object;
+        if ($event->data->object->object == 'invoice') {
 
-        $member = Member::where('subscription_id', $invoice->subscription)->first();
-        $stripeSub = $this->stripe->subscriptions->retrieve(
-            $member->subscription_id,
-            [],
-            ["stripe_account" => $member->client->stripe_account]
-        );
-        $member->status = $stripeSub->status;
-        $member->current_period_end = $stripeSub->current_period_end;
-        $member->save();
+            $invoice = $event->data->object;
 
-        $student = $member->user;
-        $isDev = config('app.env') != 'production';
-        $to = $isDev ? config('mail.from.address') : $student;
+            $member = Member::where('subscription_id', $invoice->subscription)->first();
+            $stripeSub = $this->stripe->subscriptions->retrieve(
+                $member->subscription_id,
+                [],
+                ["stripe_account" => $member->client->stripe_account]
+            );
+            $member->status = $stripeSub->status;
+            $member->current_period_end = $stripeSub->current_period_end;
+            $member->save();
 
-        switch ($event->type) {
-            case 'invoice.upcoming':
-                Log::info("{$student->client->name} - Payment upcoming for $student->name");
-                $message = Mail::to($to);
-                if ( ! $isDev) {
-                    $message->bcc($student->client->first_admin);
-                }
-                $message->send(new PaymentUpcomingStudent($invoice, $student));
-                break;
-            case 'invoice.paid':
-                Log::info("{$student->client->name} - Payment succeeded for $student->name");
-                $message = Mail::to($to);
-                if ( ! $isDev) {
-                    $message->bcc($student->client->first_admin);
-                }
-                $message->send(new PaymentProcessedStudent($invoice, $student));
-                break;
-            case 'invoice.payment_failed':
-                Log::error("{$student->client->name} - Payment failed for $student->name");
-                Mail::send('emails.payment_failed_student', [], function($message) use ($to, $isDev, $student, $invoice) {
-                    $message->from($student->client->firstAdmin);
-                    $message->to($to);
+            $student = $member->user;
+            $isDev = config('app.env') != 'production';
+            $to = $isDev ? config('mail.from.address') : $student;
+
+            switch ($event->type) {
+                case 'invoice.upcoming':
+                    Log::info("{$student->client->name} - Payment upcoming for $student->name");
+                    $message = Mail::to($to);
                     if ( ! $isDev) {
                         $message->bcc($student->client->first_admin);
                     }
-                    $message->subject('Payment to '. $student->client->name . ' failed');
-                });
+                    $message->send(new PaymentUpcomingStudent($invoice, $student));
+                    break;
+                case 'invoice.paid':
+                    Log::info("{$student->client->name} - Payment succeeded for $student->name");
+                    $message = Mail::to($to);
+                    if ( ! $isDev) {
+                        $message->bcc($student->client->first_admin);
+                    }
+                    $message->send(new PaymentProcessedStudent($invoice, $student));
+                    break;
+                case 'invoice.payment_failed':
+                    Log::error("{$student->client->name} - Payment failed for $student->name");
+                    Mail::send('emails.payment_failed_student', [], function($message) use ($to, $isDev, $student, $invoice) {
+                        $message->from($student->client->firstAdmin);
+                        $message->to($to);
+                        if ( ! $isDev) {
+                            $message->bcc($student->client->first_admin);
+                        }
+                        $message->subject('Payment to '. $student->client->name . ' failed');
+                    });
+            }
         }
     }
 
