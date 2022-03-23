@@ -756,7 +756,7 @@ export default {
                     .then(resp => resp.json())
                     .then(members => this.members = members.map(member => {
 
-                        if (member.cancel_at_period_end === 1) {
+                        if (member.cancel_at_period_end === 1 && member.status === 'active') {
 
                             member.status =  'cancels at period end';
 
