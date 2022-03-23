@@ -301,7 +301,9 @@ class MemberController extends Controller
                 $member = Member::where('subscription_id', $subscription->id)->first();
                 $member->current_period_end = $subscription->current_period_end;
                 $member->status = $subscription->status;
-                $member->pause_collection = $subscription->pause_collection;
+                $member->price_id = $subscription->items->data[0]->price->id;
+                $member->pause_collection = ! empty($subscription->pause_collection);
+                $member->resumes_at = $member->pause_collection ? $subscription->pause_collection->resumes_at : null;
                 $member->cancel_at_period_end = $subscription->cancel_at_period_end;
                 $member->save();
             }
