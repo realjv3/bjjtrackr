@@ -328,11 +328,17 @@
                             small
                             class="mr-2"
                             @click="handleResumeMember(item)"
+                            :disabled="item.status === 'canceled' || ! item.subscription_id"
                         >
                             mdi-play
                         </v-icon>
 
-                        <v-icon v-else small @click="handleCancelMember(item)" :disabled="item.status === 'canceled' || ! item.subscription_id">
+                        <v-icon
+                            v-else
+                            small
+                            @click="handleCancelMember(item)"
+                            :disabled="item.status === 'canceled' || ! item.subscription_id"
+                        >
                             stop
                         </v-icon>
                     </template>
@@ -760,7 +766,7 @@ export default {
 
                             member.status =  'cancels at period end';
 
-                        } else if (member.pause_collection === 1) {
+                        } else if (member.pause_collection === 1 && member.status === 'active') {
 
                             member.status = 'paused';
 
