@@ -52,7 +52,6 @@ Route::middleware(['auth:web'])->group(function () {
      * Pages
      */
     Route::view('tos', 'tos')->name('ToS');
-    Route::get('paymentmethod', 'HomeController@paymentMethod') ->name('payment_method');
     Route::get('dashboard', 'HomeController@index')->middleware('logged_in');
 
     /**
@@ -89,12 +88,6 @@ Route::middleware(['auth:web'])->group(function () {
 
     Route::post('/feedback/', 'MessageController@feedback');
     Route::get('/eligible/{userId}', 'MessageController@eligibleForPromo');
-
-    Route::get('/customer', 'PaymentController@findOrCreateCustomer');
-    Route::get('/payment_methods', 'PaymentController@getPaymentMethods');
-    Route::post('/payment_method', 'PaymentController@setDefaultPaymentMethod');
-    Route::delete('payment_method/{id}', 'PaymentController@deletePaymentMethod');
-    Route::post('/subscription', 'PaymentController@upsertSubscription');
 
     Route::get('/log', function () {
 

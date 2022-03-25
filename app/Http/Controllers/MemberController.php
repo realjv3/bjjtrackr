@@ -181,6 +181,7 @@ class MemberController extends Controller
             'customer' => $customer->id,
             'items' => [['price' => $price->id]],
             'expand' => ['latest_invoice.payment_intent'],
+            'application_fee_percent' => 2,
             'trial_period_days' => $request->input('trial_period_days'),
         ], ["stripe_account" => $client->stripe_account]);
 

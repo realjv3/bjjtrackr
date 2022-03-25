@@ -72,22 +72,5 @@ class AuthServiceProvider extends ServiceProvider
 
             return Gate::denies('isSuperAdmin') && Gate::denies('isAdmin') && Gate::denies('isInstructor');
         });
-
-        Gate::define('subscriptionActive', function ($user) use ($stripe) {
-
-            $client = $user->client;
-
-            if (empty($client->subscription) || ! in_array($client->subscription->status, ['active', 'trialing'])) {
-                return false;
-            }
-
-            $paymentMethods = $stripe->paymentMethods->all(['customer' => $client->subscription->cust_id, 'type' => 'card']);
-
-            if ($paymentMethods->isEmpty()) {
-                return false;
-            }
-
-            return true;
-        });
     }
 }

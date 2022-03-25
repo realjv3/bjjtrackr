@@ -54,19 +54,6 @@
                                 </v-btn>
                             </v-col>
                         </v-row>
-
-                        <template v-if="isAdmin(user)">
-                            <v-row class="my-5">
-                                <v-col>
-                                    <h3>Payment Info</h3>
-                                </v-col>
-                            </v-row>
-                            <v-row justify="center">
-                                <v-col cols="9">
-                                    <PaymentMethods />
-                                </v-col>
-                            </v-row>
-                        </template>
                     </v-container>
                 </v-card-text>
             </v-card>
@@ -80,13 +67,11 @@
 import {headers} from "../authorization";
 import {isAdmin} from "../authorization";
 import Fetches from "../fetches";
-import PaymentMethods from "components/PaymentMethods";
 
 const fetches = new Fetches();
 
 export default {
     name: "Settings",
-    components: {PaymentMethods},
     data: () => ({
         belt: 1,
         belts: [

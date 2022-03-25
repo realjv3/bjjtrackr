@@ -16,10 +16,6 @@
                     <v-divider></v-divider>
 
                     <v-stepper-step step="4" :complete="step > 4">Terms of Service</v-stepper-step>
-
-                    <v-divider></v-divider>
-
-                    <v-stepper-step step="5">Payment Method</v-stepper-step>
                 </v-stepper-header>
 
                 <v-stepper-items>
@@ -104,7 +100,7 @@
                                             <p class="text-center mt-5 mx-auto">
                                                 <v-icon class="text-h1" color="secondary">mdi-currency-usd</v-icon>
                                             </p>
-                                            <p class="text-center ma-16">Pay only for what you use. The price is $1.50 per active student per month. Free 30 day trial, no contracts, cancel anytime.</p>
+                                            <p class="text-center ma-16">Pay only for what you use. The price is 2% per active membership. No contracts, cancel anytime.</p>
                                         </v-carousel-item>
                                     </v-carousel>
 
@@ -318,23 +314,6 @@
                         </v-card>
 
                     </v-stepper-content>
-
-                    <v-stepper-content step="5">
-                        <v-card class="ma-lg-16" height="74vh">
-                            <v-card-title class="grey darken-2 mb-2">Payment Method</v-card-title>
-                            <v-row class="ma-6">
-                                <div class="text-body-1">
-                                    Please input your card info.<br/>
-                                    After a 30 day free trial, the monthly subscription fee will be charged to the card. The price will be calculated as $1.50 per active student. Cancel anytime.
-                                </div>
-                            </v-row>
-                            <v-row class="ma-6">
-                                <v-col cols="5">
-                                    <PaymentMethods @created-payment-method="redirectHome" />
-                                </v-col>
-                            </v-row>
-                        </v-card>
-                    </v-stepper-content>
                 </v-stepper-items>
             </v-stepper>
         </v-main>
@@ -344,7 +323,6 @@
 <script>
 
 import {headers} from "../authorization";
-import PaymentMethods from "components/PaymentMethods";
 import Fetches from "../fetches";
 import PrivacyPolicy from "components/PrivacyPolicy";
 
@@ -352,7 +330,7 @@ const fetches = new Fetches();
 
 export default {
     name: "Signup",
-    components: {PaymentMethods, PrivacyPolicy},
+    components: {PrivacyPolicy},
     data: function () {
         return {
             client: {
@@ -435,10 +413,6 @@ export default {
         },
     },
     created() {
-        if (window.location.pathname === '/paymentmethod') {
-            this.step = 5;
-        }
-
         if (this.user) {
             this.person = this.user;
             this.client = this.$store.state.clients.find(client => client.id === this.user.client_id);

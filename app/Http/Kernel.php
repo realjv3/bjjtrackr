@@ -40,7 +40,6 @@ class Kernel extends HttpKernel
         'logged_in' => [
             \App\Http\Middleware\IsActive::class,
             \App\Http\Middleware\TermsOfService::class,
-            \App\Http\Middleware\VerifyPaymentMethod::class,
         ],
 
         'api' => [
@@ -64,7 +63,6 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'isactive' => \App\Http\Middleware\IsActive::class,
-        'payment.method' => \App\Http\Middleware\VerifyPaymentMethod::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
@@ -90,6 +88,5 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\VerifyCsrfToken::class,
         \App\Http\Middleware\IsActive::class,
         \App\Http\Middleware\TermsOfService::class,
-        \App\Http\Middleware\VerifyPaymentMethod::class,
     ];
 }

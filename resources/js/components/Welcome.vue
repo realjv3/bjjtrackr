@@ -33,7 +33,7 @@
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-col cols="4">
-                                        <a href="/signup">Start free trial</a>
+                                        <a href="/signup">Sign up for free</a>
                                     </v-col>
 
                                     <v-col>
