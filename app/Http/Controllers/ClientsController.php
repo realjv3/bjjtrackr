@@ -13,11 +13,18 @@ class ClientsController extends Controller
     public function read() {
 
         if (Gate::allows('isSuperAdmin')) {
-            return Client::all();
+
+            $clients =  Client::all();
+
+            return $clients->map(function($client) {
+                $activeMembers = $client->members()->where('status', 'canceled')->where('pause_collection', 0)->count();
+                return [...$client->toArray(), 'activeMembers' => $activeMembers];
+            });
+
         } else {
             $user = Auth::user();
             $client = $user->client;
-            return Client::with(['users'])->where('id', $client->id)->get();
+            return [Client::find($client->id)];
         }
     }
 

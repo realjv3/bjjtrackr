@@ -46,12 +46,9 @@
             headers: [
                 { text: 'Name', align: 'left', value: 'name' },
                 { text: 'Affiliation', value: 'affiliation' },
-                { text: 'Address1', value: 'address1' },
-                { text: 'Address2', value: 'address2' },
+                { text: 'Active Members', value: 'activeMembers' },
                 { text: 'City', value: 'city' },
                 { text: 'State', value: 'state' },
-                { text: 'Postal Code', value: 'zip' },
-                { text: 'Country', value: 'country' },
                 { text: 'Actions', value: 'action', sortable: false },
             ],
             loading: false,

@@ -17,27 +17,14 @@ use Stripe\StripeClient;
 
 class UserController extends Controller
 {
-    public function read($client_id = null) {
+    public function read() {
 
-        if (Gate::allows('isSuperAdmin')) {
-            if ( ! empty($client_id)) {
-                return User::with(['rank.belt', 'roles', 'client', 'lastCheckin'])
-                    ->where('client_id', $client_id)
-                    ->orderBy('name')
-                    ->get();
-            } else {
-                return User::with(['rank.belt', 'roles', 'client', 'lastCheckin'])
-                    ->orderBy('name')
-                    ->get();
-            }
-        } else {
-            $user = Auth::user();
-            $clientId = $user->client_id;
-            return User::with(['rank.belt', 'client', 'roles', 'lastCheckin'])
-                ->where('client_id', $clientId)
-                ->orderBy('name')
-                ->get();
-        }
+        $user = Auth::user();
+        $clientId = $user->client_id;
+        return User::with(['rank.belt', 'roles', 'lastCheckin'])
+            ->where('client_id', $clientId)
+            ->orderBy('name')
+            ->get();
     }
 
     public function getLoggedInUser() {
