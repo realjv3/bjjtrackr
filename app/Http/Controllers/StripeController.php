@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Gate;
 use Stripe\Account;
 use Stripe\StripeClient;
 
-class PaymentController extends Controller
+class StripeController extends Controller
 {
     /**
      * PaymentController constructor.
@@ -56,11 +56,10 @@ class PaymentController extends Controller
     /**
      * Gets connected Stripe account of a client
      *
-     * @param Request $request
      * @param Client $client
      * @param StripeClient $stripeClient
      */
-    public function stripeConnectAccount(Request $request, Client $client) {
+    public function stripeConnectAccount(Client $client) {
 
         if (Gate::denies('isAdmin') && Gate::denies('isSuperAdmin') ) {
 

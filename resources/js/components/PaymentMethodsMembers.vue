@@ -65,6 +65,7 @@ let stripe;
  * Logic for payment method CRUD
  *
  * @emits cust-id
+ * @emits payment-id
  */
 export default {
     name: "PaymentMethodsMembers",
@@ -105,7 +106,7 @@ export default {
             this.loading = true;
             this.show.cardInputs = false;
             fetches.cancelFetches();
-            fetch(`member/payment_method/${this.client.id}/${this.member.user_id}`, {
+            fetch(`payment_method/${this.client.id}/${this.member.user_id}`, {
                 method: 'POST',
                 headers,
                 signal: fetches.getSignal(),
@@ -116,21 +117,23 @@ export default {
                     this.cards = json.data;
                     this.default_payment_method = json.default_payment_method;
                     this.loading = false;
+                    this.$emit('payment-method', !!this.default_payment_method);
                 });
         },
         clickDelCard(paymentMethodId) {
             if (confirm('Are you sure you want to delete this card?')) {
                 this.loading = true;
-                fetch(`member/payment_method/${paymentMethodId}`, {
+                fetch(`payment_method/${this.client.id}/${this.member.user_id}`, {
                     method: 'DELETE',
                     headers,
-                    credentials: "same-origin",
+                    body: JSON.stringify({paymentMethodId })
                 })
                     .then( resp => resp.json())
                     .then( json => {
                         this.cards = json.data;
                         this.default_payment_method = json.default_payment_method;
                         this.loading = false;
+                        this.$emit('payment-method', !!this.default_payment_method);
                     });
             }
         },
@@ -169,7 +172,6 @@ export default {
                     }
                     this.loading = false;
                     this.$emit('cust-id', json.customer.id);
-
                 });
         },
         getCardImg(brand) {
@@ -201,12 +203,13 @@ export default {
         },
         getPaymentMethods() {
             this.loading = true;
-            fetch(`member/payment_methods/${this.client.id}/${this.member.user_id}`, {headers})
+            fetch(`payment_methods/${this.client.id}/${this.member.user_id}`, {headers})
                 .then(resp => resp.json())
                 .then(json => {
                     this.cards = json.data;
                     this.default_payment_method = json.default_payment_method;
                     this.loading = false;
+                    this.$emit('payment-method', !!this.default_payment_method);
                 });
         },
         async showCardInputs() {

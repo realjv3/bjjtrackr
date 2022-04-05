@@ -23,8 +23,7 @@ Route::post('signup', 'Auth\RegisterController@signup');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::view('privacy', 'privacy')->name('privacy');
 // stripe webhook endpoint
-Route::post('payments', 'PaymentController@handle')->name('payments');
-Route::post('members/payments', 'MemberController@handle')->name('payments.member');
+Route::post('payments', 'MemberController@handle')->name('payments');
 // esignatures.io webhook endpoint
 Route::post('document/signatures', 'DocumentController@handle');
 
@@ -106,17 +105,19 @@ Route::middleware(['auth:web'])->group(function () {
     Route::delete('document/{clientId}/{documentId}', 'DocumentController@delete');
     Route::get('document/contracturl/{contractId}', 'DocumentController@getDownloadUrl');
 
-    Route::post('stripeconnect/{client}', 'PaymentController@stripeConnect');
-    Route::get('stripeconnect/{client}/account', 'PaymentController@stripeConnectAccount');
+    Route::post('stripeconnect/{client}', 'StripeController@stripeConnect');
+    Route::get('stripeconnect/{client}/account', 'StripeController@stripeConnectAccount');
 
     Route::get('product/{client}', 'ProductController@read');
     Route::post('product/{client}', 'ProductController@create');
     Route::patch('product/{client}/{product}', 'ProductController@update');
 
+    Route::get('payment_methods/{client}/{user}', 'PaymentMethodsController@getPaymentMethods');
+    Route::post('payment_method/{client}/{user}', 'PaymentMethodsController@setDefaultPaymentMethod');
+    Route::delete('payment_method/{client}/{user}', 'PaymentMethodsController@deletePaymentMethod');
+
     Route::get('member/{client}', 'MemberController@read');
-    Route::get('member/payment_methods/{client}/{user}', 'MemberController@getPaymentMethods');
     Route::post('member/customer/{client}/{user}', 'MemberController@findOrCreateCustomer');
-    Route::post('member/payment_method/{client}/{user}', 'MemberController@setDefaultPaymentMethod');
     Route::post('member/{client}/{user}/{product}/{price}', 'MemberController@create');
     Route::patch('member/{member}/{product}/{price}', 'MemberController@update');
     Route::patch('member/{member}/product/{product}/pause', 'MemberController@pause');

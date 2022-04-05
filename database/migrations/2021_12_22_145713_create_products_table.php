@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->string('id', 40)->primary()->comment('Matches Stripe product id');
             $table->unsignedBigInteger('client_id');
             $table->string('name');
-            $table->string('unit');
+            $table->string('unit')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

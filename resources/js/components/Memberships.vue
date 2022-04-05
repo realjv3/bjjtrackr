@@ -86,7 +86,7 @@
 
                                     <v-expansion-panel-header v-if="!price.amount">New Price</v-expansion-panel-header>
                                     <v-expansion-panel-header v-else>
-                                        ${{price.amount}} per {{membership.unit}} every {{price.period_count}} {{price.period}}s
+                                        ${{price.amount}} {{membership.unit ? `per ${membership.unit}` : ''}} every {{price.period_count}} {{price.period}}s
                                     </v-expansion-panel-header>
 
                                     <v-expansion-panel-content>
@@ -350,7 +350,7 @@
                     <v-card-title class="grey darken-2" v-text="`${editing ? 'Edit' : 'Add'} Membership`"/>
 
                     <v-container fluid>
-                        <v-form v-model="valid" ref="memberForm">
+                        <v-form v-model="valid">
 
                             <v-row class="mx-2">
                                 <v-col cols="8">
@@ -366,8 +366,12 @@
                             </v-row>
 
                             <v-row v-if="member.user_id" class="mx-2">
-
-                                <PaymentMethodsMembers :client="client" :member="member" @cust-id="setCustID"/>
+                                <PaymentMethodsMembers
+                                    :client="client"
+                                    :member="member"
+                                    @cust-id="setCustID"
+                                    @payment-method="setHasPaymentMethod"
+                                />
                             </v-row>
 
                             <v-row class="mx-2">
@@ -413,7 +417,12 @@
 
                             <v-row justify="end">
                                 <v-card-actions>
-                                    <v-btn text @click="handleSaveMember" :loading="loading" :disabled="!valid">Save</v-btn>
+                                    <v-btn
+                                        text
+                                        @click="handleSaveMember"
+                                        :loading="loading"
+                                        :disabled="!valid || !member.has_payment_method"
+                                    >Save</v-btn>
                                     <v-btn text color="primary" @click="reset">Cancel</v-btn>
                                 </v-card-actions>
                             </v-row>
@@ -510,7 +519,6 @@
 <script>
 import {headers} from '../authorization';
 import {utcDateTimeToLocal, utcDateTimeToLocalYMD} from "../datetime_converters";
-import Documents from "components/Documents";
 import PaymentMethodsMembers from "components/PaymentMethodsMembers";
 import Vue from "vue";
 import Fetches from "../fetches";
@@ -519,7 +527,7 @@ const fetches = new Fetches();
 
 function Membership() {
     this.name = null;
-    this.unit = 'Student';
+    this.unit = 'student';
     this.prices = [new Price()];
 }
 
@@ -533,6 +541,8 @@ function Price() {
 function Member() {
     this.id = null;
     this.user_id = null;
+    this.cust_id = null;
+    this.has_payment_method = false;
     this.membership_id = null;
     this.price_id = null;
     this.trial_period_days = 0;
@@ -543,7 +553,7 @@ function Member() {
 
 export default {
     name: "Memberships",
-    components: {Documents, PaymentMethodsMembers},
+    components: {PaymentMethodsMembers},
     data: () => ({
         editing: false,
         errors: {},
@@ -726,7 +736,8 @@ export default {
                 });
         },
         handleSaveMember() {
-            this.editing ? this.updateMember() : this.addMember()
+            (this.valid && this.member.has_payment_method)
+            && this.editing ? this.updateMember() : this.addMember();
         },
         handleSaveMembership() {
             this.editing ? this.updateMembership() : this.addMembership()
@@ -810,6 +821,12 @@ export default {
          */
         setCustID(custId) {
             this.member.cust_id = custId;
+        },
+        /**
+         * @param hasPaymentMethod {Boolean}
+         */
+        setHasPaymentMethod(hasPaymentMethod) {
+            this.member.has_payment_method = hasPaymentMethod;
         },
         updateMember() {
             this.loading = true;
