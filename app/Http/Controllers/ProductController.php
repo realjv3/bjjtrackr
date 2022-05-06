@@ -118,7 +118,23 @@ class ProductController extends Controller
     private function syncProducts(Client $client)
     {
         // Sync products with client's Stripe account
-        $products = $this->stripe->products->all(null, ["stripe_account" => $client->stripe_account]);
+        $params = ['limit' => 100];
+        $products = [];
+
+        do {
+            if (isset($productsResponse) && $productsResponse->has_more) {
+
+                $params['starting_after'] = $productsResponse->last()->id;
+            }
+
+            $productsResponse = $this->stripe->products->all(
+                $params,
+                ["stripe_account" => $client->stripe_account]
+            );
+            $products = [...$products, ...$productsResponse->data];
+
+        } while ($productsResponse->has_more);
+
         $deletedProducts = Product::where('client_id', $client->id)->get();
 
         // sync product models with Stripe products
@@ -153,7 +169,23 @@ class ProductController extends Controller
         }
 
         // Sync prices with client's Stripe account
-        $prices = $this->stripe->prices->all(null, ["stripe_account" => $client->stripe_account]);
+        $params = ['limit' => 5];
+        $prices = [];
+
+        do {
+            if (isset($pricesResponse) && $pricesResponse->has_more) {
+
+                $params['starting_after'] = $pricesResponse->last()->id;
+            }
+
+            $pricesResponse = $this->stripe->prices->all(
+                $params,
+                ["stripe_account" => $client->stripe_account]
+            );
+            $prices = [...$prices, ...$pricesResponse->data];
+
+        } while ($pricesResponse->has_more);
+
         $deletedPrices = Price::where('client_id', $client->id)->get();
 
         foreach ($prices as $price) {
