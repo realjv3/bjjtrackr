@@ -60,6 +60,10 @@ class Client extends Model
         return $this->hasMany('App\Models\Member');
     }
 
+    public function sales(): HasMany {
+        return $this->hasMany('App\Models\Sale');
+    }
+
     public function getFirstAdminAttribute() {
 
         return $this->users()->whereHas('roles', fn($q) => $q->where('role_id', 2))->first();

@@ -148,7 +148,7 @@ class MemberController extends Controller
             return response()->json(['error' => 'Unauthorized.'], 401);
         }
 
-        return Member::where('client_id', $client->id)->with(['user', 'price.product'])->get();
+        return Member::where('client_id', $client->id)->whereNotNull('subscription_id')->with(['user', 'price.product'])->get();
     }
 
     /**

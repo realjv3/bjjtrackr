@@ -33,7 +33,7 @@
                     <template v-slot:item.prices="{ item }">
                         <div class="d-flex flex-column">
                             <span v-for="price in item.prices" v-if="price.active">
-                                ${{ price.amount }} every {{price.period_count}} {{price.period}}{{price.period_count > 1 ? 's': ''}}
+                                {{ price.amount }} every {{price.period_count}} {{price.period}}{{price.period_count > 1 ? 's': ''}}
                             </span>
                         </div>
                     </template>
@@ -86,7 +86,7 @@
 
                                     <v-expansion-panel-header v-if="!price.amount">New Price</v-expansion-panel-header>
                                     <v-expansion-panel-header v-else>
-                                        ${{price.amount}} {{membership.unit ? `per ${membership.unit}` : ''}} every {{price.period_count}} {{price.period}}s
+                                        {{price.amount}} {{membership.unit ? `per ${membership.unit}` : ''}} every {{price.period_count}} {{price.period}}s
                                     </v-expansion-panel-header>
 
                                     <v-expansion-panel-content>
@@ -290,7 +290,7 @@
                 >
                     <template v-slot:item.price="{ item }">
                         <span v-if="item.price">
-                            ${{ item.price.amount }} every {{item.price.period_count}} {{item.price.period}}{{item.price.period_count > 1 ? 's': ''}}
+                            {{ item.price.amount }} every {{item.price.period_count}} {{item.price.period}}{{item.price.period_count > 1 ? 's': ''}}
                         </span>
                     </template>
 
@@ -521,9 +521,6 @@ import {headers} from '../authorization';
 import {utcDateTimeToLocal, utcDateTimeToLocalYMD} from "../datetime_converters";
 import PaymentMethodsMembers from "components/PaymentMethodsMembers";
 import Vue from "vue";
-import Fetches from "../fetches";
-
-const fetches = new Fetches();
 
 function Membership() {
     this.name = null;
@@ -554,6 +551,9 @@ function Member() {
 export default {
     name: "Memberships",
     components: {PaymentMethodsMembers},
+    props: {
+        memberships: {type: Array, required: true},
+    },
     data: () => ({
         editing: false,
         errors: {},
@@ -575,7 +575,6 @@ export default {
             { text: 'Active', value: 'active' },
             { text: 'Edit', value: 'action', sortable: false },
         ],
-        memberships: [],
         periods: [
             {text: 'Days', value: 'day'},
             {text: 'Weeks', value: 'week'},
@@ -587,12 +586,12 @@ export default {
             week: [v => v > 0 && v <= 52 || 'Can not exceed a year.'],
             day: [v => v > 0 && v <= 365 || 'Can not exceed a year.'],
             number: [v => /\d+/.test(v) || 'Number is required'],
-            price: [v => /^\d+(\.\d{1,2})?$/.test(v) || 'Price must be valid'],
+            price: [v => /^\$?\d+(\.\d{1,2})?$/.test(v) || 'Price must be valid'],
         },
         searchMembers: '',
         searchMemberships: '',
         show: {
-            cencelModal: false,
+            cancelModal: false,
             memberModal: false,
             membershipModal: false,
             pauseModal: false,
@@ -614,7 +613,7 @@ export default {
             return membership.prices
                 .filter(p => p.active)
                 .map(p => {
-                    const text = `$${p.amount} every ${p.period_count} ${p.period}${p.period_count > 1 ? 's': ''}`;
+                    const text = `${p.amount} every ${p.period_count} ${p.period}${p.period_count > 1 ? 's': ''}`;
                     return {text, value: p.id};
                 });
         },
@@ -765,9 +764,7 @@ export default {
             this.loading = true;
 
             Promise.all([
-                fetch(`/product/${this.client.id}`)
-                    .then(resp => resp.json())
-                    .then(json => this.memberships = json),
+                this.$store.dispatch('getProducts'),
 
                 fetch(`/member/${this.client.id}`)
                     .then(resp => resp.json())
@@ -787,15 +784,14 @@ export default {
                                 member.status += ' until ' + resumesAt.toLocaleDateString();
                             }
                         }
-
                         return member;
                     })),
-
             ]).then(() => this.loading = false);
         },
         reset() {
             this.refresh();
             this.show = {
+                cancelModal: false,
                 memberModal: false,
                 membershipModal: false,
                 pauseModal: false,

@@ -113,6 +113,8 @@
 
                     <MembershipsPage v-show="(isSuperAdmin(user) || isAdmin(user)) && show === 'Memberships'" />
 
+                    <SalesPage v-show="(isSuperAdmin(user) || isAdmin(user)) && show === 'Sales'" />
+
                     <Schedule v-show="show === 'Schedule'" ref="schedule" @edit-event="onEditEvent" />
 
                     <Checkins v-show="show === 'Check-ins'" ref="checkins" @edit-checkin="onEditCheckin" />
@@ -211,6 +213,7 @@ import Checkin from "components/Checkin";
 import Help from "components/Help";
 import QRCodes from "components/QRCodes";
 import Reports from "components/Reports";
+import SalesPage from "components/SalesPage";
 import Schedule from "components/Schedule";
 import Settings from "components/Settings";
 import Tour from 'components/Tour';
@@ -223,7 +226,7 @@ import MembershipsPage from "./MembershipsPage";
 export default {
     components: {
         Checkins, Client, Clients, Documents, Event, Help, MembershipsPage, People, Person, Checkin, QRCodes, Reports,
-        Schedule, Settings, Feedback, Tour
+        SalesPage, Schedule, Settings, Feedback, Tour
     },
     data: () => ({
         drawer: null,
@@ -365,6 +368,9 @@ export default {
             store.dispatch('getUser'),
         ])
             .then(() => {
+
+                store.dispatch('setStripe');
+
                 this.items = [
                     {icon: 'mdi-account-cash', text: 'Clients', allowed: this.isSuperAdmin(this.user)},
                     {
@@ -373,8 +379,13 @@ export default {
                         allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user)
                     },
                     {
-                        icon: 'mdi-currency-usd',
+                        icon: 'mdi-account-cash',
                         text: 'Memberships',
+                        allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user)
+                    },
+                    {
+                        icon: 'mdi-currency-usd',
+                        text: 'Sales',
                         allowed: this.isSuperAdmin(this.user) || this.isAdmin(this.user)
                     },
                     {icon: 'mdi-calendar-month-outline', text: 'Schedule', allowed: true},

@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Product extends Model
+class Sale extends Model
 {
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -20,41 +19,41 @@ class Product extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'unit', 'active'];
+    protected $fillable = ['status', 'payment_method'];
 
     /**
-     * Relationship to clients
+     * Relationship to client
      *
      * @return BelongsTo
      */
     public function client(): BelongsTo {
-
         return $this->belongsTo('App\Models\Client');
     }
 
     /**
-     * Relationship to prices
+     * Relationship to user
      *
-     * @return HasMany
+     * @return BelongsTo
      */
-    public function prices(): HasMany {
-
-        return $this->hasMany('App\Models\Price');
+    public function user(): BelongsTo {
+        return $this->belongsTo('App\Models\User');
     }
 
     /**
-     * Relationship to sales
+     * Relationship to products
      *
-     * @return HasMany
+     * @return BelongsTo
      */
-    public function sales(): HasMany {
-        return $this->hasMany('App\Models\Sale');
+    public function product(): BelongsTo {
+        return $this->belongsTo('App\Models\Product');
     }
 
     /**
-     * The relationships that should always be loaded.
+     * Relationship to price
      *
-     * @var array
+     * @return BelongsTo
      */
-    protected $with = ['prices'];
+    public function price(): BelongsTo {
+        return $this->belongsTo('App\Models\Price');
+    }
 }

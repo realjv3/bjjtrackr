@@ -1,11 +1,11 @@
 <template>
     <v-container fluid>
+
         <v-row align="center">
             <v-col style="min-width: 255px">
                 <template v-if="!show.cardInputs">
                     <v-col>
                         <v-btn
-                            v-model="show.cardInputs"
                             :disabled="loading"
                             :loading="loading"
                             color="pink"
@@ -27,6 +27,7 @@
                 </template>
             </v-col>
         </v-row>
+
         <v-list dense min-width="300">
             <v-list-item class="px-0" v-for="(card, i) in cards" :key="i">
                 <v-skeleton-loader type="list-item-avatar" v-if="loading" style="right: 17px; width: 300px"/>
@@ -55,17 +56,16 @@
 
 <script>
 import {headers} from "../authorization";
-import {loadStripe} from "@stripe/stripe-js";
 import Fetches from "../fetches";
+import Vue from "vue";
 
 const fetches = new Fetches();
-let stripe;
 
 /**
  * Logic for payment method CRUD
  *
  * @emits cust-id
- * @emits payment-id
+ * @emits payment-method - boolean
  */
 export default {
     name: "PaymentMethodsMembers",
@@ -112,13 +112,12 @@ export default {
                 signal: fetches.getSignal(),
                 body: JSON.stringify({ custId: this.member.cust_id, paymentMethodId }),
             })
-                .then( resp => resp.json())
-                .then( json => {
-                    this.cards = json.data;
-                    this.default_payment_method = json.default_payment_method;
-                    this.loading = false;
-                    this.$emit('payment-method', !!this.default_payment_method);
-                });
+                .then( resp => {
+                    if (resp.ok) {
+                        this.getPaymentMethods();
+                    }
+                })
+                .finally( () => this.loading = false);
         },
         clickDelCard(paymentMethodId) {
             if (confirm('Are you sure you want to delete this card?')) {
@@ -128,13 +127,12 @@ export default {
                     headers,
                     body: JSON.stringify({paymentMethodId })
                 })
-                    .then( resp => resp.json())
-                    .then( json => {
-                        this.cards = json.data;
-                        this.default_payment_method = json.default_payment_method;
-                        this.loading = false;
-                        this.$emit('payment-method', !!this.default_payment_method);
-                    });
+                    .then( resp => {
+                        if (resp.ok) {
+                            this.getPaymentMethods();
+                        }
+                    })
+                    .finally( () => this.loading = false);
             }
         },
         /**
@@ -145,15 +143,15 @@ export default {
          */
         createPaymentMethod(custId, stripeAccountId) {
             this.loading = true;
-            return stripe.createPaymentMethod({type: 'card', card: this.card})
+            return this.$store.state.stripe.createPaymentMethod({type: 'card', card: this.card})
                 .then( result => {
                     if (result.error) {
                         this.errors.card = result.error;
                     } else {
                         this.changeDefault(result.paymentMethod.id);
                     }
-                    this.loading = false;
-                });
+                })
+                .finally(() => this.loading = false);
         },
         findOrCreateStripeCustomer() {
             this.loading = true;
@@ -214,27 +212,29 @@ export default {
         },
         async showCardInputs() {
             this.show.cardInputs = true;
-            stripe = await loadStripe(STRIPE_PUB_KEY, {stripeAccount: this.stripeAccountId});
-            const
-                elements = stripe.elements(),
-                style = {
-                    base: {
-                        color: "#FFF",
-                        fontFamily: 'Roboto, sans-serif',
-                        fontSmoothing: "antialiased",
-                        fontSize: "16px",
-                        "::placeholder": {
-                            color: "#aab7c4"
-                        }
-                    },
-                    invalid: {
-                        color: "#ff5252",
-                        iconColor: "#ff5252"
-                    },
-                };
-            this.card = elements.create('card', {style});
-            this.card.mount('#card');
-            this.card.on('change', this.changeCard);
+            Vue.nextTick()
+                .then(() => {
+                    const
+                        elements = this.$store.state.stripe.elements(),
+                        style = {
+                            base: {
+                                color: "#FFF",
+                                fontFamily: 'Roboto, sans-serif',
+                                fontSmoothing: "antialiased",
+                                fontSize: "16px",
+                                "::placeholder": {
+                                    color: "#aab7c4"
+                                }
+                            },
+                            invalid: {
+                                color: "#ff5252",
+                                iconColor: "#ff5252"
+                            },
+                        };
+                    this.card = elements.create('card', {style});
+                    this.card.mount('#card');
+                    this.card.on('change', this.changeCard);
+                });
         },
     },
     created() {

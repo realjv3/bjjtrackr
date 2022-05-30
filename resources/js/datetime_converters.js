@@ -82,12 +82,28 @@ export function timeToLocale(time) {
 
 /**
  * Adds minutes to date, timezone agnostic
- * @param date {Date}
- * @param minutes {Number}
+ *
+ * @param {Date} date
+ * @param {Number} minutes
  *
  * @return {Date}
  */
 export function addMinutes(date, minutes) {
 
     return new Date(date.getTime() + minutes * 60000)
+}
+
+/**
+ * Converts unix timestamp to local datetime
+ *
+ * @param {string} unixTime
+ *
+ * @return {Date}
+ */
+export function unixToLocal(unixTime) {
+    // Create a new JavaScript Date object based on the timestamp
+    // multiplied by 1000 so that the argument is in milliseconds, not seconds
+    const date = new Date(unixTime * 1000);
+
+    return date.toLocaleString();
 }

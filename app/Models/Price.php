@@ -51,14 +51,23 @@ class Price extends Model
     }
 
     /**
+     * Relationship to sales
+     *
+     * @return HasMany
+     */
+    public function sales(): HasMany {
+        return $this->hasMany('App\Models\Sale');
+    }
+
+    /**
      * Gets the price's amount attribute
      *
      * @param $value
      *
-     * @return int|float
+     * @return string
      */
-    public function getAmountAttribute($value): int|float {
-        return $value / 100;
+    public function getAmountAttribute($value): string {
+        return '$' . number_format($value / 100, 2);
     }
 
     /**

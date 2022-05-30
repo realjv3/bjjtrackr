@@ -2,21 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\PaymentMethods;
 use App\Models\Client;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Stripe\StripeClient;
 
 class PaymentMethodsController extends Controller
 {
-    /**
-     * PaymentController constructor.
-     * @param StripeClient $stripe
-     */
-    public function __construct(private StripeClient $stripe) {}
-
     /**
      * Gets all the member's (Stripe customer) payment methods
      *
@@ -31,18 +25,7 @@ class PaymentMethodsController extends Controller
             return response()->json(['error' => 'Unauthorized.'], 401);
         }
 
-        $paymentMethods = collect();
-        $member = $user->members->first();
-        $defaultPaymentMethod = null;
-        if ( ! empty($member)) {
-            $custId = $member->cust_id;
-            $customer = $this->stripe->customers->retrieve($custId, null, ["stripe_account" => $client->stripe_account]);
-            $paymentMethods = $this->stripe->paymentMethods->all(
-                ['customer' => $custId, 'type' => 'card'],
-                ["stripe_account" => $client->stripe_account]
-            );
-            $defaultPaymentMethod = $customer->invoice_settings->default_payment_method;
-        }
+        list($paymentMethods, $defaultPaymentMethod) = PaymentMethods::getAllPaymentMethods($client, $user);
 
         return [
             ...$paymentMethods->toArray(),
@@ -56,7 +39,7 @@ class PaymentMethodsController extends Controller
      * @param Client $client
      * @param User $user
      *
-     * @return JsonResponse
+     * @return array|JsonResponse
      */
     public function setDefaultPaymentMethod(Request $request, Client $client, User $user) {
 
@@ -70,20 +53,11 @@ class PaymentMethodsController extends Controller
         ]);
 
         $custId = $request->custId;
+        $paymentMethodId = $request->paymentMethodId;
 
-        $payment_method = $this->stripe->paymentMethods->retrieve(
-            $request->paymentMethodId,
-            null,
-            ["stripe_account" => $client->stripe_account]
-        );
-        $payment_method->attach(['customer' => $custId], ["stripe_account" => $client->stripe_account]);
+        PaymentMethods::setDefault($client, $paymentMethodId, $custId);
 
-        // Set the default payment method on the customer
-        $this->stripe->customers->update($custId, [
-            'invoice_settings' => ['default_payment_method' => $request->paymentMethodId],
-        ], ["stripe_account" => $client->stripe_account]);
-
-        return $this->getPaymentMethods($client, $user);
+        return ['paymentMethodId' => $paymentMethodId];
     }
 
 
@@ -105,12 +79,10 @@ class PaymentMethodsController extends Controller
 
         $request->validate(['paymentMethodId' => 'string|required']);
 
-        $this->stripe->paymentMethods->detach(
-            $request->paymentMethodId,
-            [],
-            ["stripe_account" => $client->stripe_account]
-        );
+        $paymentMethodId = $request->paymentMethodId;
 
-        return ['paymentMethodId' => $request->paymentMethodId];
+        PaymentMethods::detach($client, $paymentMethodId);
+
+        return ['paymentMethodId' => $paymentMethodId];
     }
 }

@@ -37,19 +37,21 @@ class ProductController extends Controller
 
         $request->validate([
             'name' => 'string|required',
-            'unit' => 'string',
             'prices' => 'array|required|min:1',
             'prices.*.amount' => 'numeric|required',
             'prices.*.recurring' => 'boolean',
-            'prices.*.period' => [new Enum(PricePeriod::class), 'required_if:prices.*.recurring,true'],
-            'prices.*.period_count' => ['integer', 'required_if:prices.*.recurring,true', new PricePeriodCount()],
+            'prices.*.period' => ['exclude_if:prices.*.recurring,false', new Enum(PricePeriod::class)],
+            'prices.*.period_count' => ['exclude_if:prices.*.recurring,false', 'integer', new PricePeriodCount()],
         ]);
 
         try {
-            $productResponse = $this->stripe->products->create([
-                'name' => $request->input('name'),
-                'unit_label' => $request->input('unit'),
-            ], ["stripe_account" => $client->stripe_account]);
+            $productData = ['name' => $request->input('name')];
+
+            if ( ! empty($request->input('unit'))) {
+
+                $productData['unit_label'] = $request->input('unit');
+            }
+            $productResponse = $this->stripe->products->create($productData, ["stripe_account" => $client->stripe_account]);
 
             $product = new Product(['name' => $request->input('name'), 'unit' => $request->input('unit')]);
             $product->id = $productResponse->id;
@@ -62,7 +64,7 @@ class ProductController extends Controller
                     'product' => $product->id,
                     'unit_amount' => $newPrice['amount'] * 100,
                 ];
-                $isRecurring = $newPrice['recurring'] == true;
+                $isRecurring = isset($newPrice['recurring']) && $newPrice['recurring'] == true;
                 if ($isRecurring) {
                     $priceData['recurring'] = [
                         'interval' => $newPrice['period'],
@@ -169,7 +171,7 @@ class ProductController extends Controller
         }
 
         // Sync prices with client's Stripe account
-        $params = ['limit' => 5];
+        $params = ['limit' => 100];
         $prices = [];
 
         do {
@@ -249,15 +251,14 @@ class ProductController extends Controller
         $request->validate([
             'id' => 'string|required',
             'name' => 'string|required',
-            'unit' => 'string',
             'active' => 'boolean',
             'prices' => 'array|required|min:1',
             'prices.*.id' => 'string',
-            'prices.*.amount' => 'numeric|required',
+            'prices.*.amount' => 'required|regex:/\$?\d+(\.\d{1,2})?$/',
             'prices.*.product_id' => 'string',
             'prices.*.recurring' => 'boolean',
-            'prices.*.period' => [new Enum(PricePeriod::class), 'required_if:prices.*.recurring,true'],
-            'prices.*.period_count' => ['integer', 'required_if:prices.*.recurring,true', new PricePeriodCount()],
+            'prices.*.period' => ['exclude_if:prices.*.recurring,false', new Enum(PricePeriod::class)],
+            'prices.*.period_count' => ['exclude_if:prices.*.recurring,false', 'integer', new PricePeriodCount()],
             'prices.*.active' => 'boolean',
         ]);
 
@@ -274,14 +275,14 @@ class ProductController extends Controller
 
             foreach ($request->input('prices') as $editPrice) {
 
-                $isRecurring = $editPrice['recurring'] == true;
+                $isRecurring = isset($editPrice['recurring']) && $editPrice['recurring'] == true;
 
                 if (empty($editPrice['id'])) {
 
                     $priceData = [
                         'currency' => 'usd',
                         'product' => $product->id,
-                        'unit_amount' => $editPrice['amount'] * 100,
+                        'unit_amount' => (float) $editPrice['amount'] * 100,
                         'active' => $editPrice['active'] ?? true,
                     ];
                     if ($isRecurring) {
