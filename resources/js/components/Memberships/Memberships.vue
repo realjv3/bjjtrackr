@@ -517,8 +517,8 @@
 </template>
 
 <script>
-import {headers} from '../authorization';
-import {utcDateTimeToLocal, utcDateTimeToLocalYMD} from "../datetime_converters";
+import {headers} from '../../authorization';
+import {utcDateTimeToLocal, utcDateTimeToLocalYMD} from "../../datetime_converters";
 import PaymentMethodsMembers from "components/PaymentMethodsMembers";
 import Vue from "vue";
 

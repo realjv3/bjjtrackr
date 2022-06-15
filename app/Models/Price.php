@@ -51,16 +51,7 @@ class Price extends Model
     }
 
     /**
-     * Relationship to sales
-     *
-     * @return HasMany
-     */
-    public function sales(): HasMany {
-        return $this->hasMany('App\Models\Sale');
-    }
-
-    /**
-     * Gets the price's amount attribute
+     * Gets the price's amount attribute prefixed with dollar sign & having decimal places
      *
      * @param $value
      *

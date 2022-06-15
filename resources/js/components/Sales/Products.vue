@@ -158,7 +158,7 @@
 </template>
 <script>
 
-import {headers} from "../authorization";
+import {headers} from "../../authorization";
 
 function Product() {
     this.name = null;

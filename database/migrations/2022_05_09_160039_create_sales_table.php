@@ -17,17 +17,16 @@ class CreateSalesTable extends Migration
             $table->string('id', 40)->primary()->comment('Matches Stripe payment intent id');
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('product_id', 40);
-            $table->string('price_id', 40);
+            $table->json('metadata');
             $table->string('status', 40);
+            $table->unsignedBigInteger('total')->default(0);
             $table->string('payment_method', 40);
             $table->timestamps();
         });
 
         Schema::table('sales', function(Blueprint $table) {
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreign('price_id')->references('id')->on('prices')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -40,8 +39,7 @@ class CreateSalesTable extends Migration
     {
         Schema::table('sales', function(Blueprint $table) {
             $table->dropForeign('sales_client_id_foreign');
-            $table->dropForeign('sales_product_id_foreign');
-            $table->dropForeign('sales_price_id_foreign');
+            $table->dropForeign('sales_user_id_foreign');
         });
         Schema::dropIfExists('sales');
     }

@@ -24,31 +24,58 @@ class SalesController extends Controller
     /**
      * Creates a Stripe payment intent
      *
+     * @param Request $request
      * @param Client $client
-     * @param Price $price
      * @param string|null $cust_id - Stripe customer ID
      *
      * @return array|JsonResponse
      * @throws \Stripe\Exception\ApiErrorException
      */
-    public function createPaymentIntent(Client $client, Price $price, string $cust_id = null) {
+    public function createPaymentIntent(Request $request, Client $client, string $cust_id = null) {
 
-        if (
-            (Gate::denies('isAdmin') && Gate::denies('isSuperAdmin'))
-            || $price->client_id !== $client->id
-        ) {
+        // Authorize
+        if (Gate::denies('isAdmin') && Gate::denies('isSuperAdmin')) {
             return response()->json(['error' => 'Unauthorized.'], 401);
         }
 
-        $params = [
-            'amount' => (float) substr($price->amount, 1) * 100,
-            'currency' => 'usd',
-            'metadata' => ['product_id' => $price->product->id, 'product' => $price->product->name],
-            'automatic_payment_methods' => ['enabled' => true],
-        ];
         if ($cust_id !== null) {
 
             $member = Member::where('cust_id', $cust_id)->first();
+
+            if ($member->client_id != $client->id) {
+                return response()->json(['error' => 'Unauthorized.'], 401);
+            }
+        }
+
+        // Validate
+        $request->validate(['items' => 'required|array|min:1']);
+
+        // Calculate total
+        $items = [];
+        $total = 0;
+
+        foreach ($request->items as $item) {
+
+            $price = Price::find($item['price_id']);
+            $total += $price->getAttributes()['amount'] * (int) $item['count'];
+            $items[] = [
+                'count' => $item['count'],
+                'unit' => $price->product->unit,
+                'price' => $price->getAttributes()['amount'],
+                'price_id' => $price->id,
+                'product' => $price->product->name,
+                'product_id' => $price->product->id,
+            ];
+        }
+
+        // Set params for Stripe API createPaymentIntent request
+        $params = [
+            'amount' => $total,
+            'currency' => 'usd',
+            'metadata' => ['items' => json_encode($items)],
+            'automatic_payment_methods' => ['enabled' => true],
+        ];
+        if ($cust_id !== null && $member !== null) {
 
             $params['customer'] = $cust_id;
             $params['metadata']['cust_name'] = $member->user->name;
@@ -58,7 +85,7 @@ class SalesController extends Controller
         try {
             $intent =  $this->stripe->paymentIntents->create($params, ["stripe_account" => $client->stripe_account]);
 
-            return ['id' => $intent->id, 'clientSecret' => $intent->client_secret];
+            return ['success' => true, 'paymentIntent' => $intent];
 
         } catch (InvalidRequestException $exception) {
 
@@ -121,8 +148,8 @@ class SalesController extends Controller
         $sale = new Sale();
         $sale->id = $request->paymentIntent['id'];
         $sale->client()->associate($client->id);
-        $sale->product()->associate($request->sale['product_id']);
-        $sale->price()->associate($request->sale['price_id']);
+        $sale->metadata = json_encode(['items' => json_decode($request->paymentIntent['metadata']['items'])]);
+        $sale->total = $request->paymentIntent['amount'];
         $sale->status = $request->paymentIntent['status'];
 
         if (isset($request->sale['user_id'])) {
@@ -162,7 +189,7 @@ class SalesController extends Controller
             return response()->json(['error' => 'Unauthorized.'], 401);
         }
 
-        return Sale::where('client_id', $client->id)->with(['user', 'product', 'price'])->orderByDesc('created_at')->get();
+        return Sale::where('client_id', $client->id)->with(['user'])->orderByDesc('updated_at')->get();
     }
 
     /**`
@@ -188,15 +215,21 @@ class SalesController extends Controller
             'amount' => 'required|numeric',
         ]);
 
-        if ((float) $request->amount <= 0) {
+        $amount = (float) $request->amount * 100; // convert to cents
+
+        if ($amount <= 0) {
             return response()->json(['error' => 'Refund amount must be greater than zero.'], 400);
+        }
+
+        if ($amount > $sale->getAttributes()['total']) {
+            return response()->json(['error' => 'Refund amount must be less or equal to sale total.'], 400);
         }
 
         try {
             // create the refund
             $this->stripe->refunds->create(
-                ['payment_intent' => $sale->id],
-                ["stripe_account" => $client->stripe_account]
+                ['payment_intent' => $sale->id, 'amount' => $amount],
+                ['stripe_account' => $client->stripe_account]
             );
 
             // update the sale in DB

@@ -43,15 +43,6 @@ class Product extends Model
     }
 
     /**
-     * Relationship to sales
-     *
-     * @return HasMany
-     */
-    public function sales(): HasMany {
-        return $this->hasMany('App\Models\Sale');
-    }
-
-    /**
      * The relationships that should always be loaded.
      *
      * @var array

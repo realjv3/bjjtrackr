@@ -11,15 +11,15 @@
 </template>
 
 <script>
-import Products from "components/Products";
-import Sales from "components/Sales";
+import Products from "components/Sales/Products";
+import Sales from "components/Sales/Sales";
 
 export default {
     name: "ProductSales",
     components: {Sales, Products},
     computed: {
         products() {
-            return this.$store.state.products.filter(product => !product.prices[0].recurring);
+            return this.$store.state.products.filter(product => product.active && !product.prices[0].recurring);
         },
     },
 }

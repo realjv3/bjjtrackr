@@ -26,6 +26,10 @@
                 :loading="loading"
                 :search="searchSales"
             >
+                <template v-slot:item.metadata="{ item }">
+                    <a @click="setSoldItems(item.id)">Items</a>
+                </template>
+
                 <template v-slot:item.created_at="{ item }">
                     {{ utcDateTimeToLocal(item.created_at) }}
                 </template>
@@ -38,7 +42,25 @@
             </v-data-table>
         </v-card>
 
-        <v-dialog v-model="show.saleModal" :persistent="true" max-width="400">
+        <v-dialog v-model="show.itemsModal" :persistent="true" max-width="600">
+            <v-card>
+                <v-card-title class="grey darken-2">Items</v-card-title>
+
+                <v-container fluid>
+
+                    <Items :items="soldItems"/>
+
+                    <v-row justify="end">
+                        <v-card-actions>
+                            <v-btn text color="primary" @click="closeItemsModal">Close</v-btn>
+                        </v-card-actions>
+                    </v-row>
+
+                </v-container>
+            </v-card>
+        </v-dialog>
+
+        <v-dialog v-model="show.saleModal" :persistent="true" max-width="500">
             <v-card>
                 <v-card-title class="grey darken-2">Make Sale</v-card-title>
 
@@ -48,42 +70,59 @@
 
                     <v-form v-model="valid">
 
-                        <v-row class="mx-2">
-                            <v-col cols="8">
-                                <v-select
-                                    label="Product"
-                                    v-model="sale.product_id"
-                                    :items="productOptions"
-                                    required
-                                    :rules="rules.required"
-                                    @change="resetBuyer"
-                                />
-                            </v-col>
-                        </v-row>
+                        <v-row v-for="(item, i) in sale.items" class="mx-2 mt-2" :key="i">
 
-                        <div v-if="sale.product_id">
                             <v-row class="mx-2">
+
+                                <v-col cols="2">
+                                    <v-text-field
+                                        label="Count"
+                                        type="number"
+                                        min="1"
+                                        step="1"
+                                        v-model="item.count"
+                                        :rules="rules.number"
+                                    />
+                                </v-col>
+
                                 <v-col cols="8">
                                     <v-select
-                                        label="Price"
-                                        v-model="sale.price_id"
-                                        :items="priceOptions"
+                                        label="Product"
+                                        v-model="item.price_id"
+                                        :items="productOptions"
                                         required
                                         :rules="rules.required"
                                     />
                                 </v-col>
-                            </v-row>
-                        </div>
 
-                        <v-row v-if="sale.price_id" class="mx-2">
+                                <v-col class="pt-10">
+                                    <v-icon small @click="sale.items.splice(i, 1)" title="Remove Item">delete</v-icon>
+                                </v-col>
+
+                            </v-row>
+
+                        </v-row>
+
+                        <v-btn x-small @click="addItem" class="ma-2">+Add item</v-btn>
+
+                        <v-row class="ma-5" v-if="sale.items.length">
+
+                            <div class="text-body-1">Total: ${{total}}</div>
+                        </v-row>
+
+                        <v-row v-if="sale.items.length" class="mx-5 mt-4">
+
                             <v-switch
                                 v-model="anonSale"
                                 :label="`Sell to ${anonSale ? 'non-' : ''}member`"
                                 color="secondary"
                                 @change="resetBuyer"
                             />
+                        </v-row>
 
-                            <v-col cols="8" v-if="!anonSale">
+                        <v-row v-if="sale.items.length && !anonSale" class="mx-2">
+
+                            <v-col cols="8">
                                 <v-select
                                     label="Member"
                                     v-model="sale.user_id"
@@ -104,7 +143,7 @@
                             />
                         </v-row>
 
-                        <v-row v-else-if="anonSale && sale.price_id" class="mx-2">
+                        <v-row v-else-if="anonSale && sale.items.length" class="mx-2">
 
                             <PaymentMethod
                                 :client="client"
@@ -132,7 +171,7 @@
             </v-card>
         </v-dialog>
 
-        <v-dialog v-model="show.refundModal" :persistent="true" max-width="400">
+        <v-dialog v-model="show.refundModal" :persistent="true" max-width="600">
             <v-card>
                 <v-card-title class="grey darken-2">Refund</v-card-title>
 
@@ -142,22 +181,20 @@
 
                         <span v-if="errors" class="red--text">{{errors}}</span>
 
-                        <v-row class="mx-2">
-                            <v-col>
-                                <v-text-field label="Product" v-model="refund.product.name" disabled />
-                            </v-col>
-                        </v-row>
+                        <Items :items="refund.metadata.items" />
+
+                        <hr class="my-12" />
 
                         <v-row class="mx-2">
                             <v-col cols="8">
-                                <v-text-field label="Amount" v-model="refund.price.amount" required :rules="rules.price"/>
+                                <v-text-field label="Amount" v-model="refund.amount" required :rules="rules.amount"/>
                             </v-col>
                         </v-row>
 
                         <v-row class="mx-2">
 
                             <v-col cols="8">
-                                <v-text-field label="Member" v-model="refund.payment_method" disabled />
+                                <v-text-field label="Payment Method" v-model="refund.payment_method" disabled />
                             </v-col>
                         </v-row>
 
@@ -183,27 +220,29 @@
 </template>
 
 <script>
-import {headers} from "../authorization";
-import {utcDateTimeToLocal} from "../datetime_converters";
+import {headers} from "../../authorization";
+import {utcDateTimeToLocal} from "../../datetime_converters";
 import PaymentMethod from "components/PaymentMethod"
 import PaymentMethodsMembers from "components/PaymentMethodsMembers"
+import Items from "components/Sales/Items";
+
+function Item() {
+    this.count = 1;
+    this.price_id = null;
+}
 
 function Sale() {
     this.id = null;
     this.user_id = null;
     this.cust_id = null;
     this.has_payment_method = false;
-    this.product_id = null;
-    this.price_id = null;
-    this.paymentIntent = {
-        id: null,
-        clientSecret: null,
-    };
+    this.items = [];
+    this.paymentIntent = null;
 }
 
 export default {
     name: 'Sales',
-    components: {PaymentMethod, PaymentMethodsMembers},
+    components: {Items, PaymentMethod, PaymentMethodsMembers},
     props: {
         products: {type: Array, required: true},
     },
@@ -211,18 +250,19 @@ export default {
         anonSale: false,
         errors: null,
         loading: false,
+        soldItems: [], // items in a completed sale, used for itemsModal
         refund: null,
         rules: {
             required: [v => !!v || 'Field is required'],
             number: [v => /\d+/.test(v) || 'Number is required'],
-            price: [v => /^\d+(\.\d{1,2})?$/.test(v) || 'Price must be valid'],
+            amount: [v => /^\d+(\.\d{1,2})?$/.test(v) || 'Price must be valid'],
         },
         salesHeaders: [
             { text: 'Date', align: 'left', value: 'created_at' },
             { text: 'Name', align: 'left', value: 'user.name' },
             { text: 'Payment Method', align: 'left', value: 'payment_method' },
-            { text: 'Product', align: 'left', value: 'product.name' },
-            { text: 'Price', value: 'price.amount'},
+            { text: 'Items', align: 'left', value: 'metadata' },
+            { text: 'Total', align: 'left', value: 'total' },
             { text: 'Status', value: 'status' },
             { text: 'Actions', value: 'action', sortable: false },
         ],
@@ -230,6 +270,7 @@ export default {
         sale: new Sale(),
         searchSales: '',
         show: {
+            itemsModal: false,
             refundModal: false,
             saleModal: false,
         },
@@ -240,24 +281,48 @@ export default {
             return this.$store.state.clients.find(client => client.id === this.user.client_id);
         },
         productOptions() {
-            return this.products
-                .filter(m => m.active)
-                .map(m => ({text: m.name, value: m.id}));
-        },
-        priceOptions() {
-            const product = this.products.find(m => m.id === this.sale.product_id);
-            return product.prices
-                .filter(p => p.active)
-                .map(p => ({text: `${p.amount}`, value: p.id}));
+
+            const productOptions = [];
+
+            this.products.forEach( product => {
+
+                product.prices.forEach( price => {
+
+                    productOptions.push({text: `${product.name} - ${price.amount}`, value: price.id});
+                });
+            });
+
+            return productOptions;
         },
         people() {
             return this.$store.state.people.map( person => ({text: person.name, value: person.id}));
+        },
+        total() {
+            let total = 0;
+
+            this.sale.items.forEach(item => {
+
+                this.products.forEach(product => {
+
+                    product.prices.forEach(price => {
+
+                        if (price.id === item.price_id) {
+                            total += item.count * Number(price.amount.slice(1));
+                        }
+                    });
+                });
+            });
+
+            return total.toFixed(2);
         },
         user() {
             return this.$store.state.user;
         },
     },
     methods: {
+        addItem() {
+            this.sale.items.push(new Item());
+        },
         async addSale() {
 
             this.loading = true;
@@ -269,19 +334,19 @@ export default {
                 return;
             }
 
-            const paymentIntent = await this.createPaymentIntent();
+            const res = await this.createPaymentIntent();
 
-            if (paymentIntent.error) {
+            if (res.error) {
 
-                this.errors = paymentIntent.error;
+                this.errors = res.error;
                 return;
             } else {
-                this.sale.paymentIntent = paymentIntent;
+                this.sale.paymentIntent = res.paymentIntent;
             }
 
             const
                 options = this.anonSale ? {payment_method: {card: this.$refs.paymentMethod.card}} : {},
-                resp = await this.$store.state.stripe.confirmCardPayment(this.sale.paymentIntent.clientSecret, options);
+                resp = await this.$store.state.stripe.confirmCardPayment(this.sale.paymentIntent.client_secret, options);
 
             if (resp.error) {
 
@@ -292,7 +357,7 @@ export default {
                     method: 'POST',
                     headers,
                     body: JSON.stringify({
-                        paymentIntent: resp.paymentIntent,
+                        paymentIntent: {metadata: this.sale.paymentIntent.metadata, ...resp.paymentIntent},
                         sale: this.sale,
                     })
                 })
@@ -334,10 +399,7 @@ export default {
                     if (json.error) {
                         this.errors = json.error;
                     } else {
-                        this.sale.paymentIntent = {
-                            id: null,
-                            clientSecret: null,
-                        };
+                        this.sale.paymentIntent = null;
                     }
                 })
                 .finally(() => this.loading = false);
@@ -350,11 +412,19 @@ export default {
         async createPaymentIntent() {
 
             const resp = await fetch(
-                `/payment_intent/${this.client.id}/${this.sale.price_id}/${this.sale.cust_id ? this.sale.cust_id : ''}`,
-                {headers}
+                `/payment_intent/${this.client.id}/${this.sale.cust_id ? this.sale.cust_id : ''}`, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({items: this.sale.items})
+                }
             );
 
             return await resp.json();
+        },
+        closeItemsModal() {
+
+            this.soldItems = [];
+            this.show.itemsModal = false;
         },
         doRefund() {
             this.loading = true;
@@ -365,27 +435,27 @@ export default {
             fetch(`/sales/${this.client.id}/${this.refund.id}`, {
                 method: 'DELETE',
                 headers,
-                body: JSON.stringify({amount: this.refund.price.amount})
+                body: JSON.stringify({amount: this.refund.amount})
             })
                 .then(resp => resp.json())
                 .then(json => {
+                    this.loading = false;
                     if (json.errors) {
                         this.errors = JSON.stringify(json.errors);
                     } else if (json.error) {
                         this.errors = JSON.stringify(json.error);
+                    } else {
+                        this.reset();
+                        this.refresh();
                     }
-                })
-                .finally(() => {
-                    this.reset();
-                    this.refresh();
                 });
         },
         handleRefund(sale) {
             this.refund = JSON.parse(JSON.stringify(sale));
 
             // remove the leading dollar sign from price
-            const match = this.refund.price.amount.match(/\$?([0-9]*.[0-9]{2})/);
-            this.refund.price.amount = match[1];
+            const match = this.refund.total.match(/\$?([0-9]*.[0-9]{2})/);
+            this.refund.amount = match[1];
 
             this.show.refundModal = true;
         },
@@ -393,7 +463,13 @@ export default {
             this.loading = true;
             fetch(`/sales/${this.client.id}`)
                 .then(resp => resp.json())
-                .then(sales => this.sales = sales)
+                .then(sales => {
+                    this.sales = sales.map(sale => {
+
+                        sale.metadata = JSON.parse(sale.metadata);
+                        return sale;
+                    });
+                })
                 .finally(() => this.loading = false)
         },
         reset() {
@@ -424,6 +500,14 @@ export default {
          */
         setHasPaymentMethod(hasPaymentMethod) {
             this.sale.has_payment_method = hasPaymentMethod;
+        },
+        /**
+         * Sets items of a sale for display in itemsModal
+         * @param saleId {String}
+         */
+        setSoldItems(saleId) {
+            this.soldItems = this.sales.find(sale => sale.id === saleId).metadata.items;
+            this.show.itemsModal = true;
         },
         utcDateTimeToLocal
     },

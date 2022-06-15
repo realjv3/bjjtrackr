@@ -124,7 +124,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::patch('member/{member}/product/{product}/resume', 'MemberController@resume');
     Route::patch('member/{member}/product/{product}/cancel', 'MemberController@cancel');
 
-    Route::get('payment_intent/{client}/{price}/{member?}', 'SalesController@createPaymentIntent');
+    Route::post('payment_intent/{client}/{member?}', 'SalesController@createPaymentIntent');
     Route::delete('payment_intent/{client}', 'SalesController@cancelPaymentIntent');
     Route::get('sales/{client}', 'SalesController@read');
     Route::post('sales/{client}', 'SalesController@create');

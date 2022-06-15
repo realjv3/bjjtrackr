@@ -22,6 +22,17 @@ class Sale extends Model
     protected $fillable = ['status', 'payment_method'];
 
     /**
+     * Gets the sale's total attribute prefixed with dollar sign & having decimal places
+     *
+     * @param $value
+     *
+     * @return string
+     */
+    public function getTotalAttribute($value): string {
+        return '$' . number_format($value / 100, 2);
+    }
+
+    /**
      * Relationship to client
      *
      * @return BelongsTo
@@ -37,23 +48,5 @@ class Sale extends Model
      */
     public function user(): BelongsTo {
         return $this->belongsTo('App\Models\User');
-    }
-
-    /**
-     * Relationship to products
-     *
-     * @return BelongsTo
-     */
-    public function product(): BelongsTo {
-        return $this->belongsTo('App\Models\Product');
-    }
-
-    /**
-     * Relationship to price
-     *
-     * @return BelongsTo
-     */
-    public function price(): BelongsTo {
-        return $this->belongsTo('App\Models\Price');
     }
 }

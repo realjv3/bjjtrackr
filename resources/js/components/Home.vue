@@ -210,10 +210,10 @@ import Clients from "components/Clients";
 import Client from "components/Client";
 import Checkins from "components/Checkins";
 import Checkin from "components/Checkin";
-import Help from "components/Help";
+import Help from "components/Help/Help";
 import QRCodes from "components/QRCodes";
 import Reports from "components/Reports";
-import SalesPage from "components/SalesPage";
+import SalesPage from "components/Sales/SalesPage";
 import Schedule from "components/Schedule";
 import Settings from "components/Settings";
 import Tour from 'components/Tour';
@@ -221,7 +221,7 @@ import Event from 'components/Event';
 import Feedback from "components/Feedback";
 import store from "../store";
 import Documents from "./Documents";
-import MembershipsPage from "./MembershipsPage";
+import MembershipsPage from "./Memberships/MembershipsPage";
 
 export default {
     components: {
