@@ -19,6 +19,8 @@
 
             <HelpPeople class="col-sm-12" v-show="selected.id === 'people'"/>
 
+            <HelpSales class="col-sm-12" v-show="selected.id === 'sales'"/>
+
             <HelpMembers class="col-sm-12" v-show="selected.id === 'members'"/>
 
             <HelpSchedule class="col-sm-12" v-show="selected.id === 'schedule'"/>
@@ -38,16 +40,18 @@ import HelpCheckins from "./HelpCheckins";
 import HelpDocuments from "./HelpDocuments";
 import HelpMembers from "./HelpMembers";
 import HelpPeople from "./HelpPeople";
+import HelpSales from "./HelpSales";
 import HelpSchedule from "./HelpSchedule";
 import HelpSettings from "./HelpSettings";
 
 export default {
     name: "Help",
-    components: {HelpCheckins, HelpDocuments, HelpMembers, HelpPeople, HelpSchedule, HelpSettings},
+    components: {HelpCheckins, HelpDocuments, HelpMembers, HelpPeople, HelpSales, HelpSchedule, HelpSettings},
     data() {
         const topics = [
             {id: 'people', name: 'People'},
             {id: 'members', name: 'Memberships'},
+            {id: 'sales', name: 'Sales'},
             {id: 'schedule', name: 'Schedule'},
             {id: 'checkins', name: 'Attendance'},
             {id: 'documents', name: 'Documents'},

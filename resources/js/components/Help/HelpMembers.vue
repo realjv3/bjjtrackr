@@ -122,7 +122,7 @@
 </template>
 <script>
 export default {
-    name: 'HelpPeople',
+    name: 'HelpMembers',
     components: {}
 
 }
